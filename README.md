@@ -21,12 +21,12 @@ You can find an example seed.inp and seed.par, along with the results of simple 
 in the test_cases folder.
 
 ### Citations ###
-Assessment of SEED on 15 different protein targets, with a focus its scoring power. Advantages, limitations and practical tips are discussed:
+Assessment of SEED on 15 different protein targets, with a focus on its scoring power. Advantages, limitations and practical tips for usage are discussed:
  * K. Goossens, B. Wroblowski, C. Langini, H. van Vlijmen, A. Caflisch, and H. De Winter. Assessment of the Fragment Docking Program SEED.
 Journal of Chemical Information and Modeling, 60(10):4881–4893, 2020.\
 https://doi.org/10.1021/acs.jcim.0c00556
 
-Review of the applications of SEED in the period 1999-2018, including a discussion on its strenghts/weaknesses in light of our experience:
+Review of the applications of SEED in the period 1999-2018, including a discussion on its strenghts and weaknesses in light of our experience:
  * J.-R. Marchand, and A. Caflisch. In silico fragment-based drug design with SEED.
 European Journal of Medicinal Chemistry, 156:907-917, 2018.\
 https://doi.org/10.1016/j.ejmech.2018.07.042
