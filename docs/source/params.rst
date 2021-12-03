@@ -24,7 +24,8 @@ Here we define all the parameters of the ``seed.inp`` file.
 .. _i1:
 
 **i1**
-  name of parameter file (``seed.par``) 
+  | first line: name of parameter file (``seed.par``) 
+  | second line: name of the keyword-based parameter file (``seed_kw.par``)
   
 .. _i2:
 
@@ -72,15 +73,15 @@ Here we define all the parameters of the ``seed.inp`` file.
   | coordinates of the center and radius of a sphere in which the geometry center of
     the fragment position must be in order to be accepted. 
     This filter can be discarded by selecting ``n`` instead of ``y`` as first value.
-  | ``y``,``n`` / sphere center / sphere radius
+  | ``y``, ``n`` / sphere center / sphere radius
 
 .. _i7:
   
 **i7**
   | Fragment library specifications
-  | First line: one character specifying the running mode of SEED: 
+  | **First line**: one character specifying the running mode of SEED: 
     :ref:`dock-runmode` (``d``) or only :ref:`energy-runmode` (``e``).
-  | Following lines: the first column contains the path of the fragment mol2 file 
+  | **Second line**: the first column contains the path of the fragment mol2 file 
     and the second column allows the selection of apolar, polar docking or both 
     (``a``, ``p``, ``b``). The fragment position is accepted if the total energy 
     (according to the fast energy model) is smaller than a cutoff given in the third column. 
@@ -88,9 +89,25 @@ Here we define all the parameters of the ``seed.inp`` file.
     for which the binding energy of the cluster representative is smaller than a cutoff value
     specified in the 4th column. In summary:
   
-  | Fragment library filename / 
-    apolar docking, polar docking, or both (``a``, ``p``, ``b``) /
-    energy cutoff in kcal/mol / 2nd clustering cutoff in kcal/mol
+  | Fragment library filename - 
+    apolar docking, polar docking, or both (``a``, ``p``, ``b``) -
+    energy cutoff in kcal/mol - 2nd clustering cutoff in kcal/mol
+
+  | **Third line**: Reading mode, either ``single`` or ``multi``. This option is only relevant
+    when using the MPI parallel version and only concerns the way the input mol2 library is read. 
+    With ``single`` SEED expects a single mol2 input
+    file; molecules are read from this file by the master rank, which dispatches them to the
+    first available rank, balancing the computational load among the processes. 
+    This is especially important when running Monte Carlo minimization as the variance of the
+    running time per molecule can be large.
+    With the ``multi`` option each rank reads from a separate mol2 file. This requires the user
+    to preemptively split the library into a number of parts equal to the number of ranks. In order
+    to relieve the possible load imbalace, whe recommend shuffling the library file before splitting it
+    (scripts are provided).
+    The ``multi`` option can be useful when reanalyzing SEED output poses, as each rank writes to a 
+    separate output mol2 file, or when running with a limited number of MPI ranks, as with ``single`` 
+    the master rank only reads and dispatches molecules without doing any conmputation.
+    For the serial version the chosen reading mode is inconsequential as only one process will be started.
     
 As you do not need to modify all the parameters and in most of the cases 
 default values will give good results, we recommend not to write an input 
@@ -295,7 +312,7 @@ to eliminate fragments which are very close in space.
     energies and the two clustering procedures / 
   | print level (``0`` = lean, ``1`` = adds sorting before postprocessing, 
     ``2`` = adds 2nd clustering).
-  
+
 Force field parameters
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -330,15 +347,112 @@ Force field parameters
   | First line: number of elements (without element 0)
   | element name / element number / atomic weight
 
+.. _KW_param:
+
+Keyword-based parameter file
+----------------------------
+
+In order to allow more flexibility and easier addition of SEED parameters, 
+we have decided to move from the original sequential format of the ``seed.par`` 
+to a keyword based format. This, for legacy reasons, only involves the newly 
+added settings, so that an older ``seed.par`` can be used as it is without the need 
+of modifications or rewritings.
+The new keyword based parameters should be specified in the format 
+``<keyword> = <value>`` as for example:
+::
+
+  # Additional parameters 
+  do_mc = y # activates MCSA sampling 
+  mc_temp = 500
+  mc_max_xyz_step = 0.7 0.1
+
+Comments can be introduced by *#* and will be ignored. Note that some keywords require 
+multiple values. If the same keyword is repeated multiple times in the file, the last 
+instance will be used.
+The additional keyword-based parameter file, that we will refer to as ``seed_kw.par`` 
+should always be present (even if blank) and its path has to be specified in the second 
+line of :ref:`i1<i1>`.
+The keywords that can be set are the following:
+
+.. _MC_param:
+
+Monte Carlo parameters
+^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters are needed for running a Monte Carlo Simulated Annealing
+minimization of the top poses.
+This option can be enabled by setting :ref:`do_mc<do_mc>` to ``y`` (yes) and adding 
+the following related keywords.
+If :ref:`do_mc<do_mc>` is set to ``n`` (no), all the additional MC parameters in this section 
+play no role.
+
+.. _do_mc:
+
+**do_mc**
+  | Perform MC refinement? (``y`` / ``n``)
+
+.. _mc_temp:
+
+**mc_temp**
+  | Starting temperature of MC run.
+
+.. _mc_max_xyz_step:
+
+**mc_max_xyz_step**
+  | Maximum rigid body translation step (in Angstrom): coarse (1st value) 
+  | and fine (2nd value) moves.
+
+.. _mc_max_rot_step:
+
+**mc_max_rot_step**
+  | Maximum rigid body rotation step (in degrees): coarse (1st value) 
+  | and fine (2nd value) moves.
+
+.. _mc_rot_freq:
+
+**mc_rot_freq**
+  | MC move set frequencies:
+  | Frequency :math:`p` of rigid body rotation moves (the frequency of 
+  | rigid body translation move will be :math:`q = 1 - p`).
+
+.. _mc_xyz_fine_freq:
+
+**mc_xyz_fine_freq**
+  | Relative frequency (w.r.t. the number of translation move) of fine translation moves.
+
+.. _mc_rot_fine_freq:
+
+**mc_rot_fine_freq**
+  | Relative frequency (w.r.t. the number of rotation moves) of fine rotation moves.
+
+.. _mc_niter:
+
+**mc_niter**
+  | Number of steps :math:`N_{out}` of the outer MC chain (1st value).
+  | Number of steps :math:`N_{in}` of the inner MC chain (2nd value).
+
+.. _mc_sa_alpha:
+
+**mc_sa_alpha**
+  | Annealing parameter :math:`\alpha`.
+
+.. _mc_rseed:
+
+**mc_rseed**
+  | Seed for the pseudo-random number generator used by the MC sampler. A value of ``-1`` uses 
+    the current CPU time.
+
+
 .. _par_generator:
 
 Parameter File Generator
 ------------------------
 
 The parameter file generator helps you preparing the input parameter files 
-for a SEED run (``seed.inp`` and ``seed.par``).
+for a SEED run (``seed.inp``, ``seed.par``, and ``seed_kw.par``).
 You can load a template with predefined default values, edit the user-specific 
-information and save it.
+information and save it. The template for ``seed_kw.par`` shows example settings for 
+a run with additional MCSA minimization of the poses.
 
   .. <script>
   ..   //var filename = "./_static/seed.inp";
@@ -387,6 +501,7 @@ information and save it.
 
   <button id="btn-inp">Load default seed.inp</button>
   <button id="btn-par">Load default seed.par</button>
+  <button id="btn-kw">Load default seed_kw.par</button>
   
   <div>
     <p>Here you can edit the file with user-specific information. 
@@ -416,6 +531,10 @@ information and save it.
   jQuery("#btn-par").click( function() {
     jQuery( "#input-area" ).load("_static/seed4_cgenff4.par");
     jQuery("#input-fileName").val("seed.par")
+  });
+  jQuery("#btn-kw").click( function() {
+    jQuery( "#input-area" ).load("_static/seed4_kw.par");
+    jQuery("#input-fileName").val("seed_kw.par")
   });
   
   //jQuery(document).ready(function(){

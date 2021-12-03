@@ -1,23 +1,26 @@
 # Makefile for SEED 4.0.0
 # clangini 2016
 #SHELL = /bin/bash
-# Folders:
+# Folders: 
 #SRC_DIR = .
-BIN_DIR = ../bin
-BUILD_DIR = build
+MKFILE_PATH = $(abspath $(firstword $(MAKEFILE_LIST)))
+CURR_DIR = $(dir $(MKFILE_PATH))
+BIN_DIR = $(CURR_DIR)../bin
 
-BUILD_DIR_MPI = build/mpi
-BUILD_DIR_DEBUG = build/dbg
-TARGET_EXEC = $(BIN_DIR)/seed_4
-TARGET_EXEC_DEBUG = $(BIN_DIR)/seed_4_debug
-TARGET_EXEC_MPI = $(BIN_DIR)/seed_4_mpi
+BUILD_DIR = $(CURR_DIR)build
+BUILD_DIR_MPI = $(CURR_DIR)build/mpi
+BUILD_DIR_DEBUG = $(CURR_DIR)build/dbg
+
+TARGET_EXEC = $(BIN_DIR)/seed_4_mc_lb
+TARGET_EXEC_MPI = $(BIN_DIR)/seed_4_mpi_mc_lb
+TARGET_EXEC_DEBUG = $(BIN_DIR)/seed_4_mc_lsb_debug
 
 # Flags:
 CXX = g++
 CXXFLAGS = -std=c++11 -O3 -pedantic -Wall -march=native
 LDFLAGS = -lm -O3 -static
 
-INC_FLAGS = -I. -I./lib/
+INC_FLAGS = -I$(CURR_DIR) -I$(CURR_DIR)../lib/
 
 # For seed MPI:
 MPICXX = mpic++
@@ -26,12 +29,13 @@ MPILDFLAGS = -lm -O3
 
 DBGCXXFLAGS = -g3 -std=c++11 -O3 -pedantic -Wall -march=native
 
-include Makefile.local
+include $(CURR_DIR)Makefile.local
 
 DEP_FLAGS = $(INC_FLAGS) -MMD -MP
 
-PRESRCLIST = align_frag assire checkresn cofren cogrep conubu convert2pp count_heavy_atom extoutnam featres fialhy findfrsym fracdo geomcent geomfu hybstat listchres main makbsatlist makspv nrutil otfunc psspee psspma reacdo reduc_polvectre refrfi_coo_mol2 refrfi_mol2_new reinfi relaic relaic_en rerefi_mol2 rosefr seedfr_ap seedfr simila solv_frag solv_frag_fast solv_lookup solv_util sort_all sort sqdisfrre_ps vwfren vwgrep write_charmm write_chm_clus write_mol2
+PRESRCLIST = align_frag assire checkresn cofren cogrep conubu convert2pp count_heavy_atom extoutnam featres fialhy findfrsym fracdo geomcent geomfu hybstat listchres main makbsatlist makspv montecarlo nrutil otfunc Parameter psspee psspma reacdo reduc_polvectre refrfi_coo_mol2 refrfi_mol2_new reinfi relaic relaic_en rerefi_mol2 rnd_namespace rosefr seedfr_ap seedfr simila solv_frag solv_frag_fast solv_lookup solv_util sort_all sort sqdisfrre_ps vwfren vwgrep write_charmm write_chm_clus write_mol2
 SRCLIST = $(PRESRCLIST:%=%.cpp)
+
 SRCS = $(SRCLIST)
 OBJS = $(SRCLIST:%.cpp=$(BUILD_DIR)/%.o)
 OBJS_DEBUG = $(SRCLIST:%.cpp=$(BUILD_DIR_DEBUG)/%.o)
@@ -45,6 +49,7 @@ RM = rm
 MKDIR_P = mkdir -p
 RMDIR = rmdir
 ECHO = @echo
+# PWD = shell pwd
 
 # Targets:
 .PHONY: seed
@@ -67,13 +72,13 @@ $(TARGET_EXEC_MPI): $(OBJS_MPI)
 	$(MPICXX) $(OBJS_MPI) $(MPILDFLAGS) -o $@
 
 # Using order-only prerequisite to build the directory
-$(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(CURR_DIR)%.cpp | $(BUILD_DIR)
 	$(CXX) -c $(CXXFLAGS) $(DEP_FLAGS) $< -o $@
 
-$(BUILD_DIR_DEBUG)/%.o: %.cpp | $(BUILD_DIR_DEBUG)
+$(BUILD_DIR_DEBUG)/%.o: $(CURR_DIR)%.cpp | $(BUILD_DIR_DEBUG)
 	$(CXX) -c $(DBGCXXFLAGS) $(DEP_FLAGS) $< -o $@
 
-$(BUILD_DIR_MPI)/%.o: %.cpp | $(BUILD_DIR_MPI)
+$(BUILD_DIR_MPI)/%.o: $(CURR_DIR)%.cpp | $(BUILD_DIR_MPI)
 	$(MPICXX) -c $(MPICXXFLAGS) -DENABLE_MPI $(DEP_FLAGS) $< -o $@
 
 $(BUILD_DIR):
@@ -96,6 +101,11 @@ print:
 	$(ECHO) $(SRCS)
 	$(ECHO) $(OBJS)
 	$(ECHO) $(DEPS)
+	$(ECHO)
+	$(ECHO)
+	$(ECHO) $(MAKEFILE_LIST)
+	$(ECHO) $(MKFILE_PATH)
+	$(ECHO) $(CURR_DIR)
 
 .PHONY: objclean
 objclean:

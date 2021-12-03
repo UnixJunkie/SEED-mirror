@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdlib.h> /* for exit-fct.*/
 #include "funct.h"
+#include "math.h"
 
 #ifdef ENABLE_MPI
   #include <mpi.h>
@@ -35,35 +36,8 @@
 
 
 
-/*void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
-            int *FragNu,char ***FrFiNa,char *TREFiP,double *SphAng,
-            int *SphPoN,int *NuRoAx,double *VdWFaB,double *CoDieV,int *CoDieP,
-            double *CoGrIn,double *CoGrSi,char *OutFil,double *BuEvFa,
-            double **FrMaEn,double *PsSpRa,double *GrSiCu_en,
-            int *FiNuMa,double *GrInSo,double *GrSiSo,double *WaMoRa,
-            int *NPtSphere,double *DielWa,double *DielRe,char *ReDesoAlg,
-            char *DesoMapAcc,char *DesoMapFile,char *FDexe,char *FDdir,
-            double *ReSurfDens_apol,double *PtDensFr,double *Sphere_apol,
-            double *NCutapolRatio,double *ScaleDeso,
-            double *ScaleVDW,double **SimWei,double *SimExp,
-            double *SimCut,double **FrMaEn_sd,double *SimExp_sd,double *SimCut_sd,
-            int *BSMeNu,int **BSMeAN,double ***BSMeVE,char *CoGrAcc,
-            char *CoGrFile,char *EvalEn,char *Solv_typ,
-            char *SpPoCh_opt,double *SpPoCh_cent,double *SpPoCh_rad,
-            double *SFDeso_fr,double *SFDeso_re,double *SFVWEn,double *SFIntElec,
-            int *NuClusMem,double *RedRPV_rp,double*RedRPV_nkvRatio,double *ScMaBump,
-            double *MuFaVdWCoff_ap,int *NuLiEnClus,char ***ApPoChoi,
-            double *VWGrIn,double *VWGrSi,double *BumpFaCut,char *VWGrAcc,
-            char *VWGrFile,int *MaxPosClus,int *PrintLev,
-            int *NumbAT,char ***AtTyAr,int **AtENAr,double **VdWRad,
-            double **VdWEne,double ***BLAtTy,int *distrPointBSNumb,
-	    double ***distrPointBS,double *angle_rmin,double *angle_rmax,
-	    double *mult_fact_rmin,double *mult_fact_rmax,char *EmpCorrB,
-            char *gc_opt,int *gc_reprke,double *gc_cutclus,double *gc_endifclus,
-            double *gc_weighneg,double *gc_weighpos,int *gc_maxwrite,
-            char *write_pproc_opt,char *write_pproc_chm_opt,int *CorrFiNumb)*/
-void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
-            char *FrFiNa,char *TREFiP,double *SphAng,
+void ReInFi(char *InpFil, char *kwParFil, char *RecFil,int *BSResN,int **BSReNu,
+            char *FrFiNa,char *TREFiP, char *FrFiRMode, double *SphAng,
             int *SphPoN,int *NuRoAx,double *VdWFaB,double *CoDieV,int *CoDieP,
             double *CoGrIn,double *CoGrSi,char *OutFil,double *BuEvFa,
             double *FrMaEn,double *PsSpRa,double *GrSiCu_en,
@@ -85,8 +59,8 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
             char *VWGrFile,int *MaxPosClus,int *PrintLev,
             int *NumbAT,char ***AtTyAr,int **AtENAr,double **VdWRad,
             double **VdWEne,double ***BLAtTy,int *distrPointBSNumb,
-	    double ***distrPointBS,double *angle_rmin,double *angle_rmax,
-	    double *mult_fact_rmin,double *mult_fact_rmax,char *EmpCorrB,
+	          double ***distrPointBS,double *angle_rmin,double *angle_rmax,
+	          double *mult_fact_rmin,double *mult_fact_rmax,char *EmpCorrB,
             char *gc_opt,int *gc_reprke,double *gc_cutclus,double *gc_endifclus,
             double *gc_weighneg,double *gc_weighpos,int *gc_maxwrite,
             char *write_pproc_opt,char *write_pproc_chm_opt,char *write_best_opt,
@@ -163,7 +137,7 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
    RedRPV_nkv  maximal number of kept vectors in the reducing of the receptor
                polar vectors -> deprecated
    RedRPV_nkvRatio  Ratio  (kept vectors / (total number of donor & acceptor vectors))
-               to reduce number of polar vectors in binding site
+                    to reduce number of polar vectors in binding site
    ScMaBump  scaling factor for computing the maximal number of tolerated
              bumps
    MuFaVdWCoff_ap  multiplicative factor used for computing the van der Waals
@@ -172,7 +146,7 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
                sorted energies and the two clustering procedures
    ApPoChoi  user choice between apolar or polar seeding for each fragment
              type (a,p,n)
-   VWGrIn  van der Waals grid increase
+   VWGrIn van der Waals grid increase
    VWGrSi  van der Waals grid size
    BumpFaCut  cutoff (maximal vdW energy) for bump checking with fast energy
               evaluation
@@ -186,19 +160,18 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
    VdWRad  van der Waals radii
    VdWEne  van der Waals energies
    BLAtTy  bond lengths between atom types in the hydrogen bond making
-   distrPointBSNumb  number of points in the binding site used for the
-                     reduction of polar and apolar vectors using an
-		     angle criterion
+           distrPointBSNumb  number of points in the binding site used for the
+           reduction of polar and apolar vectors using an angle criterion
    distrPointBS  distribution of points in the binding site used for
-                 the reduction of polar and apolar vectors using an
-		 angle criterion
+                 the reduction of polar and apolar vectors using an angle criterion
    angle_rmin  angle cutoff for the reduction of vectors
    angle_rmax  angle cutoff for the reduction of vectors
    mult_fact_rmin  multiplicative factor for the reduction of vectors
    mult_fact_rmax  multiplicative factor for the reduction of vectors
    EmpCorrB  empirical correction term (y,n) to the Coulomb field
              approximation for the accurate screened interaction and
-	     fragment desolvation energies */
+	           fragment desolvation energies 
+   kwParFil  keyword-based parameter file */
 {
     FILE *FilePa,*FilePa2;/* unused variable : ,*FilChk;*/
   /* char StrLin[_STRLENGTH], **FrFiNa_L,**ApPoChoi_L,**AtTyAr_L; */
@@ -209,20 +182,24 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
   int AtEl; //clangini
   //double AtWei_k; // clangini
   char dummyStr[5]; //clangini
+  double dummy_double, dummy_double_fine; // dummy var for reading with scanf
 /* ----------------------------------------- */
 /* ---------- Read the input file ---------- */
 /* ----------------------------------------- */
 
   FilePa=fopen(InpFil,"r");
-
   CheckFile(InpFil,'r');
-//  std::cout << "file: " << InpFil << std::endl;
+
 /* Path of the file containing the parameters */
   SkipComLin(FilePa,StrLin);
   sscanf(StrLin,"%s",TREFiP);
-
   CheckFile(TREFiP,'r');
-//  std::cout << "file: " << TREFiP << std::endl;
+
+/* Path of the file containing the keyword-based parameters */
+  SkipComLin(FilePa, StrLin);
+  sscanf(StrLin, "%s", kwParFil);
+  CheckFile(kwParFil, 'r');
+
 /* Path of the file containing the receptor coordinates (mol2 format) */
   SkipComLin(FilePa,StrLin);
   sscanf(StrLin,"%s",RecFil);
@@ -286,10 +263,26 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
   fgets_wrapper(StrLin,_STRLENGTH,FilePa);
   //sscanf(StrLin, "%s%s%lf%lf", FrFiNa_L, ApPoChoi_L, FrMaEn, FrMaEn_sd);
   sscanf(StrLin, "%s%s%lf%lf", FrFiNa, ApPoChoi, FrMaEn, FrMaEn_sd);
-  //*FrFiNa = FrFiNa_L;
-  //*ApPoChoi = ApPoChoi_L;
 
-  /*FrFiNa_L=cmatrix(1,*FragNu,1,_STRLENGTH);
+  SkipComLin(FilePa, StrLin);
+  sscanf(StrLin, "%s", FrFiRMode);
+
+  // Check if FrFiRMode is valid:
+  if (!((strcmp(FrFiRMode, "single") == 0) || (strcmp(FrFiRMode, "multi") == 0)))
+  {
+    fprintf(stderr, "Library reading mode is not valid. single mode will be used.\n");
+    strcpy(FrFiRMode, "single");
+  }
+#ifndef ENABLE_MPI
+  if (strcmp(FrFiRMode, "multi") == 0){
+    fprintf(stderr, "multi reading is not possible with the serial executable. single mode will be used.\n");
+    strcpy(FrFiRMode, "single");
+  }
+#endif
+    //*FrFiNa = FrFiNa_L;
+    //*ApPoChoi = ApPoChoi_L;
+
+    /*FrFiNa_L=cmatrix(1,*FragNu,1,_STRLENGTH);
   FrMaEn_L=vector(1,*FragNu);
   FrMaEn_sd_L=vector(1,*FragNu);
   ApPoChoi_L=cmatrix(1,*FragNu,1,2);
@@ -298,7 +291,7 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
   *FrMaEn_sd=FrMaEn_sd_L;
   *ApPoChoi=ApPoChoi_L; */
 
-  /* *CorrFiNumb=0;
+    /* *CorrFiNumb=0;
   for (i=1;i<=*FragNu;i++) {
     fgets_wrapper(StrLin,_STRLENGTH,FilePa);
     sscanf(StrLin,"%s%s%lf%lf",FrFiNa_L[i]+1,ApPoChoi_L[i]+1,&FrMaEn_L[i],
@@ -314,12 +307,11 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
 
   }*/
 
-  fclose(FilePa);
+    fclose(FilePa);
 
-
-/* ---------------------------------------------- */
-/* ---------- Read the parameters file ---------- */
-/* ---------------------------------------------- */
+  /* ---------------------------------------------- */
+  /* ---------- Read the parameters file ---------- */
+  /* ---------------------------------------------- */
 
   FilePa=fopen(TREFiP,"r");
 
@@ -561,7 +553,6 @@ written in output file*/ //clangini
    Printing level (0,1->preprocess,2->second clustering) */
   SkipComLin(FilePa,StrLin);
   sscanf(StrLin,"%d%d",NuLiEnClus,PrintLev);
-
 /* CLANGINI 2016 END */
 
   /* Read NumbAT AtTyAr AtENAr VdWRad VdWEne */
@@ -636,27 +627,19 @@ written in output file*/ //clangini
   /*clangini START Read atomic weights */
   SkipComLin(FilePa,StrLin);
   sscanf(StrLin,"%d",&UsVal2); // Number of elements (without element 0)
-  //std::cout << "UsVal2 "<<UsVal2<<std::endl;
   *AtWei=dvector(0,UsVal2);
   for (k=0;k<=UsVal2;k++) {
     fgets_wrapper(StrLin,_STRLENGTH,FilePa);
     sscanf(StrLin,"%s%d%lf",dummyStr,&AtEl,&(*AtWei)[k]);
-    //std::cout << "dummyStr: "<<dummyStr
-    //          << " AtEl: "<< AtEl
-    //          << " k: " << k
-    //          << " (*AtWei)[k]" << (*AtWei)[k] << std::endl;
     if (k != AtEl){
       std::cerr << "Atom is missing in the atomic weight list! Exit program!" << std::endl;
       exit(12);
     }
   }
-  //std::cout << "Example Atom Weight[10]: " << (*AtWei)[10] << std::endl;
   /*clangini END*/
   fclose(FilePa);
 
 }
-
-
 
 void SkipComLin(FILE *FilePa,char *StrLin)
 /* This function skips the comment lines starting with a # */

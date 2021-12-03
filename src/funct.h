@@ -16,9 +16,18 @@
 *    You should have received a copy of the GNU General Public License
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef _FUNCT_H
+#define _FUNCT_H
+
 #include <iostream>
 #include <cstdio>
+#ifdef ENABLE_MPI
+#include <mpi.h>
+#endif
+#include "point.h"
 #include "quaternion.h"
+#include "Parameter.h"
 #define sqrtf sqrt
 #define sinf sin
 #define cosf cos
@@ -29,35 +38,8 @@
 #define modff modf
 #define logf log
 
-/*void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
-            int *FragNu,char ***FrFiNa,char *TREFiP,double *SphAng,
-            int *SphPoN,int *NuRoAx,double *VdWFaB,double *CoDieV,int *CoDieP,
-            double *CoGrIn,double *CoGrSi,char *OutFil,double *BuEvFa,
-            double **FrMaEn,double *PsSpRa,double *GrSiCu_en,
-            int *FiNuMa,double *GrInSo,double *GrSiSo,double *WaMoRa,
-            int *NPtSphere,double *DielWa,double *DielRe,char *ReDesoAlg,
-            char *DesoMapAcc,char *DesoMapFile,char *FDexe,char *FDdir,
-            double *ReSurfDens_apol,double *PtDensFr,double *Sphere_apol,
-            double *NCutapolRatio*//*int *NCutapol*//*,double *ScaleDeso,
-            double *ScaleVDW,double **SimWei,double *SimExp,
-            double *SimCut,double **FrMaEn_sd,double *SimExp_sd,double *SimCut_sd,
-            int *BSMeNu,int **BSMeAN,double ***BSMeVE,char *CoGrAcc,
-            char *CoGrFile,char *EvalEn,char *Solv_typ,
-            char *SpPoCh_opt,double *SpPoCh_cent,double *SpPoCh_rad,
-            double *SFDeso_fr,double *SFDeso_re,double *SFVWEn,double *SFIntElec,
-            int *NuClusMem,double *RedRPV_rp,double *RedRPV_nkvDens,double *ScMaBump, *//*int *RedRPV_nkv, dey new*/
-            /*double *MuFaVdWCoff_ap,int *NuLiEnClus,char ***ApPoChoi,
-            double *VWGrIn,double *VWGrSi,double *BumpFaCut,char *VWGrAcc,
-            char *VWGrFile,int *MaxPosClus,int *PrintLev,
-            int *NumbAT,char ***AtTyAr,int **AtENAr,double **VdWRad,
-            double **VdWEne,double ***BLAtTy,int *distrPointBSNumb,
-	    double ***distrPointBS,double *angle_rmin,double *angle_rmax,
-	    double *mult_fact_rmin,double *mult_fact_rmax,char *EmpCorrB,
-            char *gc_opt,int *gc_reprke,double *gc_cutclus,double *gc_endifclus,
-            double *gc_weighneg,double *gc_weighpos,int *gc_maxwrite,
-            char *write_pproc_opt,char *write_pproc_chm_opt,int *CorrFiNumb);*/
-void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
-            char *FrFiNa,char *TREFiP,double *SphAng,
+void ReInFi(char *InpFil,char *kwParFil,char *RecFil,int *BSResN,int **BSReNu,
+            char *FrFiNa,char *TREFiP, char* FrFiRMode, double *SphAng,
             int *SphPoN,int *NuRoAx,double *VdWFaB,double *CoDieV,int *CoDieP,
             double *CoGrIn,double *CoGrSi,char *OutFil,double *BuEvFa,
             double *FrMaEn,double *PsSpRa,double *GrSiCu_en,
@@ -72,14 +54,15 @@ void ReInFi(char *InpFil,char *RecFil,int *BSResN,int **BSReNu,
             char *CoGrFile,char *EvalEn,char *Solv_typ,
             char *SpPoCh_opt,double *SpPoCh_cent,double *SpPoCh_rad,
             double *SFDeso_fr,double *SFDeso_re,double *SFVWEn,double *SFIntElec,
-            int *NuClusMem,int *NuPosMem,double *RedRPV_rp,double *RedRPV_nkvDens,double *ScMaBump, /*int *RedRPV_nkv, dey new*/
+            int *NuClusMem,int *NuPosMem,double *RedRPV_rp,
+            double *RedRPV_nkvDens,double *ScMaBump, /*int *RedRPV_nkv, dey new*/
             double *MuFaVdWCoff_ap,int *NuLiEnClus,char *ApPoChoi,
             double *VWGrIn,double *VWGrSi,double *BumpFaCut,char *VWGrAcc,
             char *VWGrFile,int *MaxPosClus,int *PrintLev,
             int *NumbAT,char ***AtTyAr,int **AtENAr,double **VdWRad,
             double **VdWEne,double ***BLAtTy,int *distrPointBSNumb,
-	    double ***distrPointBS,double *angle_rmin,double *angle_rmax,
-	    double *mult_fact_rmin,double *mult_fact_rmax,char *EmpCorrB,
+	          double ***distrPointBS,double *angle_rmin,double *angle_rmax,
+	          double *mult_fact_rmin,double *mult_fact_rmax,char *EmpCorrB,
             char *gc_opt,int *gc_reprke,double *gc_cutclus,double *gc_endifclus,
             double *gc_weighneg,double *gc_weighpos,int *gc_maxwrite,
             char *write_pproc_opt,char *write_pproc_chm_opt,char *write_best_opt,
@@ -112,10 +95,23 @@ int ReFrFi_mol2(std::istream *inStream, std::streampos *strPos,
                 char ***FrAtEl,double ***FrCoor,char ***FrAtTy,  char ***FrSyAtTy,double **FrPaCh,
                 int ***FrBdAr,char ***FrBdTy,char *FrSubN,char *FrSubC,
                 int *FrCoNu,char ***SubNa, std::string &AlTySp);
-void ReFrFi_mol2_syb(int CurFra,char **FrFiNa,char *FragNa,int *FrAtNu,int *FrBdNu,
-                 char ***FrAtEl,double ***FrCoor,char ***FrAtTy, char ***FrSyAtTy,double **FrPaCh,
-                 int ***FrBdAr,char ***FrBdTy,char *FrSubN,char *FrSubC,
-                 int *FrCoNu);
+#ifdef ENABLE_MPI
+int MPI_ReFrFi_mol2(std::istream *inStream, std::streampos *strPos, MPI_Request *rkreqs,
+                    int *readies, bool *firsttime);
+int MPI_slave_ReFrFi_mol2(int *SkiFra,int *CurFraTot,char *FragNa,
+                std::string & FragNa_str,int *FrAtNu,int *FrBdNu,
+                char ***FrAtEl,double ***FrCoor,char ***FrAtTy,char ***FrSyAtTy,
+                double **FrPaCh,
+                int ***FrBdAr,char ***FrBdTy,char *FrSubN,char *FrSubC,
+                int *FrCoNu, char ***SubNa, std::string &AlTySp);
+#endif
+void release_mol_mem(char **FrAtEl, double **FrCoor, char **FrSyAtTy, double *FrPaCh,
+                     char **SubNa, int **FrBdAr, char **FrBdTy, char **FrAtTy,
+                     int FrAtNu, int FrBdNu);
+void ReFrFi_mol2_syb(int CurFra, char **FrFiNa, char *FragNa, int *FrAtNu, int *FrBdNu,
+                    char ***FrAtEl, double ***FrCoor, char ***FrAtTy, 
+                    char ***FrSyAtTy, double **FrPaCh, int ***FrBdAr, 
+                    char ***FrBdTy, char *FrSubN, char *FrSubC, int *FrCoNu);
 void write_mol2_clus_pproc_syb(int CurFra,int NuPosSdCl,int FrAtNu,char **FrAtTy, char **FrSyAtTy,
                            double ***FrCoPo,int *FrPosAr_sort,char **ResN_fr,
                            char **FrFiNa_out,int FrBdNu,char **FrAtEl,
@@ -228,11 +224,24 @@ void ReLAIC_en(int ReReNu,double **ReCoor,double GrSiCu_en,double *ReMinC,
 void PsSpMa(double PsSpRa,double GrSiCu_en,int PsSpNC,int ***PsSphe);
 void PsSpEE(int FrAtNu,int ReAtNu,double *ReVdWE_sr,double *FrVdWE_sr,
             double *ReVdWR,double *FrVdWR,double *VWEnEv_ps,double **SDFrRe_ps);
+void PsSpFE(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
+            double *ReVdWR, double *FrVdWR, double *FvdW, double *TvdW, 
+            double *maxFvdW, double *maxTvdW, double **SDFrRe_ps,
+            double **RoSFCo, double **ReCoor, double **RelCOMCo);
+double calc_grms(double *FvdW, double *TvdW, double alpha_xyz, double alpha_rot);
+void check_gradient_vdw(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
+                        double *ReVdWR, double *FrVdWR, double *FvdW, double *TvdW,
+                        double **RoSFCo, double **ReCoor,
+                        double *ReMinC,
+                        double GrSiCu_en, int *CubNum_en, int ***CubFAI_en, int ***CubLAI_en,
+                        int *CubLiA_en, int PsSpNC, int ***PsSphe,
+                        double PsSpRa, int ReReNu, int *AtReprRes,
+                        int *FiAtRes, int *LaAtRes, int *FrAtEl_nu, double *AtWei);
 /* deprecated */
 /* void ReaOut(int CurFra,int SFWrNu,int *Index_ro,double *VW_f_ro,double *VW_s_ro, */
 /*             double *In_f_ro,double *In_s_ro,double *Dr_f_ro,double *Dr_s_ro, */
 /*             double *Df_f_ro,double *Df_s_ro,double *To_f_ro,double *To_s_ro); */
-void Sort(int N,int *IndArr,double *SorArr);
+void Sort(int N, int *IndArr, double *SorArr);
 void write_charmm(int CurFra,int SFWrNu,int FrAtNu,int *Index_ro,
                   double *Coulo_ro,double *Vande_ro,double *TotEn_ro,
                   char **FrAtTy,double ***FrCoPo,char **ResN_fr,
@@ -251,8 +260,10 @@ void MakBSAtList(int ReAtNu,int *ReResN,int BSResN,int *BSReNu,int *BSAtNu,
                  int **BSAtLi);
 double TrProd(double ox,double oy,double oz,double ax,double ay,double az,
              double bx,double by,double bz,double cx,double cy,double cz);
-void HybStAt(int xxAtNu,int *xxAtEl_nu,double **xxCoor,int xxBdNu,int **xxBdAr,
-             int *HybxxAt,FILE *FPaOut);
+void CenterOfMass(double *COM, double **coords, int FrAtNu,
+                  double *AtWei, int *FrAtEl_nu);
+void HybStAt(int xxAtNu, int *xxAtEl_nu, double **xxCoor, int xxBdNu, int **xxBdAr,
+             int *HybxxAt, FILE *FPaOut);
 void FrAcDo(int FrAtNu,int *FrAtEl_nu,double **FrCoor,int *HybFrAt,int FrBdNu,
             int **FrBdAr,int *FrAcNu,int *FrDoNu,int **FrDATy,int **FrDAAt,
             int **FrHydN,double ***FrVeCo,FILE *FPaOut,char *OutFil);
@@ -271,9 +282,16 @@ void SqDisFrRe_ps(int FrAtNu,double **RoSFCo,double **ReCoor,double *ReMinC,
             int ReAtNu,double PsSpRa,double *RePaCh,int ReReNu,int *AtReprRes,
             int *FiAtRes,int *LaAtRes,double *TotChaRes,int NuChResEn,
             int *LiChResEn,double **SDFrRe_ps_elec,double **ChFrRe_ps_elec);
+void dist2_to_dist(double **dist2, double **dist, 
+              int FrAtNu, int ReAtNu);
+void SqDisFrRe_ps_vdW(int FrAtNu,double **RoSFCo,double **ReCoor,double *ReMinC,
+            double GrSiCu_en,int *CubNum_en,int ***CubFAI_en,int ***CubLAI_en,
+            int *CubLiA_en,int PsSpNC,int ***PsSphe,double **SDFrRe_ps,
+            int ReAtNu,double PsSpRa,int ReReNu,int *AtReprRes,
+            int *FiAtRes,int *LaAtRes); // clangini
 /* void ExtOutNam(int FragNu,char **FrFiNa,char **FrFiNa_out); clangini */
 void ExtOutNam(char *FrFiNa,char *FrFiNa_out); /* clangini */
-void ExtOutNam(char *FrFiNa,char *FrFiNa_out, int myrank); /* clangini */
+void ExtOutNam(char *FrFiNa,char *FrFiNa_out, char *suffix); /* clangini */
 void FindFrSym(int FrAtNu,double **FrCoor,char **FrAtTy,int *UndisAt_fr);
 void write_chm_clus_reduc(int CurFra,int SFWrNu,int FrAtNu,int *AliHyd,
                           double *Coulo_ro,double *Vande_ro,double *TotEn_ro,
@@ -325,11 +343,7 @@ void GeomCenter_FFLD(int CurFra,char **FrFiNa_out,int FrAtNu,int *FrAtEl_nu,
 
 
 
-struct point {
-  double x;
-  double y;
-  double z;
-};
+
 void Solvation(int ReAtNu,double **ReCoor,double *ReVdWE_sr,double *ReVdWR,
                double *ReRad,double *ReRad2,double *ReRadOut,double *ReRadOut2,
                double *ReEffRad_bound,
@@ -512,7 +526,28 @@ void ElecFrag(int ReAtNu,double **ReCoor,double *RePaCh,
               int nymaxBS,int nzmaxBS,double corr_scrint,
               double corr_fr_deso,double *PReDesoElec,
               double *PReFrIntElec,double *PFrDesoElec,double *ReSelfVol_corrB,
-	      char *EmpCorrB,FILE *FPaOut);
+	            char *EmpCorrB,FILE *FPaOut);
+void CalcEffRad(int ReAtNu, double **ReCoor, double *RePaCh,
+                double *ReRad, double *ReRad2, 
+                double *ReRadOut, double *ReRadOut2,
+                double *ReEffRad_bound,
+                struct point *surfpt_re, int *nsurf_re,
+                int *pointsrf_re, double *ReSelfVol, int FrAtNu, double **RoSFCo,
+                double **FrCoor, double *FrPaCh, double *FrRad, double *FrRad2,
+                double *FrRadOut, double *FrRadOut2,
+                double *FrEffRad_bound,
+                double **Frdist2, double **dist2,
+                double *FrMinC_orig, double *FrMaxC_orig,
+                int Nsurfpt_fr, struct point *surfpt_fr_orig,
+                int *nsurf_fr, int *pointsrf_fr, struct point *surfpt_ex,
+                double Tr[4], double U1[4][4], double U2[4][4], double WaMoRa,
+                double GrSiSo, int NPtSphere, struct point Min,
+                struct point Max, double *XGrid, double *YGrid, double *ZGrid,
+                int NGridx, int NGridy, int NGridz, char ***GridMat,
+                double Kelec, double Ksolv, double UnitVol, double pi4,
+                double *ReSelfVol_corrB, char *EmpCorrB, FILE *FPaOut,
+                double *ReEffRad, double *FrEffRad,
+                int *NNeighList3, int *NNeigh3);
 void ElecFragFast(int ReAtNu,double **ReCoor,double *ReRadOut,double *ReRadOut2,
                  struct point *surfpt_re,int *nsurf_re,double *ReSurf_deso,
                  int *pointsrf_re,int ***nlist_re,int **list_re,int nstep_re,
@@ -524,7 +559,7 @@ void ElecFragFast(int ReAtNu,double **ReCoor,double *ReRadOut,double *ReRadOut2,
                  int *nsurf_fr,double *FrSurf_deso,int *pointsrf_fr,
                  double Tr[4],double U1[4][4],double U2[4][4],
                  double WaMoRa,double rslop,int MaxNeigh,double *PReDesoElec,
-		 double *PFrDesoElec);
+		             double *PFrDesoElec);
 int get_frag_dim(int FrAtNu,double **RoSFCo,double *FrRadOut,double GrSiSo,
                  double WaMoRa,int NGridx,int NGridy,int NGridz,
                  struct point Min,int *PnxminFr,
@@ -577,7 +612,7 @@ int Get_Self_Vol_Fr(int FrAtNu,double **RoSFCo,double *FrPaCh,
                     int nzmin_big,int nxmax_big,int nymax_big,int nzmax_big,
                     double *SelfVol,double *SelfVol_corrB,char *EmpCorrB);
 int Get_Self_En_Fr(int FrAtNu,double **RoSFCo,double *FrPaCh,double *FrRadOut,
-                   double *FrRadOut2,double *XGrid,double *YGrid,double *ZGrid,
+                   double *FrRadOut2,double *FrEffRad_bound,double *XGrid,double *YGrid,double *ZGrid,
                    double UnitVol,double Ksolv,double pi4,char ***FrGridMat,
                    int nxminFr,int nyminFr,int nzminFr,
                    int nxmaxFr,int nymaxFr,int nzmaxFr,
@@ -587,6 +622,24 @@ int screened_int(double **RePaCh_Fr,double *ReEffRad,
                  int NNeigh3,int *NeighList3,int FrAtNu,
                  double *FrPaCh,double *FrEffRad,double **dist2,double **dist,
                  double Kelec,double Ksolv,double *PReFrIntElec);
+int screened_int_forces(double **RePaCh_Fr, double *ReEffRad,
+                        int NNeigh3, int *NeighList3, int FrAtNu,
+                        double *FrPaCh, double *FrEffRad, double **dist2, double **dist,
+                        double Kelec, double Ksolv,
+                        double **RoSFCo, double **ReCoor, double **RelCOMCo,
+                        double *F_elec, double *T_elec, double corr_scrint);
+void check_gradient_int_elec(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
+                             double *ReVdWR, double *FrVdWR,
+                             double *Felec, double *Telec,
+                             double **RoSFCo, double **ReCoor,
+                             double *ReMinC,
+                             double GrSiCu_en, int *CubNum_en, int ***CubFAI_en, int ***CubLAI_en,
+                             int *CubLiA_en, int PsSpNC, int ***PsSphe,
+                             double PsSpRa, int ReReNu, int *AtReprRes,
+                             int *FiAtRes, int *LaAtRes, int *FrAtEl_nu, double *AtWei,
+                             double *RePaCh, double *FrPaCh, double *TotChaRes, int NuChResEn, int *LiChResEn,
+                             double **ChFrRe_ps_elec, double *ReEffRad, double *FrEffRad,
+                             int *NeighList3, int NNeigh3, double Kelec, double Ksolv, double corr_scrint);
 int screened_int_uhbd(int FrAtNu,double **RoSFCo,double *FrPaCh,double ***phi,
                       double *XGrid,double *YGrid,double *ZGrid,
                       struct point Min,double GrSiSo,double *PReFrIntElec);
@@ -628,3 +681,4 @@ int Fast_Desol_Receptor(int AtNu,double **Coor,double *RadOut,double *RadOut2,
 			double * minC,double *maxC, double ** xcoor,double maxrad,double WaMoRa);
 int CheckFile(char*name,char type);
 int CheckMol2File(char*name);
+#endif

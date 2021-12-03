@@ -14,7 +14,7 @@ of a rigid receptor, and ranks them according to their binding energy.
 :raw-html:`<br />`
 Polar fragments are positioned such that at least one hydrogen bond with
 optimal distance to a protein polar group is made (polar docking).
-Apolar fragments are docked are docked by matching hydrophobic regions on the
+Apolar fragments are docked by matching hydrophobic regions on the
 fragment and on the receptor (apolar docking).
 These regions are efficiently and accurately determined
 by evaluating electrostatic desolvation penalty and van der Waals
@@ -23,6 +23,14 @@ interactions with an uncharged probe sphere.
 Two implicit solvation models based on the Generalized Born methodology
 are employed to efficiently evaluate the protein and fragment desolvation
 upon binding and the screened electrostatic interaction.
+
+**NEW!** The best generated poses can now be stochastically minimized with 
+Monte Carlo simulated annealing. Beware that this new feature is experimental and
+has not been tested thoroughly yet. See :ref:`mc_minimization` for details.
+
+**NEW!** A new keyword-based parameter file has been introduced. This allows more flexibility in 
+the way settings are specified, but only involves newly added settings (e.g. the ones of :ref:`mc_minimization`),
+so that legacy ``seed.par`` files keep working as expected. See :ref:`KW_param` for details.
 
 |
 
@@ -47,6 +55,7 @@ Contents:
    :maxdepth: 2
 
    getstart
+   parallel
    docking
    vectors
    models

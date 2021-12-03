@@ -16,11 +16,13 @@
 *    You should have received a copy of the GNU General Public License
 *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #if defined(__STDC__) || defined(ANSI) || defined(NRANSI) /* ANSI */
 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <nrutil.h>
 #define NR_END 1
 #define FREE_ARG char*
 
@@ -128,6 +130,49 @@ float **matrix(long nrl, long nrh, long ncl, long nch)
 
       for(i=nrl+1;i<=nrh;i++) m[i]=m[i-1]+ncol;
 
+      /* return pointer to array of pointers to rows */
+      return m;
+    }
+  return NULL;
+}
+void copy_dmatrix(double **source, double **dest, long nrl, long nrh,
+                  long ncl, long nch)
+/* copy content of matrix source into matrix dest */
+{
+  for (int i = nrl; i <= nrh; i++){
+    for (int j = ncl; j <= nch; j++){
+      dest[i][j] = source[i][j];
+    }
+  }
+}
+double **dmatrix(double **s, long nrl, long nrh, long ncl, long nch)
+/* allocate a double matrix m with subscript range m[nrl..nrh][ncl..nch]
+   and copy the values of s in it. clangini */
+{
+  if(nrh>=nrl && nch>=ncl)
+    {
+      long i,j, nrow=nrh-nrl+1,ncol=nch-ncl+1;
+      double **m;
+
+      /* allocate pointers to rows */
+      m = (double **) malloc((size_t)((nrow+NR_END)*sizeof(double*)));
+      if (!m) nrerror("allocation failure 1 in matrix()");
+      m += NR_END;
+      m -= nrl;
+
+      /* allocate rows and set pointers to them */
+      m[nrl]=(double *) malloc((size_t)((nrow*ncol+NR_END)*sizeof(double)));
+      if (!m[nrl]) nrerror("allocation failure 2 in matrix()");
+      m[nrl] += NR_END;
+      m[nrl] -= ncl;
+
+      for(i=nrl+1;i<=nrh;i++) m[i]=m[i-1]+ncol;
+      /* copy content of s into m */
+      for (i = nrl; i <= nrh; i++){
+        for (j = ncl; j <= nch; j++){
+          m[i][j] = s[i][j];
+        }
+      }
       /* return pointer to array of pointers to rows */
       return m;
     }
@@ -504,11 +549,46 @@ void free_i3tensor(int ***t, long nrl, long nrh, long ncl, long nch,
 /* ------------------------- */
 
 /* ------ added by MS ------ */
-struct point {
+struct point{
   double x;
   double y;
   double z;
 };
+
+Point3D::Point3D()
+: x(0.0), y(0.0), z(0.0) { }
+
+Point3D::Point3D(double x_, double y_, double z_)
+: x(x_), y(y_), z(z_) { }
+
+Point3D::Point3D(const Point3D& p){
+    x = p.x;
+    y = p.y;
+    z = p.z;
+}
+
+const Point3D& Point3D::operator=(const Point3D& rhs){
+  x = rhs.x;
+  y = rhs.y;
+  z = rhs.z;
+  return *this;
+}
+
+const Point3D& Point3D::operator+=(const Point3D& q){
+  x += q.x;
+  y += q.y;
+  z += q.z;
+  return *this;
+}
+
+Point3D Point3D::operator*(double v){
+  return Point3D(x*v, y*v, z*v);
+}
+
+Point3D operator+(const Point3D& lhs, const Point3D& rhs){
+  return Point3D(lhs) += rhs;
+}
+
 struct point *structpointvect(long nl, long nh)
 /* allocate a float vector with subscript range v[nl..nh] */
 {
@@ -1043,3 +1123,5 @@ void free_f3tensor(t,nrl,nrh,ncl,nch,ndl,ndh)
 
 
 #endif /* ANSI */
+
+

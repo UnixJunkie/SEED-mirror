@@ -28,6 +28,8 @@
 
 /* CLANGINI 2016 */
 //#include <boost/math/constants/constants.hpp>
+#include "boost/random.hpp" // for random number generation
+#include "boost/generator_iterator.hpp"
 #include <sys/stat.h> /* to check for directory existence (consider changing using boost/system instead) */
 #include <iostream>
 #include <iomanip>
@@ -43,6 +45,12 @@
 #else
   #include <map>
 #endif
+
+#include "Parameter.h" //parameter class
+#include "rnd_namespace.h"
+#include "montecarlo.h"
+#include "energy.h"
+const double R_constant = 1.9872036e-3;
 
 #ifdef ENABLE_MPI
   #include <mpi.h>
@@ -62,126 +70,127 @@ using namespace std;
 
 int main(int argc,char *argv[])
   /* Main part of the program :
-     FPaOut  pointer for the output file
-     SeFrCo  seeded fragment coordinates
-     RoSFCo  coordinates of the rotated seeded fragment
-     WriPat  path for the output file
-     WriNam  name to be written in the output file
-     SFWrNu  number of written seeded fragments
-     AnglRo  fragment rotation angle
-     TREFiP  path of the file which contains the parameters
-     ReVdWR  receptor van der Waals radii
-     ReVdWE  receptor van der Waals energies
-     FrVdWR  fragment van der Waals radii
-     FrVdWE  fragment van der Waals energies
-     ReVdWE_sr  square root of receptor van der Waals energies
-     FrVdWE_sr  square root of fragment van der Waals energies
-     FrAcce  fragment accepted or not (1 -> yes, 0 -> no)
-     BumpMa  maximum number of tolerated bumps
-     NuRoAx  number of fragment rotations around each axis
-     RecHyN  receptor hydrogen number in the current vector (0 if no hydrogen)
-     FraHyN  fragment hydrogen number in the current vector (0 if no hydrogen)
-     FrMaEn  maximal total energy for each type of fragment
-     FrNuTo  total number of generated fragments of the current type
-     FrNuPB  number of generated fragments of the current type that passed the
-     bump checking
-     VWEnEv_ps  evaluation of the van der Waals energy (pseudo-sphere approach)
-     ToNFrP  total number of fragment positions
-     FrCoPo  vector of pointers pointing to matrices of fragment coordinates
-     FraEqu  equivalence between the fragments
-     ClusNu  number of fragment clusters
-     FraSim_no  normalization for the similarity number between two fragments
-     Dist_sq  squared distance
-     ClusIn  indexes for the cluster list done with GSEAL
-     ClusLi  cluster list done with GSEAL
-     FraSim_no_sd  normalization for the similarity number between two fragments
-     for the second GSEAL
-     FraEqu_sd  equivalence between the fragments for the second GSEAL
-     PrintVa  variable used in the printing process
-     ClusVa_1  variable used in the clustering process
-     ClusVa_2  variable used in the clustering process
-     ClusVa_3  variable used in the clustering process
-     ClusLi_sd  cluster list done with the second GSEAL
-     ClusLi_sd_01  cluster indexation for the second GSEAL (1->all the represen-
-     tatives,0->in the clusters)
-     FilChk  file existence checking
-     ReAtEl_nu  atom element numbers array of the receptor
-     FrAtEl_nu  atom element numbers array of the fragment
-     HybReAt  hybridization state of the receptor atoms (2 -> sp2, 3 -> sp3,
-     0 -> no hybridization state found)
-     HybFrAt  hybridization state of the fragment atoms (2 -> sp2, 3 -> sp3,
-     0 -> no hybridization state found)
-     ReApAt  receptor atom which is the origin of the vector used for the
-     seeding of apolar fragments
-     FrApAt  fragment atom which is the extremity of the vector used for the
-     seeding of apolar fragments
-     apol_Vect_re  receptor vectors used for the seeding of apolar fragments
-     apol_Vect_fr  fragment vectors used for the seeding of apolar fragments
-     FrMinC  minimal coordinates of the fragment in each direction (x,y,z)
-     FrMaxC  maximal coordinates of the fragment in each direction (x,y,z)
-     SpPoCh_bool  fragment position in the specified sphere (1->yes,0->no)
-     FrNuSp  number of fragments kept in the specified sphere
-     SpPoCh_gc  geometric center of the fragment
-     SpPoCh_dist  squared distance between the geometric center of the fragment
-     and the center of the specified sphere
-     SpPoCh_rad_sq  squared radius of the sphere for the checking of the fragment
-     position
-     SFWrNu_ar  array of the finally kept number of fragment positions for each
-     fragment type
-     ClusLi_sd_01_reduc  same comment as for ClusLi_sd_01 but keeping only a
-     reduced number of representatives
-     ClusVa_4  variable used in the clustering process
-     ReAtoTyp_nu  receptor atom type numbering
-     FrAtoTyp_nu  fragment atom type numbering
-     VdWCoff_ap  van der Waals energy cutoff in the seeding of apolar fragments
-     FrNuVdW_ap  number of fragments that passed vdW energy checking (only for
-     apolar fragments)
-  FileTemp  temporary file used to write the energies during the generation
-  of the fragment positions (before the sorting)  -> removed Dey
-ClusVa_wr  variable used in the clustering process (for writing)
-  ChkExit  1 if any problem (program exits), 0 if not
-  FrCoNu  number of conformations of the current fragment type
-  Ind_num_cn  index number of the current conformation
-  FrCoor_clus  coordinates of a fragment for computing the normalization
-  in the clustering procedure
-  ConfArr  array of conformations numbers
-  FraSim_no_max  normalization (maximum) for the clustering procedure
-  ReVdWR_p3  power of 3 of the receptor van der Waals radii
-  FrVdWR_p3  power of 3 of the fragment van der Waals radii
-  VW_f  van der Waals energy (fast algorithm)
-  VW_s  van der Waals energy (slow algorithm)
-  In_f  electrostatic interaction energy (fast algorithm)
-  In_s  electrostatic interaction energy (slow algorithm)
-  Dr_f  desolvation of the receptor (fast algorithm)
-  Dr_s  desolvation of the receptor (slow algorithm)
-  Df_f  desolvation of the fragment (fast algorithm)
-  Df_s  desolvation of the fragment (slow algorithm)
-  To_f  total energy (fast algorithm)
-To_s  total energy (slow algorithm)
-  Index_both  index array for sorting lists if both (SLOW and FAST) methods are used
-  TotEn_both  total energy array for sorting lists if both (SLOW and FAST) methods are used
-  ClusLi_sd_pproc  cluster indexation for the second GSEAL for the postprocessing
-  (2->representative of the first GSEAL,1->representative of the
-   second GSEAL(only a reduced number),0->in the clusters)
-  NuSdClKe  number of second clusters which are kept (energy of the cluster
-      representative below a user-given cutoff)
-  NuPosSdCl  total number of kept positions which are members of the kept
-second clusters (representative included)
-  FrPosAr_pproc  array containing the number of the fragment position for the
-  postprocessing
-  SdClusAr_pproc  array containing the number of the second cluster to which
-  belongs the fragment position for the postprocessing
-  TotEnSdClus_pproc  array containing the total energy (slow method) of the
-  second cluster (kept positions) for the postprocessing
-  IntVar1  integer variable used as an index
-  IntVar2  integer variable used as an index
-  Index_pproc  array of indexes for the postprocessing (sorting step)
-  FrPosAr_sort  array containing the number of the fragment position for the
+    FPaOut  pointer for the output file
+    SeFrCo  seeded fragment coordinates
+    RoSFCo  coordinates of the rotated seeded fragment
+    WriPat  path for the output file
+    WriNam  name to be written in the output file
+    SFWrNu  number of written seeded fragments
+    AnglRo  fragment rotation angle
+    TREFiP  path of the file which contains the parameters
+    kwParFil  path of the file which contains the keyword-based parameters
+    ReVdWR  receptor van der Waals radii
+    ReVdWE  receptor van der Waals energies
+    FrVdWR  fragment van der Waals radii
+    FrVdWE  fragment van der Waals energies
+    ReVdWE_sr  square root of receptor van der Waals energies
+    FrVdWE_sr  square root of fragment van der Waals energies
+    FrAcce  fragment accepted or not (1 -> yes, 0 -> no)
+    BumpMa  maximum number of tolerated bumps
+    NuRoAx  number of fragment rotations around each axis
+    RecHyN  receptor hydrogen number in the current vector (0 if no hydrogen)
+    FraHyN  fragment hydrogen number in the current vector (0 if no hydrogen)
+    FrMaEn  maximal total energy for each type of fragment
+    FrNuTo  total number of generated fragments of the current type
+    FrNuPB  number of generated fragments of the current type that passed the
+    bump checking
+    VWEnEv_ps  evaluation of the van der Waals energy (pseudo-sphere approach)
+    ToNFrP  total number of fragment positions
+    FrCoPo  vector of pointers pointing to matrices of fragment coordinates
+    FraEqu  equivalence between the fragments
+    ClusNu  number of fragment clusters
+    FraSim_no  normalization for the similarity number between two fragments
+    Dist_sq  squared distance
+    ClusIn  indexes for the cluster list done with GSEAL
+    ClusLi  cluster list done with GSEAL
+    FraSim_no_sd  normalization for the similarity number between two fragments
+    for the second GSEAL
+    FraEqu_sd  equivalence between the fragments for the second GSEAL
+    PrintVa  variable used in the printing process
+    ClusVa_1  variable used in the clustering process
+    ClusVa_2  variable used in the clustering process
+    ClusVa_3  variable used in the clustering process
+    ClusLi_sd  cluster list done with the second GSEAL
+    ClusLi_sd_01  cluster indexation for the second GSEAL (1->all the represen-
+    tatives,0->in the clusters)
+    FilChk  file existence checking
+    ReAtEl_nu  atom element numbers array of the receptor
+    FrAtEl_nu  atom element numbers array of the fragment
+    HybReAt  hybridization state of the receptor atoms (2 -> sp2, 3 -> sp3,
+    0 -> no hybridization state found)
+    HybFrAt  hybridization state of the fragment atoms (2 -> sp2, 3 -> sp3,
+    0 -> no hybridization state found)
+    ReApAt  receptor atom which is the origin of the vector used for the
+    seeding of apolar fragments
+    FrApAt  fragment atom which is the extremity of the vector used for the
+    seeding of apolar fragments
+    apol_Vect_re  receptor vectors used for the seeding of apolar fragments
+    apol_Vect_fr  fragment vectors used for the seeding of apolar fragments
+    FrMinC  minimal coordinates of the fragment in each direction (x,y,z)
+    FrMaxC  maximal coordinates of the fragment in each direction (x,y,z)
+    SpPoCh_bool  fragment position in the specified sphere (1->yes,0->no)
+    FrNuSp  number of fragments kept in the specified sphere
+    SpPoCh_gc  geometric center of the fragment
+    SpPoCh_dist  squared distance between the geometric center of the fragment
+    and the center of the specified sphere
+    SpPoCh_rad_sq  squared radius of the sphere for the checking of the fragment
+    position
+    SFWrNu_ar  array of the finally kept number of fragment positions for each
+    fragment type
+    ClusLi_sd_01_reduc  same comment as for ClusLi_sd_01 but keeping only a
+    reduced number of representatives
+    ClusVa_4  variable used in the clustering process
+    ReAtoTyp_nu  receptor atom type numbering
+    FrAtoTyp_nu  fragment atom type numbering
+    VdWCoff_ap  van der Waals energy cutoff in the seeding of apolar fragments
+    FrNuVdW_ap  number of fragments that passed vdW energy checking (only for
+    apolar fragments)
+    FileTemp  temporary file used to write the energies during the generation
+    of the fragment positions (before the sorting)  -> removed Dey
+    ClusVa_wr  variable used in the clustering process (for writing)
+    ChkExit  1 if any problem (program exits), 0 if not
+    FrCoNu  number of conformations of the current fragment type
+    Ind_num_cn  index number of the current conformation
+    FrCoor_clus  coordinates of a fragment for computing the normalization
+    in the clustering procedure
+    ConfArr  array of conformations numbers
+    FraSim_no_max  normalization (maximum) for the clustering procedure
+    ReVdWR_p3  power of 3 of the receptor van der Waals radii
+    FrVdWR_p3  power of 3 of the fragment van der Waals radii
+    VW_f  van der Waals energy (fast algorithm)
+    VW_s  van der Waals energy (slow algorithm)
+    In_f  electrostatic interaction energy (fast algorithm)
+    In_s  electrostatic interaction energy (slow algorithm)
+    Dr_f  desolvation of the receptor (fast algorithm)
+    Dr_s  desolvation of the receptor (slow algorithm)
+    Df_f  desolvation of the fragment (fast algorithm)
+    Df_s  desolvation of the fragment (slow algorithm)
+    To_f  total energy (fast algorithm)
+    To_s  total energy (slow algorithm)
+    Index_both  index array for sorting lists if both (SLOW and FAST) methods are used
+    TotEn_both  total energy array for sorting lists if both (SLOW and FAST) methods are used
+    ClusLi_sd_pproc  cluster indexation for the second GSEAL for the postprocessing
+    (2->representative of the first GSEAL,1->representative of the
+    second GSEAL(only a reduced number),0->in the clusters)
+    NuSdClKe  number of second clusters which are kept (energy of the cluster
+    representative below a user-given cutoff)
+    NuPosSdCl  total number of kept positions which are members of the kept
+    second clusters (representative included)
+    FrPosAr_pproc  array containing the number of the fragment position for the
+    postprocessing
+    SdClusAr_pproc  array containing the number of the second cluster to which
+    belongs the fragment position for the postprocessing
+    TotEnSdClus_pproc  array containing the total energy (slow method) of the
+    second cluster (kept positions) for the postprocessing
+    IntVar1  integer variable used as an index
+    IntVar2  integer variable used as an index
+    Index_pproc  array of indexes for the postprocessing (sorting step)
+    FrPosAr_sort  array containing the number of the fragment position for the
     postprocessing after sorting
-  SdClusAr_sort  array containing the number of the second cluster to which
+    SdClusAr_sort  array containing the number of the second cluster to which
     belongs the fragment position for the postprocessing after
     sorting (new order)
-  FlagAr  flag array
+    FlagAr  flag array
   ReprSdClAr  array containing the representatives of the conserved second
     clusters after postprocessing
   CluIndex_sort  array to go from cluster index number (SdClusAr_pproc) to cluster
@@ -194,6 +203,9 @@ second clusters (representative included)
 ChkInGrid  check if ligand lies in grid(s) (1->yes,0->no)
   vdwErr,clbErr print "out of grid"-warnings only once per fragment
 TotFra fragment counter (both sane and failed fragments). For the sane only, CurFra will be used. (clangini)
+FrFiRMode reading mode for fragment input file (only relevant for MPI runs):
+  single: reads single input file.
+  multi: looks for file named as FrFiNa_partXXX where FrFiNa goes from 0 to nranks-1
   */
 
 {
@@ -227,7 +239,7 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
        *SdClusAr_sort,*FlagAr,*ReprSdClAr,MaxPosClus,SFWrNu_init,PrintLev,
        ToNFrP_ap,ij,distrPointBSNumb,gc_reprke,gc_maxwrite,ChkInGrid; /*,CorrFiNumb; clangini*/
 
-      double **FrCoor,*FrPaCh,**ReCoor,*RePaCh,**ReVeCo,**FrVeCo,**SeFrCo,
+  double **FrCoor,*FrPaCh,**ReCoor,*RePaCh,**ReVeCo,**FrVeCo,**SeFrCo,
       /*AnglRo,*/**RoSFCo,*VdWRad,*VdWEne,*ReVdWR,*ReVdWE,*FrVdWR,*FrVdWE,
       LaVdWR,ReMaxC[4],ReMinC[4],SphAng,VdWFaB,BSMaxC[4],BSMinC[4],CoDieV,
       CoGrIn,CoGrSi,***CoGrRP,BuEvFa,*ReVdWE_sr,*FrVdWE_sr,
@@ -281,15 +293,24 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
   /* CLANGINI 2016 */
   std::vector<int> PosToRem;
   struct stat DirExist;
-  char TabLin[_STRLENGTH]; //clangini
+  char TabLin[_STRLENGTH], FrFiRMode[10], kwParFil[_STRLENGTH]; //clangini
   std::ofstream TabOutStream; //clangini
+  double *FrEffRad_bound, *ReEffRad_bound; // Lower bound for the Born Effective radius (frg and rec)
   int HeAtCo = 0; // HeAtCo = Heavy Atom Count clangini
   double *AtWei; // list of atomic weights clangini
   double MolWei = 0.0; // Molecular Weight clangini
   int *CluIndex_sort; // Array Clu index number -> sorted Clu index number clangini
-  double *FrEffRad_bound, *ReEffRad_bound; // Lower bound for the Born Effective radius (frg and rec)
   std::string AlTySp;
   std::string FragNa_str; //C++ string equivalent to FragNa
+  /* params for MC run */
+  Parameter seed_par;
+  int n_rot, n_trans, n_accept_rot, n_accept_trans, // counters for mc moves
+      n_rot_fine, n_trans_fine, n_accept_rot_fine, n_accept_trans_fine;
+  bool do_rot_move, do_fine_move;
+  double old_mc_en, new_mc_en, **old_mc_FrCoor, sa_temp, mc_accept_rate,
+         old_mc_vdW, new_mc_vdW, **old_mc_FrCoor_in, accept_prob, accept_prob_in;
+  // Energy start_en;
+  struct timeval time_mc_start, time_mc_end;
 #if  __cplusplus > 199711L
   std::unordered_map<std::string, int> FragNa_map;
 #else
@@ -313,13 +334,16 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
 #ifdef ENABLE_MPI // MPI variables.
   int myrank, name_len, numtasks;
   char processor_name[MPI_MAX_PROCESSOR_NAME];
-  char dummyStr[_STRLENGTH];
+  char dummyStr[_STRLENGTH],suffix[_STRLENGTH], suffix_out[_STRLENGTH];
   double start_time, end_time, max_time; // for timing
   int dummyMpi; // dummy
   int endtag = 777; // for final handshaking
+  MPI_Request *rkreqs;
+  int *readies;
+  bool firsttime;
 #endif
 
-  #ifdef ENABLE_MPI // start MPI universe!
+#ifdef ENABLE_MPI // start MPI universe!
   MPI_Init(&argc,&argv); // Initialize MPI
   MPI_Comm_size(MPI_COMM_WORLD,&numtasks); // get number of tasks
   MPI_Comm_rank(MPI_COMM_WORLD,&myrank); // get my rank
@@ -327,7 +351,7 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
 
   MPI_Barrier(MPI_COMM_WORLD); // synchronize before calculating the starting time
   start_time = MPI_Wtime();
-  #endif
+#endif
   /*
      allocation in block size  -> to do realloc increase
    */
@@ -410,14 +434,13 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
   /* CLANGINI 2016 END */
   /* Read the input and parameters files */
   InpFil=argv[1];
-
   /* Check presence of input file */
   CheckFile(InpFil,'r');
 
   //SimWei=matrix(1,150,1,150); clangini
   SimWei=dmatrix(0,150,0,150); //Want to use atom element 0 for lone pair. clangini
 
-  ReInFi(InpFil,RecFil,&BSResN,&BSReNu,FrFiNa,TREFiP,
+  ReInFi(InpFil,kwParFil,RecFil,&BSResN,&BSReNu,FrFiNa,TREFiP,FrFiRMode,
       &SphAng,&SphPoN,&NuRoAx,&VdWFaB,&CoDieV,&CoDieP,&CoGrIn,&CoGrSi,
       OutFil,&BuEvFa,&FrMaEn,&PsSpRa,&GrSiCu_en,&FiNuMa,&GrInSo,
       &GrSiSo,&WaMoRa,&NPtSphere,&DielWa,&DielRe,ReDesoAlg,DesoMapAcc,
@@ -433,8 +456,18 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
       EmpCorrB,gc_opt,&gc_reprke,&gc_cutclus,&gc_endifclus,&gc_weighneg,
       &gc_weighpos,&gc_maxwrite,write_pproc_opt,write_pproc_chm_opt,
       write_best_opt,write_sumtab_opt,write_best_sumtab_opt,&AtWei);/*clangini*/
+  seed_par.readKW(kwParFil); // read keyword-based parameter file
+
+#ifdef ENABLE_MPI
+  if (strcmp(FrFiRMode, "single") == 0)
+  {
+    rkreqs = new MPI_Request[numtasks - 1];
+    readies = new int[numtasks - 1];
+    firsttime = true;
+  }
+#endif
   /* Check presence of parameter file */
-  CheckFile(TREFiP,'r'); /* clangini This is superflous after already having read the parameters*/
+  // CheckFile(TREFiP,'r'); // already in ReInFi
 
   SpPoCh_rad_sq=SpPoCh_rad*SpPoCh_rad;
   /* SFWrNu_ar=ivector(1,FragNu); clangini 2016 ?? */
@@ -444,10 +477,27 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
   /* FrFiNa_out=cmatrix(1,FragNu,1,_STRLENGTH); clangini*/
   /* ExtOutNam(FragNu,FrFiNa,FrFiNa_out); clangini */
   #ifdef ENABLE_MPI // add suffix corresponding to the part
-  ExtOutNam(FrFiNa, FrFiNa_out, myrank); // overloaded in case we use MPI
-  ExtOutNam(OutFil, dummyStr, myrank);
 
-  MPI_Barrier(MPI_COMM_WORLD);
+  if (strcmp(FrFiRMode, "single") == 0){
+    // single mode: single input - multi output
+    if (myrank == MASTERRANK)
+    {
+      suffix[0] = '\0'; // suffix of input file
+    } else {
+      sprintf(suffix, "_part%d", myrank);
+    }
+    sprintf(suffix_out, "_part%d", myrank); // suffix for output file
+
+    ExtOutNam(FrFiNa, FrFiNa_out, suffix); // overloaded in case we use MPI
+    ExtOutNam(OutFil, dummyStr, suffix_out);
+  }
+  else if (strcmp(FrFiRMode, "multi") == 0) {
+    sprintf(suffix, "_part%d", myrank); // suffix for both in and out
+
+    ExtOutNam(FrFiNa, FrFiNa_out, suffix);
+    ExtOutNam(OutFil, dummyStr, suffix);
+  }
+  MPI_Barrier(MPI_COMM_WORLD); // is this really needed?
   #else
   ExtOutNam(FrFiNa,FrFiNa_out);
   #endif
@@ -596,14 +646,31 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
     else
       fclose(FilChk);
 
-  /* Fragment input file is now only one clangini*/
-  if ((FilChk=fopen(FrFiNa,"r"))==NULL) {
-    fprintf(FPaOut,"WARNING Was not able to open fragment file %s\n\n",FrFiNa);
-    ChkExit=1;
+#ifdef ENABLE_MPI
+  if (strcmp(FrFiRMode, "single") == 0)
+  {
+    if (myrank == MASTERRANK){
+      if ((FilChk = fopen(FrFiNa, "r")) == NULL)
+      {
+        fprintf(FPaOut, "WARNING Was not able to open fragment file %s\n\n", FrFiNa);
+        ChkExit = 1;
+      }
+      else
+        fclose(FilChk);
+    }
+  } else {
+#endif
+    // multi reading or serial code
+    if ((FilChk = fopen(FrFiNa, "r")) == NULL)
+    {
+      fprintf(FPaOut, "WARNING Was not able to open fragment file %s\n\n", FrFiNa);
+      ChkExit = 1;
+    }
+    else
+      fclose(FilChk);
+#ifdef ENABLE_MPI
   }
-  else
-    fclose(FilChk);
-
+#endif
 
   if ((FilChk=fopen(TREFiP,"r"))==NULL) {
     fprintf(FPaOut,"WARNING Was not able to open parameter file %s\n\n",TREFiP);
@@ -868,8 +935,7 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
         }
       }
       fclose(FilePa);
-    }
-    else { // calculating/writing case:
+    } else { // calculating/writing case:
       CoGReP(ReAtNu,ReCoor,RePaCh,CoDieV,CoDieP,CoGrIn,CoGrSi,BSMinC,CoGPoN,
           CoGrRP);
       printf("Receptor part of the coulombic interaction -> done\n");
@@ -1200,7 +1266,7 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
   /* Do all the precalculation necessary for continuum electrostatics */
   Solvation(ReAtNu,ReCoor,ReVdWE_sr,ReVdWR,ReRad,ReRad2,ReRadOut,ReRadOut2,
       ReEffRad_bound,
-      ReMaxC,ReMinC,RePaCh, DielRe, DielWa,WaMoRa,GrSiSo,GrInSo,
+      ReMaxC,ReMinC,RePaCh,DielRe,DielWa,WaMoRa,GrSiSo,GrInSo,
       NPtSphere,ReResN,ReReNu,BSResN,BSReNu,ReDesoAlg,DesoMapAcc,
       DesoMapFile,RecFilPDB,FDexe,FDdir,&Min,&Max,&XGrid,
       &YGrid,&ZGrid,&GridMat,&NGridx,&NGridy,&NGridz,
@@ -1295,6 +1361,9 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
 
   /* clangini 2016 */
   /* Setting up the table summary file */
+  // #ifdef ENABLE_MPI
+  // if (myrank != MASTERRANK){ // master only reads and dispatches input
+  // #endif
   if (write_sumtab_opt[0]=='y'){ // Should introduce some check.
     #ifdef ENABLE_MPI
     sprintf(dummyStr, "./outputs/seed_clus_part%d.dat", myrank);
@@ -1362,6 +1431,9 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
     }
     TabOutStream.close();
   }
+  // #ifdef ENABLE_MPI
+  // }
+  // #endif
 
   int CurFraTot = 0; /* Current fragment in the file (counting also skipped ones) clangini */
   int SkiFra = 0; /* Counter of skipped fragments clangini*/
@@ -1369,12 +1441,31 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
   int LstFra_f = 0; /* flag to signal that the last fragment was reached */
 
   std::ifstream FrInStream; /* declare input stream for the fragment */
-  FrInStream.open(FrFiNa, std::ios_base::binary); /* open input stream for the fragment */
-  if (FrInStream.fail()) {
-    fprintf(stderr,"Cannot open specified input file %s\nProgram exits!\n",FrFiNa);
-    exit(13);
+  std::streampos FrInPos;
+
+#ifdef ENABLE_MPI
+  if (strcmp(FrFiRMode, "single") == 0){
+    if (myrank == MASTERRANK){
+      FrInStream.open(FrFiNa, std::ios_base::binary); /* open input stream for the fragment */
+      if (FrInStream.fail())
+      {
+        fprintf(stderr, "Cannot open specified input file %s\nProgram exits!\n", FrFiNa);
+        exit(13);
+      }
+      FrInPos = FrInStream.tellg(); /* Save the get position */
+    }
+  } else {
+#endif
+    FrInStream.open(FrFiNa, std::ios_base::binary); /* open input stream for the fragment */
+    if (FrInStream.fail())
+    {
+      fprintf(stderr, "Cannot open specified input file %s\nProgram exits!\n", FrFiNa);
+      exit(13);
+    }
+    FrInPos = FrInStream.tellg(); /* Save the get position */
+#ifdef ENABLE_MPI
   }
-  std::streampos FrInPos = FrInStream.tellg(); /* Save the get position */
+#endif
 
   if (write_pproc_opt[0]=='y'){
     /* FILE *FilePa;*/
@@ -1396,18 +1487,39 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
     fprintf(FilePa,"# TRIPOS MOL2 file generated by SEED\n\n");
     fclose(FilePa);
   }
-  while((FrInStream.eof() == 0)&&(LstFra_f == 0)) { /* loop until reach end of file -> loop over fragments clangini*/
+
+  /* MC initialization */
+  #ifdef ENABLE_MPI
+  if (seed_par.do_mc == 'y') {
+    if(seed_par.mc_rand_seed == -1){
+      rnd_gen::set_rng_seed(time(NULL) + myrank);
+    } else { // case seed is set by user
+      rnd_gen::set_rng_seed(seed_par.mc_rand_seed + myrank);
+    }
+  }
+  #else
+  if (seed_par.do_mc == 'y') {
+    if (seed_par.mc_rand_seed == -1)
+      rnd_gen::set_rng_seed(time(NULL));
+    else {
+      rnd_gen::set_rng_seed(seed_par.mc_rand_seed);
+    }
+  }
+  #endif
+
+  // while((FrInStream.eof() == 0)&&(LstFra_f == 0)) { /* loop until reach end of file -> loop over fragments clangini*/
+  while (true)
+  {                              /* loop until reach end of file -> loop over fragments clangini*/
     /*for (i=1;i<=FragNu;i++) */ /* open loop over fragments (has to be removed) clangini */
     /* control amount of printed "out of grid" error messages */
 
-    //std::cout << "Entered loop over fragments!" << std::endl; /*clangini OK*/
+    // std::cout << "Entered loop over fragments!" << std::endl; /*clangini OK*/
 
     vdwErr = 0;
     clbErr = 0;
 
     /* CurFra=i; clangini */
-    FPaOut=fopen(OutFil,"a");
-
+    // FPaOut=fopen(OutFil,"a"); // moved after fragment reading. clangini
     //fprintf(FPaOut,"-------------------------------------------------\n\n");//Moved after fragment reading. clangini
     //fprintf(FPaOut,"Data for the fragment type %d :\n\n",CurFraTot); //Moved after fragment reading. clangini
 
@@ -1422,17 +1534,88 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
 
     /* ReFrFi_mol2 has been reimplemented in C++ clangini */
     /* Reads the next valid molecule. If it detects any problems it skips the molecule. clangini */
-    LstFra_f = ReFrFi_mol2(&FrInStream,&FrInPos,&SkiFra,&CurFraTot,FragNa,
-                           FragNa_str,
-                           &FrAtNu,&FrBdNu,&FrAtEl,&FrCoor,&FrAtTy,&FrSyAtTy,
-                           &FrPaCh,&FrBdAr,&FrBdTy,FrSubN,FrSubC,&FrCoNu,
-                           &SubNa,AlTySp);
-    if (LstFra_f){
-      std::cerr << "\tNo more fragments in input file " << FrFiNa << std::endl;
-      fclose(FPaOut);
-      break;
+#ifdef ENABLE_MPI
+    if (strcmp(FrFiRMode, "single") == 0){
+      if (myrank == MASTERRANK)
+      {
+        LstFra_f = MPI_ReFrFi_mol2(&FrInStream, &FrInPos, rkreqs, readies, &firsttime);
+        // std::cerr << "masterrank " << myrank << " ended reading with status " << LstFra_f << std::endl;
+      }
+      else
+      {
+        LstFra_f = MPI_slave_ReFrFi_mol2(&SkiFra, &CurFraTot, FragNa,
+                                         FragNa_str, &FrAtNu, &FrBdNu,
+                                         &FrAtEl, &FrCoor, &FrAtTy, &FrSyAtTy,
+                                         &FrPaCh,
+                                         &FrBdAr, &FrBdTy, FrSubN, FrSubC,
+                                         &FrCoNu, &SubNa, AlTySp);
+        // std::cerr << "rank " << myrank << " ended reading with status " << LstFra_f << std::endl;
+      }
+    } else {
+#endif
+      LstFra_f = ReFrFi_mol2(&FrInStream, &FrInPos, &SkiFra, &CurFraTot, FragNa,
+                             FragNa_str,
+                             &FrAtNu, &FrBdNu, &FrAtEl, &FrCoor, &FrAtTy, &FrSyAtTy,
+                             &FrPaCh, &FrBdAr, &FrBdTy, FrSubN, FrSubC, &FrCoNu,
+                             &SubNa, AlTySp);
+#ifdef ENABLE_MPI
+    }
+#endif
+
+    // #ifdef ENABLE_MPI
+    //     if (myrank == MASTERRANK){
+    //       LstFra_f = MPI_ReFrFi_mol2(&FrInStream,&FrInPos,rkreqs,readies, &firsttime);
+    //       // std::cerr << "rank " << myrank << " ended reading with status " << LstFra_f << std::endl;
+    //     } else {
+    //       LstFra_f = MPI_slave_ReFrFi_mol2(&SkiFra,&CurFraTot,FragNa,
+    //                       FragNa_str,&FrAtNu,&FrBdNu,
+    //                       &FrAtEl, &FrCoor,&FrAtTy,&FrSyAtTy,
+    //                       &FrPaCh,
+    //                       &FrBdAr,&FrBdTy,FrSubN,FrSubC,
+    //                       &FrCoNu, &SubNa, AlTySp);
+    //       // std::cerr << "rank " << myrank << " ended readig with status " << LstFra_f << std::endl;
+    //       if(LstFra_f == -1){
+    //         continue;
+    //       }
+    //     }
+    // #else
+    //     LstFra_f = ReFrFi_mol2(&FrInStream,&FrInPos,&SkiFra,&CurFraTot,FragNa,
+    //                            FragNa_str,
+    //                            &FrAtNu,&FrBdNu,&FrAtEl,&FrCoor,&FrAtTy,&FrSyAtTy,
+    //                            &FrPaCh,&FrBdAr,&FrBdTy,FrSubN,FrSubC,&FrCoNu,
+    //                            &SubNa,AlTySp);
+    // #endif
+    // gettimeofday(&time_read, NULL);
+
+    if (LstFra_f == -1) // skip frag
+    {
+      continue;
+    }
+    else if (LstFra_f == 1){
+#ifdef ENABLE_MPI
+      if (strcmp(FrFiRMode, "single") == 0){
+        if (myrank == MASTERRANK)
+        {
+          std::cerr << "\tNo more fragments in input file " << FrFiNa << std::endl;
+        }
+        break;
+      } else {
+#endif
+        std::cerr << "\tNo more fragments in input file " << FrFiNa << std::endl;
+        break;
+#ifdef ENABLE_MPI
+      }
+#endif
     }
 
+#ifdef ENABLE_MPI
+    if (strcmp(FrFiRMode, "single") == 0)
+    {
+      // masterrank only does reading and dispatching
+      if (myrank == MASTERRANK)
+        continue;
+    }
+#endif 
     //CurFraTot++; //This is updated in ReFrFi_mol2
     if ( ++FragNa_map[FragNa_str] > 1){
       sprintf(buff, "$%d",FragNa_map[FragNa_str]);
@@ -1441,6 +1624,7 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
 
     CurFra++; /* After succesfully reading, we update the current fragment index */
     i = CurFra; /* Not to change i to CurFra everywhere in the following clangini*/
+    FPaOut = fopen(OutFil, "a");
     fprintf(FPaOut,"-------------------------------------------------\n\n");//Moved here clangini
     fprintf(FPaOut,"Data for the fragment type %d (%d) :\n\n",CurFra, CurFraTot); //Moved here clangini
     // Here we rotate the fragment to a common framework:
@@ -1497,8 +1681,7 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
       }
       std::cout << "Fragment " << FragNa
       << " for energy evaluation run has not been pre-aligned." << std::endl;
-    }
-    else {
+    } else {
       std::cout << "Fragment " << FragNa << " has not been pre-aligned." << std::endl;
     }
     /* CLANGINI 2016 end */
@@ -1599,7 +1782,7 @@ TotFra fragment counter (both sane and failed fragments). For the sane only, Cur
         /* Calculate the solvation energy of the fragment without the receptor
            Use a very fine grid spacing (0.1) */
         nn = FragSolvEn(FrAtNu,FrCoor,FrPaCh,FrVdWR,FrRadOut,
-            FrRadOut2, FrEffRad_bound,Frdist2,Nsurfpt_fr,surfpt_fr,WaMoRa,0.1,
+            FrRadOut2,FrEffRad_bound,Frdist2,Nsurfpt_fr,surfpt_fr,WaMoRa,0.1,
             Ksolv,pi4,&FrSolvEn,EmpCorrB,FPaOut);
         /* fprintf(FPaOut,"Dielectric value = %4.1f -> %4.1f transfer energy for the fragment (%s) : ",
             DielRe,DielWa,&ResN_fr[i][1]); */
@@ -3736,7 +3919,402 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
           Df_s=SFDeso_fr*FrDesoElec;
           To_s=VW_s+In_s+Dr_s+Df_s;
 
+          if (seed_par.do_mc == 'y'){
+            gettimeofday(&time_mc_start, NULL);
+            /* MC initialization -- outer chain */
+            old_mc_en = To_s;
+            old_mc_FrCoor = dmatrix(RoSFCo, 1, FrAtNu, 1, 3); // outer chain
+            old_mc_FrCoor_in = zero_dmatrix(1, FrAtNu, 1, 3); // inner chain
+            sa_temp = seed_par.mc_temp;                       //T_0
+            mc_accept_rate = 0.0;
 
+            n_rot = 0; /* counters for the num of MC moves */
+            n_accept_rot = 0;
+            n_rot_fine = n_accept_rot_fine = 0;
+            n_trans = 0;
+            n_accept_trans = 0;
+            n_trans_fine = n_accept_trans_fine = 0;
+
+            fprintf(FPaOut, "Doing MC Minimization of pose.");
+
+            for (int cyc_out = 0; cyc_out < seed_par.mc_niter_out; cyc_out++)
+            { /* outer chain */
+              accept_prob = 0.0;
+
+              /* MC initialization -- inner chain */
+              old_mc_vdW = VW_s;
+              copy_dmatrix(old_mc_FrCoor, old_mc_FrCoor_in, 1, FrAtNu, 1, 3);
+
+              for (int cyc_in = 0; cyc_in < seed_par.mc_niter_in; cyc_in++)
+              { /* inner chain */
+                accept_prob_in = 0.0;
+
+                do_rot_move = rnd_gen::get_bernoulli(seed_par.mc_rot_freq); // doing a rotational move?
+                if (do_rot_move)
+                {
+                  n_rot++;
+                  do_fine_move = rnd_gen::get_bernoulli(seed_par.mc_rot_fine_freq);
+                  if (do_fine_move)
+                  { //fine or coarse?
+                    n_rot_fine++;
+                    rot_move(RoSFCo, FrAtNu, seed_par.mc_max_rot_step_fine);
+                  }
+                  else
+                  {
+                    rot_move(RoSFCo, FrAtNu, seed_par.mc_max_rot_step);
+                  }
+                }
+                else
+                {
+                  n_trans++;
+                  do_fine_move = rnd_gen::get_bernoulli(seed_par.mc_tran_fine_freq);
+                  if (do_fine_move)
+                  { //fine or coarse?
+                    n_trans_fine++;
+                    trans_move(RoSFCo, FrAtNu, seed_par.mc_max_tran_step_fine);
+                  }
+                  else
+                  {
+                    trans_move(RoSFCo, FrAtNu, seed_par.mc_max_tran_step);
+                  }
+                }
+                /* vdW energy evaluation - inner loop */
+                Rot_Tran(FrAtNu, FrCoor, RoSFCo, Tr, U1, U2);
+                SqDisFrRe_ps_vdW(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                                 CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                                 PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                                 ReReNu, AtReprRes, FiAtRes, LaAtRes);
+                PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                       ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+
+                new_mc_vdW = SFVWEn * VWEnEv_ps;                                               // new energy inner chain
+                accept_prob_in = exp(-1 / (R_constant * sa_temp) * (new_mc_vdW - old_mc_vdW)); // TODO remove sa_temp from inner chain
+                if (rnd_gen::get_uniform(0, 1) <= accept_prob_in)
+                {
+                  old_mc_vdW = new_mc_vdW;
+                  copy_dmatrix(RoSFCo, old_mc_FrCoor_in, 1, FrAtNu, 1, 3);
+                  if (do_rot_move)
+                  {
+                    n_accept_rot++;
+                    if (do_fine_move)
+                      n_accept_rot_fine++;
+                  }
+                  else
+                  {
+                    n_accept_trans++;
+                    if (do_fine_move)
+                      n_accept_trans_fine++;
+                  }
+                }
+                else
+                {
+                  copy_dmatrix(old_mc_FrCoor_in, RoSFCo, 1, FrAtNu, 1, 3);
+                  new_mc_vdW = old_mc_vdW;
+                }
+
+              } // end of inner chain
+              /* Energy evaluation: -- outer chain */
+              Rot_Tran(FrAtNu, FrCoor, RoSFCo, Tr, U1, U2);
+              SqDisFrRe_ps(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                           CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                           PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                           RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                           TotChaRes, NuChResEn, LiChResEn,
+                           SDFrRe_ps_elec, ChFrRe_ps_elec);
+              PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                     ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+              ElecFrag(ReAtNu, ReCoor, RePaCh, ChFrRe_ps_elec,
+                       ReRad, ReRad2, ReRadOut,
+                       ReRadOut2, ReEffRad_bound, surfpt_re, nsurf_re,
+                       pointsrf_re, ReSelfVol, FrAtNu, RoSFCo, FrCoor,
+                       FrPaCh, FrRad, FrRad2, FrRadOut, FrRadOut2,
+                       FrEffRad_bound, Frdist2,
+                       SDFrRe_ps_elec, FrMinC, FrMaxC, &FrSolvEn,
+                       Nsurfpt_fr, surfpt_fr,
+                       nsurf_fr, pointsrf_fr, surfpt_ex, Tr, U1, U2, WaMoRa,
+                       GrSiSo, NPtSphere, Min, Max, XGrid, YGrid, ZGrid,
+                       NGridx, NGridy, NGridz, GridMat,
+                       DeltaPrDeso, Kelec, Ksolv, UnitVol,
+                       pi4, nxminBS, nyminBS, nzminBS, nxmaxBS, nymaxBS,
+                       nzmaxBS, corr_scrint, corr_fr_deso, &ReDesoElec,
+                       &ReFrIntElec, &FrDesoElec, ReSelfVol_corrB, EmpCorrB, 
+                       FPaOut);
+
+              new_mc_en = SFVWEn * VWEnEv_ps + SFIntElec * ReFrIntElec +
+                          SFDeso_re * ReDesoElec + SFDeso_fr * FrDesoElec;
+
+              accept_prob = exp(-1 / (R_constant * sa_temp) * (new_mc_en - old_mc_en));
+              if (rnd_gen::get_uniform(0, 1) <= accept_prob)
+              {
+                old_mc_en = new_mc_en;
+                copy_dmatrix(RoSFCo, old_mc_FrCoor, 1, FrAtNu, 1, 3);
+                /* Update energies */
+                VW_s = SFVWEn * VWEnEv_ps;
+                In_s = SFIntElec * ReFrIntElec;
+                Dr_s = SFDeso_re * ReDesoElec;
+                Df_s = SFDeso_fr * FrDesoElec;
+                To_s = new_mc_en;
+              } 
+              else
+              { // pose not accepted
+                copy_dmatrix(old_mc_FrCoor, RoSFCo, 1, FrAtNu, 1, 3);
+                new_mc_en = old_mc_en;
+              }
+              sa_temp = seed_par.sa_alpha * sa_temp; //T_(n+1)
+            } // end of MC cyc_out
+            /* Update pose coordinates */
+            // Not needed in eval mode?
+            // for (i2 = 1; i2 <= FrAtNu; i2++)
+            // {
+            //   FrCoPo[ClusLi_sd[i1]][i2][1] = RoSFCo[i2][1]; // sets the coordinates RoSFCo
+            //   FrCoPo[ClusLi_sd[i1]][i2][2] = RoSFCo[i2][2]; // of the current pose we are analyzing. clangini
+            //   FrCoPo[ClusLi_sd[i1]][i2][3] = RoSFCo[i2][3];
+            // }
+
+            free_dmatrix(old_mc_FrCoor, 1, FrAtNu, 1, 3);
+            free_dmatrix(old_mc_FrCoor_in, 1, FrAtNu, 1, 3);
+
+            gettimeofday(&time_mc_end, NULL);
+            fprintf(FPaOut, "CPU time in sec. for MC optimization: %.2f\n",
+                    ((time_mc_end.tv_sec - time_mc_start.tv_sec) * 1000000u +
+                     time_mc_end.tv_usec - time_mc_start.tv_usec) / 1.e6);
+          } // end of if (seed_par.do_mc == 'y')
+          /* ----- Rigid Body Minimization ----- */
+          if (seed_par.do_rbmin == 'y')
+          {
+            // bool do_gradient_check = false;
+            // int max_iter = 100;
+            // double eps_grms = 0.02; // minimum gradient size
+            // double alpha_xyz = 0.1;
+            // double alpha_rot = 0.01;
+            double learning_rate = seed_par.learning_rate;
+            double grms;
+            int rbi;
+            int i;
+            
+            // forces and torques:
+            double FvdW[4]; // Total vdW force
+            double TvdW[4]; // Total vdw torque
+            double maxFvdW, maxTvdW;
+            double Felec[4]; // Total elec force
+            double Telec[4]; // Total elec torque
+            double Ftot[4];
+            double Ttot[4];
+
+            double COM[4];
+            double **RelCOMCo, **newRoSFCo;
+            Quaternion<double> q_rb;
+            double newVWEn = 0.0;
+            double newIntElec = 0.0;
+            double newTotEn = 0.0;
+            double oldTotEn = 0.0;
+            double **dist_elec;
+            int *NeighList3;
+            double *ReEffRad;
+            double *FrEffRad;
+            int NNeigh3;
+            int dummy;
+
+            RelCOMCo = dmatrix(1,FrAtNu,1,3);
+            newRoSFCo = dmatrix(1, FrAtNu, 1, 3);
+
+            // Distances for vdW and int_elec
+            SqDisFrRe_ps(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                         CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                         PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                         RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                         TotChaRes, NuChResEn, LiChResEn,
+                         SDFrRe_ps_elec, ChFrRe_ps_elec);
+            // vdW energy:
+            PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                    ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+            // Screened electrostatic interaction
+            // We keep R_born fixed.
+            NeighList3 = ivector(1, ReAtNu);
+            dist_elec = zero_dmatrix(1, FrAtNu, 1, ReAtNu);
+            ReEffRad = dvector(1, ReAtNu);
+            FrEffRad = dvector(1,FrAtNu);
+            dist2_to_dist(SDFrRe_ps_elec, dist_elec, FrAtNu, ReAtNu);
+            CalcEffRad(ReAtNu,ReCoor,RePaCh,ReRad,ReRad2,
+                       ReRadOut,ReRadOut2,ReEffRad_bound,
+                       surfpt_re,nsurf_re,
+                       pointsrf_re, ReSelfVol,FrAtNu,RoSFCo,FrCoor,
+                       FrPaCh,FrRad,FrRad2,FrRadOut, FrRadOut2,
+                       FrEffRad_bound,Frdist2,SDFrRe_ps_elec,
+                       FrMinC, FrMaxC, Nsurfpt_fr,surfpt_fr,
+                       nsurf_fr,pointsrf_fr,surfpt_ex,Tr,U1,U2, 
+                       WaMoRa,GrSiSo,NPtSphere,Min,Max,XGrid,YGrid,ZGrid,
+                       NGridx, NGridy, NGridz, GridMat,Kelec,Ksolv,
+                       UnitVol,pi4,ReSelfVol_corrB, EmpCorrB,FPaOut,
+                       ReEffRad, FrEffRad,NeighList3, &NNeigh3);
+            dummy = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                                 FrEffRad, SDFrRe_ps_elec, dist_elec, Kelec, Ksolv, &ReFrIntElec);
+            ReFrIntElec *= corr_scrint;
+            oldTotEn = VWEnEv_ps + ReFrIntElec;
+
+            for (rbi = 1; rbi <= seed_par.max_iter; rbi++){
+              // COM and coords relative to COM:
+              CenterOfMass(COM, RoSFCo, FrAtNu, AtWei, FrAtEl_nu);
+              for (i = 1; i <= FrAtNu; i++){
+                for (j = 1; j <= 3; j++)
+                  RelCOMCo[i][j] = RoSFCo[i][j] - COM[j];
+              }
+              // vdW forces and torques:
+              PsSpFE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                      ReVdWR, FrVdWR, FvdW, TvdW,
+                      &maxFvdW, &maxTvdW, 
+                      SDFrRe_ps, RoSFCo, ReCoor, RelCOMCo);
+              screened_int_forces(ChFrRe_ps_elec, ReEffRad, NNeigh3,
+                                  NeighList3, FrAtNu,
+                                  FrPaCh, FrEffRad, SDFrRe_ps_elec, dist_elec,
+                                  Kelec, Ksolv,RoSFCo, ReCoor, RelCOMCo,
+                                  Felec, Telec, corr_scrint);
+              // std::cerr << "Felec: " << Felec[1] << " " << Felec[2] << " " << Felec[3] << std::endl;
+              // std::cerr << "Telec: " << Telec[1] << " " << Telec[2] << " " << Telec[3] << std::endl;
+              sum_vec(Ftot, FvdW, Felec, 1, 3);
+              sum_vec(Ttot, TvdW, Telec, 1, 3);
+
+              grms = calc_grms(Ftot, Ttot, seed_par.alpha_xyz, seed_par.alpha_rot);
+              std::cerr << "ITER: " << rbi << std::endl;
+              std::cerr << "grms: " << grms << std::endl; 
+              // check gradients:
+              if (seed_par.do_gradient_check == 'y')
+              {
+                check_gradient_vdw(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                                   ReVdWR, FrVdWR, FvdW, TvdW,
+                                   RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                                   CubNum_en, CubFAI_en, CubLAI_en,
+                                   CubLiA_en, PsSpNC, PsSphe,
+                                   PsSpRa, ReReNu, AtReprRes,
+                                   FiAtRes, LaAtRes, FrAtEl_nu, AtWei);
+
+                check_gradient_int_elec(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                                        ReVdWR, FrVdWR, Felec, Telec,
+                                        RoSFCo, ReCoor,
+                                        ReMinC, GrSiCu_en, CubNum_en, CubFAI_en, CubLAI_en,
+                                        CubLiA_en, PsSpNC, PsSphe,
+                                        PsSpRa, ReReNu, AtReprRes,
+                                        FiAtRes, LaAtRes, FrAtEl_nu, AtWei,
+                                        RePaCh, FrPaCh, TotChaRes, NuChResEn, LiChResEn,
+                                        ChFrRe_ps_elec, ReEffRad, FrEffRad,
+                                        NeighList3, NNeigh3, Kelec, Ksolv, corr_scrint);
+              }
+              // check break condition:
+              if (grms < seed_par.eps_grms)
+              {
+                break;
+              }
+
+              // COM update:
+              COM[1] = COM[1] + learning_rate * seed_par.alpha_xyz * Ftot[1] / grms; //maxFvdW;
+              COM[2] = COM[2] + learning_rate * seed_par.alpha_xyz * Ftot[2] / grms; //maxFvdW;
+              COM[3] = COM[3] + learning_rate * seed_par.alpha_xyz * Ftot[3] / grms; //maxFvdW;
+              std::cerr << "Ftot: " << Ftot[1] << " " << Ftot[2] << " " << Ftot[3] << std::endl;
+              // Rotation update:
+              q_rb.fromXYZrot(learning_rate * seed_par.alpha_rot * Ttot[1] / grms,  //maxTvdW,
+                              learning_rate * seed_par.alpha_rot * Ttot[2] / grms,  //maxTvdW,
+                              learning_rate * seed_par.alpha_rot * Ttot[3] / grms); //maxTvdW);
+              for (i = 1; i <= FrAtNu; i++)
+              {
+                q_rb.quatConjugateVecRef(RelCOMCo[i], 0.0, 0.0, 0.0);
+              }
+              std::cerr << "TvW: " << Ttot[1] << " " << Ttot[2] << " " << Ttot[3] <<  std::endl;
+              std::cerr << "learning rate: " << learning_rate << std::endl;
+
+              // Looking forward: decide if to accept move or shrink the learning rate.
+              for (i = 1; i <= FrAtNu; i++){
+                for (j=1; j <= 3; j++)
+                  newRoSFCo[i][j] = COM[j] + RelCOMCo[i][j];
+              }
+              SqDisFrRe_ps(FrAtNu, newRoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                           CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                           PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                           RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                           TotChaRes, NuChResEn, LiChResEn,
+                           SDFrRe_ps_elec, ChFrRe_ps_elec);
+              PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                     ReVdWR, FrVdWR, &newVWEn, SDFrRe_ps);
+              dist2_to_dist(SDFrRe_ps_elec, dist_elec, FrAtNu, ReAtNu);
+              dummy = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                                   FrEffRad, SDFrRe_ps_elec, dist_elec, Kelec, Ksolv, &newIntElec);
+              newIntElec *= corr_scrint;
+              newTotEn = newVWEn + newIntElec;
+
+              std::cout << "New energies: " << newVWEn << " " << newIntElec << " " << 
+                           newTotEn << std::endl;
+              std::cout << "Old energies: " << VWEnEv_ps << " " << ReFrIntElec << " " <<
+                           oldTotEn <<std::endl;
+
+              if (newTotEn <= oldTotEn) // accept new energies
+              {
+                std::cerr << "accept step" << std::endl;
+                // update coords
+                copy_dmatrix(newRoSFCo, RoSFCo,1, FrAtNu, 1, 3);
+                // extend base learning rate:
+                learning_rate *= 1.2;
+                VWEnEv_ps = newVWEn;
+                ReFrIntElec = newIntElec;
+                oldTotEn = newTotEn;
+              } 
+              else 
+              {
+                std::cerr << "reject step" << std::endl;
+                // shrink base learning rate:
+                learning_rate *= 0.2;
+                // recalculate energy:
+                SqDisFrRe_ps(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                             CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                             PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                             RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                             TotChaRes, NuChResEn, LiChResEn,
+                             SDFrRe_ps_elec, ChFrRe_ps_elec);
+                PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                       ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+                dist2_to_dist(SDFrRe_ps_elec, dist_elec, FrAtNu, ReAtNu);
+                dummy = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                                     FrEffRad, SDFrRe_ps_elec, dist_elec, Kelec, Ksolv, &ReFrIntElec);
+                ReFrIntElec *= corr_scrint;
+                oldTotEn = VWEnEv_ps + ReFrIntElec;
+              }
+            }
+            // This is necessary to recalculate the final Born radii:
+            SqDisFrRe_ps(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                         CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                         PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                         RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                         TotChaRes, NuChResEn, LiChResEn,
+                         SDFrRe_ps_elec, ChFrRe_ps_elec);
+            PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                   ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+            /* Compute receptor desolvation, fragment desolvation and receptor-fragment
+             interaction (with screening effect) energies (slow method) */
+            ElecFrag(ReAtNu, ReCoor, RePaCh, ChFrRe_ps_elec, ReRad, ReRad2,
+                     ReRadOut, ReRadOut2, ReEffRad_bound,
+                     surfpt_re, nsurf_re,
+                     pointsrf_re, ReSelfVol, FrAtNu, RoSFCo, FrCoor,
+                     FrPaCh, FrRad, FrRad2, FrRadOut, FrRadOut2,
+                     FrEffRad_bound, Frdist2,
+                     SDFrRe_ps_elec, FrMinC, FrMaxC, &FrSolvEn, Nsurfpt_fr,
+                     surfpt_fr, nsurf_fr, pointsrf_fr, surfpt_ex, Tr, U1, U2,
+                     WaMoRa, GrSiSo, NPtSphere, Min, Max, XGrid, YGrid, ZGrid,
+                     NGridx, NGridy, NGridz, GridMat, DeltaPrDeso, Kelec, Ksolv,
+                     UnitVol, pi4, nxminBS, nyminBS, nzminBS, nxmaxBS, nymaxBS,
+                     nzmaxBS, corr_scrint, corr_fr_deso, &ReDesoElec,
+                     &ReFrIntElec, &FrDesoElec, ReSelfVol_corrB, EmpCorrB, FPaOut);
+
+            VW_s = SFVWEn * VWEnEv_ps;
+            In_s = SFIntElec * ReFrIntElec;
+            Dr_s = SFDeso_re * ReDesoElec;
+            Df_s = SFDeso_fr * FrDesoElec;
+            To_s = VW_s + In_s + Dr_s + Df_s;
+
+            free_dmatrix(RelCOMCo,1,FrAtNu,1,3);
+            free_dmatrix(newRoSFCo,1,FrAtNu,1,3);
+            free_ivector(NeighList3,1,ReAtNu);
+            free_dmatrix(dist_elec,1, FrAtNu, 1, ReAtNu);
+            free_dvector(ReEffRad,1, ReAtNu);
+            free_dvector(FrEffRad,1, FrAtNu);
+          } // end of if (seed_par.do_rbmin == 'y')
         }
 
         /* ----- FAST or BOTH methods ----- */
@@ -3799,50 +4377,70 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
           fprintf(FPaOut,
                   "%10d%12.2f%11.2f%13.2f%12.2f%13.2f\n",
-                  Ind_num_cn, VW_s, In_s, Dr_s, Df_s,
+                  Ind_num_cn,VW_s,In_s,Dr_s,Df_s,
                   To_s);
+          // if pose writing is requested, write pose (this is 
+          // redundant normally, but needed if minimizing with MC).
+          if (write_best_opt[0] == 'y')
+          { // Write *best_pproc* mol2 file
+            sprintf(WriPat, "%s%s%s", "./outputs/", FrFiNa_out,
+                    "_best.mol2\0");
+            FilePa = fopen(WriPat, "a");
+            append_pose_to_mol2(FilePa, FragNa, /*FragNa_map[FragNa_str],*/ FrAtNu,
+                                FrBdNu, 1, FrAtEl, RoSFCo,
+                                1, FrSyAtTy,
+                                FrAtTy, CurFra, FrBdAr, FrBdTy,
+                                1,
+                                To_s,
+                                FrPaCh, SubNa, AlTySp);
+            fclose(FilePa);
+          }
           // if energy evaluation run is requested, the energies are saved in
           // the best output summary table. clangini
           HeAtCo = count_heavy_atom(FrAtEl_nu, FrAtNu);
           MolWei = molecular_weight(FrAtEl_nu, FrAtNu, AtWei);
-          if (write_best_sumtab_opt[0] == 'y')
-          {
-          // append to _best_pproc summary table
-          #ifdef ENABLE_MPI
-          sprintf(dummyStr, "./outputs/seed_best_part%d.dat", myrank);
-          strcpy(TabFil, dummyStr);
-          #else
-          strcpy(TabFil,"./outputs/seed_best.dat");
-          #endif
-          TabOutStream.open (TabFil, std::ios::out | std::ios::app); // append mode
-          if(TabOutStream.is_open()){
-            //for (j=1;j<=((NuPosMem<NuPosSdCl)?NuPosMem:NuPosSdCl);j++) {
-            sprintf(TabLin,
-                  "%-30s%8d%10d%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10d%10.4f",
-                  FragNa,1,
-                  1,
-                  To_s,
-                  In_s,
-                  Dr_s,
-                  Df_s,
-                  VW_s,
-                  (In_s-FrSolvEn),
-                  FrSolvEn,(To_s/HeAtCo),
-                  (VW_s/HeAtCo),
-                  (In_s/HeAtCo),
-                  HeAtCo,MolWei);
-            TabOutStream << TabLin << std::endl;
-            //}
-          } else {
-            std::cerr << "Unable to write to file "<< TabFil << std::endl;
-          }
+          if (write_best_sumtab_opt[0]=='y'){
+            // append to _best_pproc summary table
+            #ifdef ENABLE_MPI
+            sprintf(dummyStr, "./outputs/seed_best_part%d.dat", myrank);
+            strcpy(TabFil, dummyStr);
+            #else
+            strcpy(TabFil,"./outputs/seed_best.dat");
+            #endif
+            TabOutStream.open (TabFil, std::ios::out | std::ios::app); // append mode
+            if(TabOutStream.is_open()){
+              //for (j=1;j<=((NuPosMem<NuPosSdCl)?NuPosMem:NuPosSdCl);j++) {
+              sprintf(TabLin,
+                      "%-30s%8d%10d%10d%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10d%10.4f",
+                      FragNa, 
+                      1, 
+                      1,
+                      1,
+                      To_s,
+                      In_s,
+                      Dr_s,
+                      Df_s,
+                      VW_s,
+                      (In_s - FrSolvEn),
+                      FrSolvEn, 
+                      (To_s / HeAtCo),
+                      (VW_s / HeAtCo),
+                      (In_s / HeAtCo),
+                      HeAtCo, 
+                      MolWei);
+              TabOutStream << TabLin << std::endl;
+              //}
+            } else {
+              std::cerr << "Unable to write to file "<< TabFil << std::endl;
+            }
             TabOutStream.close();
           }
         } else {
           fprintf(FPaOut,"Fragment %s with total energy %.2f did not pass the total energy cutoff\n",FragNa, To_s);
         }
         free_dmatrix(FrCoor_NoAlign,1,FrAtNu,1,3);//clangini
-      } else {
+      } // end of else if (EvalEn[0]=='e') {
+      else {
         /* --------------------- */
         /* Situation of conflict */
         /* --------------------- */
@@ -3940,11 +4538,6 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
       fprintf(FPaOut,"CPU time in sec. for the seeding of %s : %.2f\n",FragNa,
           ((time_7.tv_sec  - time_6.tv_sec) * 1000000u +
            time_7.tv_usec - time_6.tv_usec) / 1.e6);/* clangini */
-      /*fprintf(FPaOut,"CPU time in sec. for the seeding of %s : %.2f\n",
-          &FrFiNa_out[CurFra][1],
-          ((time_7.tv_sec  - time_6.tv_sec) * 1000000u +
-           time_7.tv_usec - time_6.tv_usec) / 1.e6); clangini */
-      /* &ResN_fr[i][1],(time_7-time_6)*0.01); */
       fprintf(FPaOut,"\n");
     }
     /* !!! From here, the value of SFWrNu might change */
@@ -4444,7 +5037,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
          fclose(FPaOut);
        */
 
-      if (Solv_typ[0]=='p') {
+      if (Solv_typ[0]=='p') { // if we are in the post-process scheme -> now evaluate slow energy
 
         FPaOut=fopen(OutFil,"a");
 
@@ -4520,7 +5113,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
           /* Calculate the solvation energy of the fragment without the receptor
              Use a very fine grid spacing (0.1) */
           nn = FragSolvEn(FrAtNu,FrCoor,FrPaCh,FrVdWR,FrRadOut,
-              FrRadOut2,FrEffRad_bound, Frdist2,Nsurfpt_fr,surfpt_fr,WaMoRa,0.1,
+              FrRadOut2,FrEffRad_bound,Frdist2,Nsurfpt_fr,surfpt_fr,WaMoRa,0.1,
               Ksolv,pi4,&FrSolvEn,EmpCorrB,FPaOut);
           /*fprintf(FPaOut,"Dielectric value = %4.1f -> %4.1f transfer energy for the fragment (%s) : ",
               DielRe,DielWa,&FrFiNa_out[CurFra][1]);*/
@@ -4565,8 +5158,8 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
                 (ConfArr[ClusLi_sd[i1]]==Ind_num_cn)) {
 
               for (i2=1;i2<=FrAtNu;i2++) {
-                RoSFCo[i2][1]=FrCoPo[ClusLi_sd[i1]][i2][1];
-                RoSFCo[i2][2]=FrCoPo[ClusLi_sd[i1]][i2][2];
+                RoSFCo[i2][1]=FrCoPo[ClusLi_sd[i1]][i2][1]; // sets the coordinates RoSFCo
+                RoSFCo[i2][2]=FrCoPo[ClusLi_sd[i1]][i2][2]; // of the current pose we are analyzing. clangini
                 RoSFCo[i2][3]=FrCoPo[ClusLi_sd[i1]][i2][3];
               }
 
@@ -4614,10 +5207,470 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
               Df_s_ro[ClusLi_sd[i1]]=SFDeso_fr*FrDesoElec;
               To_s_ro[ClusLi_sd[i1]]=VW_s_ro[ClusLi_sd[i1]]+In_s_ro[ClusLi_sd[i1]]+
                                      Dr_s_ro[ClusLi_sd[i1]]+Df_s_ro[ClusLi_sd[i1]];
-              // fprintf(FPaOut ,"Total slow energy for pose %d is %f\n", ClusLi_sd[i1], To_s_ro[ClusLi_sd[i1]]); //clangini debug
-            }
 
-          }
+              if (seed_par.do_mc == 'y'){
+                //seed_par.printKW();
+                gettimeofday(&time_mc_start,NULL);
+                /* Store starting energy */
+                // start_en.tot_en = To_s_ro[ClusLiL_sd[i1]];
+                // start_en.vdW_en = VW_s_ro[ClusLi_sd[i1]];
+                // start_en.elec_en = In_s_ro[ClusLi_sd[i1]];
+                // start_en.rec_des = Dr_s_ro[ClusLi_sd[i1]];
+                // start_en.frg_des = Df_s_ro[ClusLi_sd[i1]];
+
+                /* MC initialization -- outer chain */
+                old_mc_en = To_s_ro[ClusLi_sd[i1]];
+                old_mc_FrCoor = dmatrix(RoSFCo, 1, FrAtNu, 1, 3); // outer chain
+                old_mc_FrCoor_in = zero_dmatrix(1, FrAtNu, 1, 3); // inner chain
+                sa_temp = seed_par.mc_temp; //T_0
+                mc_accept_rate = 0.0;
+
+                n_rot = 0; /* counters for the num of MC moves */
+                n_accept_rot = 0;
+                n_rot_fine = n_accept_rot_fine = 0;
+                n_trans = 0;
+                n_accept_trans = 0;
+                n_trans_fine = n_accept_trans_fine = 0;
+
+                /* double chain (hybrid) MC */
+                fprintf(FPaOut,"Doing MC Minimization of pose: %d\n", ClusLi_sd[i1]);
+                // fprintf(FPaOut, "%8s%10s%10s%10s%10s%10s%10s\n",
+                        // "Step","Temp","Tot","ElinW","rec_des","frg_des", "vdW");
+
+                for (int cyc_out = 0; cyc_out < seed_par.mc_niter_out; cyc_out++){ /* outer chain */
+                  accept_prob = 0.0;
+
+                  /* MC initialization -- inner chain */
+                  old_mc_vdW = VW_s_ro[ClusLi_sd[i1]];
+                  copy_dmatrix(old_mc_FrCoor, old_mc_FrCoor_in, 1, FrAtNu, 1, 3);
+
+                  for (int cyc_in = 0; cyc_in < seed_par.mc_niter_in; cyc_in++)
+                  {
+                    accept_prob_in = 0.0;
+
+                    do_rot_move = rnd_gen::get_bernoulli(seed_par.mc_rot_freq); // doing a rotational move?
+                    if (do_rot_move){
+                      n_rot++;
+                      do_fine_move = rnd_gen::get_bernoulli(seed_par.mc_rot_fine_freq);
+                      if(do_fine_move){//fine or coarse?
+                        n_rot_fine++;
+                        rot_move(RoSFCo, FrAtNu, seed_par.mc_max_rot_step_fine);
+                      } else {
+                        rot_move(RoSFCo, FrAtNu, seed_par.mc_max_rot_step);
+                      }
+                    }
+                    else {
+                      n_trans++;
+                      do_fine_move = rnd_gen::get_bernoulli(seed_par.mc_tran_fine_freq);
+                      if(do_fine_move){//fine or coarse?
+                        n_trans_fine++;
+                        trans_move(RoSFCo, FrAtNu, seed_par.mc_max_tran_step_fine);
+                      } else {
+                        trans_move(RoSFCo, FrAtNu, seed_par.mc_max_tran_step);
+                      }
+                    }
+                    /* vdW energy evaluation - inner loop */
+                    Rot_Tran(FrAtNu,FrCoor,RoSFCo,Tr,U1,U2);
+                    SqDisFrRe_ps_vdW(FrAtNu,RoSFCo,ReCoor,ReMinC,GrSiCu_en,
+                        CubNum_en,CubFAI_en,CubLAI_en,CubLiA_en,
+                        PsSpNC,PsSphe,SDFrRe_ps,ReAtNu,PsSpRa,
+                        ReReNu,AtReprRes,FiAtRes,LaAtRes);
+                    PsSpEE(FrAtNu,ReAtNu,ReVdWE_sr,FrVdWE_sr,
+                        ReVdWR,FrVdWR,&VWEnEv_ps,SDFrRe_ps);
+
+                    new_mc_vdW = SFVWEn * VWEnEv_ps; // new energy inner chain
+                    accept_prob_in = exp(-1/(R_constant*sa_temp) * (new_mc_vdW - old_mc_vdW)); // TODO remove sa_temp from inner chain
+                    if (rnd_gen::get_uniform(0, 1) <= accept_prob_in){
+                      old_mc_vdW = new_mc_vdW;
+                      copy_dmatrix(RoSFCo, old_mc_FrCoor_in, 1, FrAtNu, 1, 3);
+                      if (do_rot_move) {
+                        n_accept_rot++;
+                        if(do_fine_move)
+                          n_accept_rot_fine++;
+                      }
+                      else {
+                        n_accept_trans++;
+                        if(do_fine_move)
+                          n_accept_trans_fine++;
+                      }
+                      // fprintf(FPaOut, "ACCEPT %d\n", cyc_out + 1);
+                      // /* dump pose for checking */
+                      // sprintf(WriPat,"%s","outputs/mc_poses.mol2\0"); // clangini
+                      // FilePa=fopen(WriPat,"a");
+                      // append_pose_to_mol2(FilePa,FragNa,FrAtNu,FrBdNu,1,FrAtEl,
+                      //                     RoSFCo,
+                      //                     1,FrSyAtTy,FrAtTy,CurFra,FrBdAr,
+                      //                     FrBdTy,1,0.0,
+                      //                     FrPaCh,SubNa,AlTySp);
+                      // fclose(FilePa);
+                    } else {
+                      copy_dmatrix(old_mc_FrCoor_in, RoSFCo, 1, FrAtNu, 1, 3);
+                      new_mc_vdW = old_mc_vdW;
+                    }
+                    // /* print MC cyc_in summary */
+                    // // fprintf(FPaOut,"%8d%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f\n",
+                    // fprintf(FPaOut,"%8d%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f\n",
+                    //         cyc_out+1, sa_temp, new_mc_en, In_s_ro[ClusLi_sd[i1]],
+                    //         Dr_s_ro[ClusLi_sd[i1]], Df_s_ro[ClusLi_sd[i1]],
+                    //         VW_s_ro[ClusLi_sd[i1]]);
+
+                    // sa_temp = seed_par.sa_alpha * sa_temp; //T_(n+1)
+
+                  } // end of inner chain
+                  /* Energy evaluation: -- outer chain */
+                  Rot_Tran(FrAtNu,FrCoor,RoSFCo,Tr,U1,U2);
+                  SqDisFrRe_ps(FrAtNu,RoSFCo,ReCoor,ReMinC,GrSiCu_en,
+                      CubNum_en,CubFAI_en,CubLAI_en,CubLiA_en,
+                      PsSpNC,PsSphe,SDFrRe_ps,ReAtNu,PsSpRa,
+                      RePaCh,ReReNu,AtReprRes,FiAtRes,LaAtRes,
+                      TotChaRes,NuChResEn,LiChResEn,
+                      SDFrRe_ps_elec,ChFrRe_ps_elec);
+                  PsSpEE(FrAtNu,ReAtNu,ReVdWE_sr,FrVdWE_sr,
+                         ReVdWR,FrVdWR,&VWEnEv_ps,SDFrRe_ps);
+                  ElecFrag(ReAtNu, ReCoor, RePaCh, ChFrRe_ps_elec,
+                           ReRad, ReRad2, ReRadOut,
+                           ReRadOut2, ReEffRad_bound, surfpt_re, nsurf_re,
+                           pointsrf_re, ReSelfVol, FrAtNu, RoSFCo, FrCoor,
+                           FrPaCh, FrRad, FrRad2, FrRadOut, FrRadOut2,
+                           FrEffRad_bound, Frdist2,
+                           SDFrRe_ps_elec, FrMinC, FrMaxC, &FrSolvEn,
+                           Nsurfpt_fr, surfpt_fr,
+                           nsurf_fr, pointsrf_fr, surfpt_ex, Tr, U1, U2, WaMoRa,
+                           GrSiSo, NPtSphere, Min, Max, XGrid, YGrid, ZGrid,
+                           NGridx, NGridy, NGridz, GridMat,
+                           DeltaPrDeso, Kelec, Ksolv, UnitVol,
+                           pi4, nxminBS, nyminBS, nzminBS, nxmaxBS, nymaxBS,
+                           nzmaxBS, corr_scrint, corr_fr_deso, &ReDesoElec,
+                           &ReFrIntElec, &FrDesoElec, ReSelfVol_corrB, EmpCorrB, FPaOut);
+
+                  new_mc_en = SFVWEn*VWEnEv_ps + SFIntElec*ReFrIntElec +
+                              SFDeso_re*ReDesoElec + SFDeso_fr*FrDesoElec;
+
+                  accept_prob = exp(-1/(R_constant*sa_temp) * (new_mc_en - old_mc_en));
+                  if (rnd_gen::get_uniform(0, 1) <= accept_prob){
+
+                    // fprintf(FPaOut, "ACCEPT %d with fr_desolv jump to %f\n", cyc_out + 1, SFDeso_fr*FrDesoElec);
+                    old_mc_en = new_mc_en;
+                    copy_dmatrix(RoSFCo, old_mc_FrCoor, 1, FrAtNu, 1, 3);
+                    /* Update energies */
+                    VW_s_ro[ClusLi_sd[i1]] = SFVWEn*VWEnEv_ps;
+                    In_s_ro[ClusLi_sd[i1]] = SFIntElec*ReFrIntElec;
+                    Dr_s_ro[ClusLi_sd[i1]] = SFDeso_re*ReDesoElec;
+                    Df_s_ro[ClusLi_sd[i1]] = SFDeso_fr*FrDesoElec;
+                    To_s_ro[ClusLi_sd[i1]] = new_mc_en;
+
+                    // if (do_rot_move) {
+                    //   n_accept_rot++;
+                    //   if(do_fine_move)
+                    //     n_accept_rot_fine++;
+                    // }
+                    // else {
+                    //   n_accept_trans++;
+                    //   if(do_fine_move)
+                    //     n_accept_trans_fine++;
+                    // }
+                    // /* dump pose for checking */
+                    // sprintf(WriPat,"%s","outputs/mc_poses.mol2\0"); // clangini
+                    // FilePa=fopen(WriPat,"a");
+                    // append_pose_to_mol2(FilePa,FragNa,FrAtNu,FrBdNu,1,FrAtEl,
+                    //                     RoSFCo,
+                    //                     1,FrSyAtTy,FrAtTy,CurFra,FrBdAr,
+                    //                     FrBdTy,1,0.0,
+                    //                     FrPaCh,SubNa,AlTySp);
+                    // fclose(FilePa);
+                  } else { // pose not accepted
+                    copy_dmatrix(old_mc_FrCoor, RoSFCo, 1, FrAtNu, 1, 3);
+                    new_mc_en = old_mc_en;
+                  }
+                  /* print MC cyc_out summary */
+                  // fprintf(FPaOut,"%8d%10.5f%10.5f%10.5f%10.5f%10.5f%10.5f\n",
+                  //         cyc_out+1, sa_temp, new_mc_en, In_s_ro[ClusLi_sd[i1]],
+                  //         Dr_s_ro[ClusLi_sd[i1]], Df_s_ro[ClusLi_sd[i1]],
+                  //         VW_s_ro[ClusLi_sd[i1]]);
+
+                  sa_temp = seed_par.sa_alpha * sa_temp; //T_(n+1)
+                } // end of MC cyc_out
+                /* Update pose coordinates */
+                for (i2=1;i2<=FrAtNu;i2++) {
+                  FrCoPo[ClusLi_sd[i1]][i2][1] = RoSFCo[i2][1]; // sets the coordinates RoSFCo
+                  FrCoPo[ClusLi_sd[i1]][i2][2] = RoSFCo[i2][2]; // of the current pose we are analyzing. clangini
+                  FrCoPo[ClusLi_sd[i1]][i2][3] = RoSFCo[i2][3];
+                }
+
+                free_dmatrix(old_mc_FrCoor, 1, FrAtNu, 1, 3);
+                free_dmatrix(old_mc_FrCoor_in, 1, FrAtNu, 1, 3);
+
+                /* Summary info of MC run */
+                // fprintf(FPaOut, "---- MC Summary ----\n");
+                // fprintf(FPaOut, "%12s%10s%24s\n", " ", "#Moves", "#Accept (Acc. rate)");
+                // fprintf(FPaOut, "%12s%8d (%6.2f)%8d (%6.2f)\n", "Total:", n_rot + n_trans,
+                //         1.0, (n_accept_rot + n_accept_trans),
+                //         (n_accept_rot + n_accept_trans)/(double)seed_par.mc_niter);
+                // fprintf(FPaOut, "%12s%8d (%6.2f)%8d (%6.2f)\n", "Rot:", n_rot,
+                //         n_rot/(double)seed_par.mc_niter, n_accept_rot,
+                //         n_accept_rot/(double)n_rot);
+                // fprintf(FPaOut, "%12s%8d (%6.2f)%8d (%6.2f)\n", "Rot(f):", n_rot_fine,
+                //         n_rot_fine/(double)n_rot, n_accept_rot_fine,
+                //         n_accept_rot_fine/(double)n_rot_fine);
+                // fprintf(FPaOut, "%12s%8d (%6.2f)%8d (%6.2f)\n", "Rot(c):", n_rot - n_rot_fine,
+                //         (n_rot-n_rot_fine)/(double)n_rot, (n_accept_rot - n_accept_rot_fine),
+                //         (n_accept_rot-n_accept_rot_fine)/(double)(n_rot-n_rot_fine));
+                // fprintf(FPaOut, "%12s%8d (%6.2f)%8d (%6.2f)\n", "Trans:", n_trans,
+                //         n_trans/(double)seed_par.mc_niter, n_accept_trans,
+                //         n_accept_trans/(double)n_trans);
+                // fprintf(FPaOut, "%12s%8d (%6.2f)%8d (%6.2f)\n", "Trans(f):", n_trans_fine,
+                //         n_trans_fine/(double)n_trans, n_accept_trans_fine,
+                //         n_accept_trans_fine/(double)n_trans_fine);
+                // fprintf(FPaOut, "%12s%8d (%6.2f)%8d (%6.2f)\n", "Trans(c):", (n_trans-n_trans_fine),
+                //         (n_trans-n_trans_fine)/(double)n_trans, (n_accept_trans-n_accept_trans_fine),
+                //         (n_accept_trans-n_accept_trans_fine)/(double)(n_trans-n_trans_fine));
+                gettimeofday(&time_mc_end,NULL);
+                fprintf(FPaOut,"CPU time in sec. for MC optimization: %.2f\n",
+                    ((time_mc_end.tv_sec  - time_mc_start.tv_sec) * 1000000u +
+                     time_mc_end.tv_usec - time_mc_start.tv_usec) / 1.e6);
+              } // end of if (seed_par.do_mc == 'y')
+
+              /* ----- Rigid Body Minimization ----- */
+              if (seed_par.do_rbmin == 'y')
+              {
+                double learning_rate = seed_par.learning_rate;
+                double grms;
+                int rbi;
+                int i;
+
+                // forces and torques:
+                double FvdW[4]; // Total vdW force
+                double TvdW[4]; // Total vdw torque
+                double maxFvdW, maxTvdW;
+                double Felec[4]; // Total elec force
+                double Telec[4]; // Total elec torque
+                double Ftot[4];
+                double Ttot[4];
+
+                double COM[4];
+                double **RelCOMCo, **newRoSFCo;
+                Quaternion<double> q_rb;
+                double newVWEn = 0.0;
+                double newIntElec = 0.0;
+                double newTotEn = 0.0;
+                double oldTotEn = 0.0;
+                double **dist_elec;
+                int *NeighList3;
+                double *ReEffRad;
+                double *FrEffRad;
+                int NNeigh3;
+                int dummy;
+
+                RelCOMCo = dmatrix(1, FrAtNu, 1, 3);
+                newRoSFCo = dmatrix(1, FrAtNu, 1, 3);
+
+                // Distances for vdW and int_elec
+                SqDisFrRe_ps(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                             CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                             PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                             RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                             TotChaRes, NuChResEn, LiChResEn,
+                             SDFrRe_ps_elec, ChFrRe_ps_elec);
+                // vdW energy:
+                PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                       ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+                // Screened electrostatic interaction
+                // We keep R_born fixed.
+                NeighList3 = ivector(1, ReAtNu);
+                dist_elec = zero_dmatrix(1, FrAtNu, 1, ReAtNu);
+                ReEffRad = dvector(1, ReAtNu);
+                FrEffRad = dvector(1, FrAtNu);
+                dist2_to_dist(SDFrRe_ps_elec, dist_elec, FrAtNu, ReAtNu);
+                CalcEffRad(ReAtNu, ReCoor, RePaCh, ReRad, ReRad2,
+                           ReRadOut, ReRadOut2, ReEffRad_bound,
+                           surfpt_re, nsurf_re,
+                           pointsrf_re, ReSelfVol, FrAtNu, RoSFCo, FrCoor,
+                           FrPaCh, FrRad, FrRad2, FrRadOut, FrRadOut2,
+                           FrEffRad_bound, Frdist2, SDFrRe_ps_elec,
+                           FrMinC, FrMaxC, Nsurfpt_fr, surfpt_fr,
+                           nsurf_fr, pointsrf_fr, surfpt_ex, Tr, U1, U2,
+                           WaMoRa, GrSiSo, NPtSphere, Min, Max, XGrid, YGrid, ZGrid,
+                           NGridx, NGridy, NGridz, GridMat, Kelec, Ksolv,
+                           UnitVol, pi4, ReSelfVol_corrB, EmpCorrB, FPaOut,
+                           ReEffRad, FrEffRad, NeighList3, &NNeigh3);
+                dummy = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                                     FrEffRad, SDFrRe_ps_elec, dist_elec, Kelec, Ksolv, &ReFrIntElec);
+                ReFrIntElec *= corr_scrint;
+                oldTotEn = VWEnEv_ps + ReFrIntElec;
+
+                for (rbi = 1; rbi <= seed_par.max_iter; rbi++)
+                {
+                  // COM and coords relative to COM:
+                  CenterOfMass(COM, RoSFCo, FrAtNu, AtWei, FrAtEl_nu);
+                  for (i = 1; i <= FrAtNu; i++)
+                  {
+                    for (j = 1; j <= 3; j++)
+                      RelCOMCo[i][j] = RoSFCo[i][j] - COM[j];
+                  }
+                  // vdW forces and torques:
+                  PsSpFE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                         ReVdWR, FrVdWR, FvdW, TvdW,
+                         &maxFvdW, &maxTvdW,
+                         SDFrRe_ps, RoSFCo, ReCoor, RelCOMCo);
+                  screened_int_forces(ChFrRe_ps_elec, ReEffRad, NNeigh3,
+                                      NeighList3, FrAtNu,
+                                      FrPaCh, FrEffRad, SDFrRe_ps_elec, dist_elec,
+                                      Kelec, Ksolv, RoSFCo, ReCoor, RelCOMCo,
+                                      Felec, Telec, corr_scrint);
+                  // std::cerr << "Felec: " << Felec[1] << " " << Felec[2] << " " << Felec[3] << std::endl;
+                  // std::cerr << "Telec: " << Telec[1] << " " << Telec[2] << " " << Telec[3] << std::endl;
+                  sum_vec(Ftot, FvdW, Felec, 1, 3);
+                  sum_vec(Ttot, TvdW, Telec, 1, 3);
+
+                  grms = calc_grms(Ftot, Ttot, seed_par.alpha_xyz, seed_par.alpha_rot);
+                  std::cerr << "ITER: " << rbi << std::endl;
+                  std::cerr << "grms: " << grms << std::endl;
+                  // check gradients:
+                  if (seed_par.do_gradient_check == 'y')
+                  {
+                    check_gradient_vdw(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                                       ReVdWR, FrVdWR, FvdW, TvdW,
+                                       RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                                       CubNum_en, CubFAI_en, CubLAI_en,
+                                       CubLiA_en, PsSpNC, PsSphe,
+                                       PsSpRa, ReReNu, AtReprRes,
+                                       FiAtRes, LaAtRes, FrAtEl_nu, AtWei);
+
+                    check_gradient_int_elec(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                                            ReVdWR, FrVdWR, Felec, Telec,
+                                            RoSFCo, ReCoor,
+                                            ReMinC, GrSiCu_en, CubNum_en, CubFAI_en, CubLAI_en,
+                                            CubLiA_en, PsSpNC, PsSphe,
+                                            PsSpRa, ReReNu, AtReprRes,
+                                            FiAtRes, LaAtRes, FrAtEl_nu, AtWei,
+                                            RePaCh, FrPaCh, TotChaRes, NuChResEn, LiChResEn,
+                                            ChFrRe_ps_elec, ReEffRad, FrEffRad,
+                                            NeighList3, NNeigh3, Kelec, Ksolv, corr_scrint);
+                  }
+                  // check break condition:
+                  if (grms < seed_par.eps_grms)
+                  {
+                    break;
+                  }
+
+                  // COM update:
+                  COM[1] = COM[1] + learning_rate * seed_par.alpha_xyz * Ftot[1] / grms; //maxFvdW;
+                  COM[2] = COM[2] + learning_rate * seed_par.alpha_xyz * Ftot[2] / grms; //maxFvdW;
+                  COM[3] = COM[3] + learning_rate * seed_par.alpha_xyz * Ftot[3] / grms; //maxFvdW;
+                  std::cerr << "Ftot: " << Ftot[1] << " " << Ftot[2] << " " << Ftot[3] << std::endl;
+                  // Rotation update:
+                  q_rb.fromXYZrot(learning_rate * seed_par.alpha_rot * Ttot[1] / grms,  //maxTvdW,
+                                  learning_rate * seed_par.alpha_rot * Ttot[2] / grms,  //maxTvdW,
+                                  learning_rate * seed_par.alpha_rot * Ttot[3] / grms); //maxTvdW);
+                  for (i = 1; i <= FrAtNu; i++)
+                  {
+                    q_rb.quatConjugateVecRef(RelCOMCo[i], 0.0, 0.0, 0.0);
+                  }
+                  std::cerr << "TvW: " << Ttot[1] << " " << Ttot[2] << " " << Ttot[3] << std::endl;
+                  std::cerr << "learning rate: " << learning_rate << std::endl;
+
+                  // Looking forward: decide if to accept move or shrink the learning rate.
+                  for (i = 1; i <= FrAtNu; i++)
+                  {
+                    for (j = 1; j <= 3; j++)
+                      newRoSFCo[i][j] = COM[j] + RelCOMCo[i][j];
+                  }
+                  SqDisFrRe_ps(FrAtNu, newRoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                               CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                               PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                               RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                               TotChaRes, NuChResEn, LiChResEn,
+                               SDFrRe_ps_elec, ChFrRe_ps_elec);
+                  PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                         ReVdWR, FrVdWR, &newVWEn, SDFrRe_ps);
+                  dist2_to_dist(SDFrRe_ps_elec, dist_elec, FrAtNu, ReAtNu);
+                  dummy = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                                       FrEffRad, SDFrRe_ps_elec, dist_elec, Kelec, Ksolv, &newIntElec);
+                  newIntElec *= corr_scrint;
+                  newTotEn = newVWEn + newIntElec;
+
+                  std::cout << "New energies: " << newVWEn << " " << newIntElec << " " << newTotEn << std::endl;
+                  std::cout << "Old energies: " << VWEnEv_ps << " " << ReFrIntElec << " " << oldTotEn << std::endl;
+
+                  if (newTotEn <= oldTotEn) // accept new energies
+                  {
+                    std::cerr << "accept step" << std::endl;
+                    // update coords
+                    copy_dmatrix(newRoSFCo, RoSFCo, 1, FrAtNu, 1, 3);
+                    // extend base learning rate:
+                    learning_rate *= 1.2;
+                    VWEnEv_ps = newVWEn;
+                    ReFrIntElec = newIntElec;
+                    oldTotEn = newTotEn;
+                  }
+                  else
+                  {
+                    std::cerr << "reject step" << std::endl;
+                    // shrink base learning rate:
+                    learning_rate *= 0.2;
+                    // recalculate energy:
+                    SqDisFrRe_ps(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                                 CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                                 PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                                 RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                                 TotChaRes, NuChResEn, LiChResEn,
+                                 SDFrRe_ps_elec, ChFrRe_ps_elec);
+                    PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                           ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+                    dist2_to_dist(SDFrRe_ps_elec, dist_elec, FrAtNu, ReAtNu);
+                    dummy = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                                         FrEffRad, SDFrRe_ps_elec, dist_elec, Kelec, Ksolv, &ReFrIntElec);
+                    ReFrIntElec *= corr_scrint;
+                    oldTotEn = VWEnEv_ps + ReFrIntElec;
+                  }
+                }
+                // This is necessary to recalculate the final Born radii:
+                SqDisFrRe_ps(FrAtNu, RoSFCo, ReCoor, ReMinC, GrSiCu_en,
+                             CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                             PsSpNC, PsSphe, SDFrRe_ps, ReAtNu, PsSpRa,
+                             RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                             TotChaRes, NuChResEn, LiChResEn,
+                             SDFrRe_ps_elec, ChFrRe_ps_elec);
+                PsSpEE(FrAtNu, ReAtNu, ReVdWE_sr, FrVdWE_sr,
+                       ReVdWR, FrVdWR, &VWEnEv_ps, SDFrRe_ps);
+                /* Compute receptor desolvation, fragment desolvation and receptor-fragment
+             interaction (with screening effect) energies (slow method) */
+                ElecFrag(ReAtNu, ReCoor, RePaCh, ChFrRe_ps_elec, ReRad, ReRad2,
+                         ReRadOut, ReRadOut2, ReEffRad_bound,
+                         surfpt_re, nsurf_re,
+                         pointsrf_re, ReSelfVol, FrAtNu, RoSFCo, FrCoor,
+                         FrPaCh, FrRad, FrRad2, FrRadOut, FrRadOut2,
+                         FrEffRad_bound, Frdist2,
+                         SDFrRe_ps_elec, FrMinC, FrMaxC, &FrSolvEn, Nsurfpt_fr,
+                         surfpt_fr, nsurf_fr, pointsrf_fr, surfpt_ex, Tr, U1, U2,
+                         WaMoRa, GrSiSo, NPtSphere, Min, Max, XGrid, YGrid, ZGrid,
+                         NGridx, NGridy, NGridz, GridMat, DeltaPrDeso, Kelec, Ksolv,
+                         UnitVol, pi4, nxminBS, nyminBS, nzminBS, nxmaxBS, nymaxBS,
+                         nzmaxBS, corr_scrint, corr_fr_deso, &ReDesoElec,
+                         &ReFrIntElec, &FrDesoElec, ReSelfVol_corrB, EmpCorrB, FPaOut);
+                /* Update energies and coords: */
+                VW_s_ro[ClusLi_sd[i1]] = SFVWEn * VWEnEv_ps;
+                In_s_ro[ClusLi_sd[i1]] = SFIntElec * ReFrIntElec;
+                Dr_s_ro[ClusLi_sd[i1]] = SFDeso_re * ReDesoElec;
+                Df_s_ro[ClusLi_sd[i1]] = SFDeso_fr * FrDesoElec;
+                To_s_ro[ClusLi_sd[i1]] = VW_s_ro[ClusLi_sd[i1]] + In_s_ro[ClusLi_sd[i1]] +
+                                         Dr_s_ro[ClusLi_sd[i1]] + Df_s_ro[ClusLi_sd[i1]];
+                for (i2 = 1; i2 <= FrAtNu; i2++)
+                {
+                  FrCoPo[ClusLi_sd[i1]][i2][1] = RoSFCo[i2][1]; 
+                  FrCoPo[ClusLi_sd[i1]][i2][2] = RoSFCo[i2][2]; 
+                  FrCoPo[ClusLi_sd[i1]][i2][3] = RoSFCo[i2][3];
+                }
+
+                free_dmatrix(RelCOMCo, 1, FrAtNu, 1, 3);
+                free_dmatrix(newRoSFCo, 1, FrAtNu, 1, 3);
+                free_ivector(NeighList3, 1, ReAtNu);
+                free_dmatrix(dist_elec, 1, FrAtNu, 1, ReAtNu);
+                free_dvector(ReEffRad, 1, ReAtNu);
+                free_dvector(FrEffRad, 1, FrAtNu);
+              } // end of if (seed_par.do_rbmin == 'y')
+            } 
+          } // end of: for (i1=1;i1<=SFWrNu;i1++)
 
           free_dmatrix(RoSFCo,1,FrAtNu,1,3);
           free_dmatrix(SDFrRe_ps,1,FrAtNu,1,ReAtNu);
@@ -4648,9 +5701,10 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
         /* Compute NuSdClKe and NuPosSdCl */
         NuSdClKe=0;
-        NuPosSdCl=0;
+        NuPosSdCl=0; // this will be the total number of poses kept for postprocessing after the second clustering
+        //std::cout << "SFWrNu = " << SFWrNu << std::endl; //clangini
         for (j=1;j<=SFWrNu;j++) {
-          //std::cout << "j = " << j << " ClusLi_sd_pproc[j] = " <<ClusLi_sd_pproc[j]<< std::endl; //clangini
+          //std::cout << "j = " << j << " ClusLi_sd[j] = " << ClusLi_sd[j]<< " ClusLi_sd_pproc[j] = " << ClusLi_sd_pproc[j] << std::endl; //clangini
           if (ClusLi_sd_pproc[j]==2) { // if it is a first cluster representative
             NuSdClKe=NuSdClKe+1;
             NuPosSdCl=NuPosSdCl+1;
@@ -4662,8 +5716,8 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
         /* Prepare lists of kept positions in second clusters for sorting
            IntVar1 numbering on kept positions
            IntVar2 numbering on clusters */
-        FrPosAr_pproc=ivector(1,NuPosSdCl);
-        SdClusAr_pproc=ivector(1,NuPosSdCl);
+        FrPosAr_pproc=ivector(1,NuPosSdCl); // number of fragment position
+        SdClusAr_pproc=ivector(1,NuPosSdCl); // number of fragment second cluster
         TotEnSdClus_pproc=dvector(1,NuPosSdCl);
 
         IntVar1=0;
@@ -4785,7 +5839,6 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
             CurFra,&FrFiNa_out[CurFra][1]); clangini*/
         fprintf(FPaOut,"Postprocessed clusters for fragment type %d (%s) :\n\n",
             CurFra,FragNa); /* clangini */
-        /* This part of seed.out should also go in the summary table. clangini */
         fprintf(FPaOut,"                             intermolecular       ");
         fprintf(FPaOut,"electrostat_desolv.       Total\n");
 
@@ -4895,7 +5948,8 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
               if(To_s_ro[FrPosAr_pproc[Index_pproc[j]]] <= FrMaEn){
                 sprintf(TabLin,
                     "%-30s%8d%10d%10d%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10.2f%10d%10.4f",
-                    FragNa,j,
+                    FragNa,
+                    j,
                     CluIndex_sort[SdClusAr_pproc[Index_pproc[j]]],
                     FrPosAr_pproc[Index_pproc[j]],
                     To_s_ro[FrPosAr_pproc[Index_pproc[j]]],
@@ -4904,10 +5958,12 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
                     Df_s_ro[FrPosAr_pproc[Index_pproc[j]]],
                     VW_s_ro[FrPosAr_pproc[Index_pproc[j]]],
                     (In_s_ro[FrPosAr_pproc[Index_pproc[j]]]-FrSolvEn),
-                    FrSolvEn,(To_s_ro[FrPosAr_pproc[Index_pproc[j]]]/HeAtCo),
+                    FrSolvEn,
+                    (To_s_ro[FrPosAr_pproc[Index_pproc[j]]]/HeAtCo),
                     (VW_s_ro[FrPosAr_pproc[Index_pproc[j]]]/HeAtCo),
                     (In_s_ro[FrPosAr_pproc[Index_pproc[j]]]/HeAtCo),
-                    HeAtCo,MolWei);
+                    HeAtCo,
+                    MolWei);
                 TabOutStream << TabLin << std::endl;
               }
             }
@@ -5109,7 +6165,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
     free_cmatrix(FrBdTy,1,FrBdNu,1,4);
     free_ivector(AliHyd,1,FrAtNu);
     free_ivector(FrAtEl_nu,1,FrAtNu);
-  } /* End of while(!FrInStream.eof()&&!LstFra_f)  clangini */
+  } /* End of while(true)  clangini */
 
 
     /* Collect the energies of all the fragment types, sort them with respect to
@@ -5164,6 +6220,11 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
     MPI_Reduce(&end_time, &max_time, 1, MPI_DOUBLE,MPI_MAX, 0, MPI_COMM_WORLD);
     if(myrank == MASTERRANK){
       fprintf(stdout, "\nMax execution time across all ranks (Total execution time): %.2f seconds\n", max_time);
+    }
+    /* clean-up MPI stuff */
+    if (strcmp(FrFiRMode, "single") == 0) {
+      delete[] rkreqs;
+      delete [] readies;
     }
     #endif
 

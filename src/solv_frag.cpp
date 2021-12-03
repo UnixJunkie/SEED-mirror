@@ -48,7 +48,7 @@ void ElecFrag(int ReAtNu,double **ReCoor,double *RePaCh,
               int nymaxBS,int nzmaxBS,double corr_scrint,
               double corr_fr_deso,double *PReDesoElec,
               double *PReFrIntElec,double *PFrDesoElec,double *ReSelfVol_corrB,
-	      char *EmpCorrB, FILE * FPaOut)
+	            char *EmpCorrB, FILE * FPaOut)
 /*########################################################################
 Continuum Electrostatics: it calculates the rec and frag desolvation,
 as well as the screened interaction. Slow and precise method
@@ -264,7 +264,7 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
    his receptor neighbours)
   printf("\tNew arrays for the ''Extended fragment''...\n"); */
 
-  ExFrAtNu = FrAtNu + NNeigh1;
+  ExFrAtNu = FrAtNu + NNeigh1; // receptor neighbours from NNeigh1. clangini
   ExRoSFCo = dmatrix(1,ExFrAtNu,1,3);
   ExFrRad = dvector(1,ExFrAtNu);
   ExFrRadOut = dvector(1,ExFrAtNu);
@@ -307,11 +307,12 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
    enclosed by the SAS of the "extended fragment"
   printf("\tMap of volume enclosed by the SAS for the fragment...\n");
   ntime = clock(); */
-  FrGridMat = c3tensor(nxminFr,nxmaxFr+1,nyminFr,nymaxFr+1,nzminFr,nzmaxFr+1);
+  FrGridMat = c3tensor(nxminFr,nxmaxFr+1,nyminFr,nymaxFr+1,nzminFr,nzmaxFr+1); // Why do we use +1? clangini
   for (ix=nxminFr;ix<=nxmaxFr+1;ix++)
     for (iy=nyminFr;iy<=nymaxFr+1;iy++)
       for (iz=nzminFr;iz<=nzmaxFr+1;iz++)
         FrGridMat[ix][iy][iz] = 'e';
+
   nn = SAS_Volume_Fr(ExFrAtNu,ExRoSFCo,ExFrRadOut,ExFrRadOut2,Min,GrSiSo,
                      nxminFr,nyminFr,nzminFr,nxmaxFr,nymaxFr,nzmaxFr,
                      FrGridMat,GridMat,FrOut);
@@ -339,8 +340,8 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
   nxmax_big = (nxmaxFr > NGridx) ? nxmaxFr : NGridx;
   nymax_big = (nymaxFr > NGridy) ? nymaxFr : NGridy;
   nzmax_big = (nzmaxFr > NGridz) ? nzmaxFr : NGridz;
-/* Check if fragment is out of the grid: if yes cut the part that is out */
 //clangini debug start
+/* Check if fragment is out of the grid: if yes cut the part that is out */
   // //nxmin_sma = (nxminFr > nxminBS) ? nxminFr : nxminBS;
   // if (nxminFr > nxminBS){
   //   std::cout << "nxminFr > nxminBS" << std::endl;
@@ -446,12 +447,12 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
   printf("\n\tProtein desolvation...\n");
   printf("\tOut %d\n",FrOut); */
   *PReDesoElec = 0.;
-  if ( FrOut != 2 )
+  if ( FrOut != 2 ) // if fragment is not completely out of BS
     for (ix=nxmin_sma;ix<=nxmax_sma;ix++)
       for (iy=nymin_sma;iy<=nymax_sma;iy++)
         for (iz=nzmin_sma;iz<=nzmax_sma;iz++)
           if (FrGridMat[ix][iy][iz] == 'o')
-            *PReDesoElec += DeltaPrDeso[ix][iy][iz];
+            *PReDesoElec += DeltaPrDeso[ix][iy][iz]; // eq. (5) from SEED 3.3.6 manual
 
 /* Calculate the effective volumes of the receptor in presence of the ligand
   printf("\n\tEffective volumes of the receptor...\n");
@@ -490,7 +491,7 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
 /* Calculate the effective radii of the receptor
   printf("\n\tEffective radii of the receptor...\n"); */
   ReEffRad=dvector(1,ReAtNu);
-  for (iat=1;iat<=NNeigh3;iat++)
+  for (iat=1;iat<=NNeigh3;iat++) // calculate the ReEffRad only for atoms within the cutoff. clangini
   {
     if (EmpCorrB[0]!='y')
       ReEffRad[NeighList3[iat]] = 1. / ( 1./ReRadOut[NeighList3[iat]] -
@@ -515,22 +516,32 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
         to "nan" values or the effective born radius is smaller than 0
         clangini modification:
         we are able to define a lower bound on the receptor born radius.
-        If the effective born radius is smaller than teh lower bound, 
+        If the effective born radius is smaller than the lower bound, 
         it is overridden to the lower bound.
       */
-      if(isnan(ReEffRad[hVar_corrB]) || ReEffRad[hVar_corrB] <= ReEffRad_bound[hVar_corrB])
+      if(std::isnan(ReEffRad[hVar_corrB]) || ReEffRad[hVar_corrB] <= ReEffRad_bound[hVar_corrB])
       {
 #ifndef NOWARN
 	      // fprintf(FPaOut,"WARNING could not calculate empirically-corrected effective born radius of receptor atom %d using standard approach\n",iat);
-        if (!isnan(ReEffRad[hVar_corrB])){
-          fprintf(FPaOut, "Calculated effective Born radius of receptor atom %d (%f) set to its lower bound (%f).\n", iat, ReEffRad[hVar_corrB], ReEffRad_bound[hVar_corrB]);
-        } else {
-          fprintf(FPaOut, "WARNING empirically-corrected effective born radius of receptor atom %d is nan. Set to its estimated lower bound (%f).\n", iat, ReEffRad_bound[hVar_corrB]);
+        // if (!std::isnan(ReEffRad[hVar_corrB])){
+        //   fprintf(FPaOut, "Calculated effective Born radius of receptor atom ");
+        //   fprintf(FPaOut, "%d (%f) set to its lower bound (%f).\n", 
+        //           iat, ReEffRad[hVar_corrB], ReEffRad_bound[hVar_corrB]);
+        // } else {
+        //   fprintf(FPaOut, "WARNING empirically-corrected effective born radius ");
+        //   fprintf(FPaOut, "of receptor atom %d is nan. Set to its estimated lower bound (%f).\n", 
+        //           iat, ReEffRad_bound[hVar_corrB]);
+        // }
+        if (!std::isnan(ReEffRad[hVar_corrB]) && (ReEffRad[hVar_corrB] / ReEffRad_bound[hVar_corrB] < 0.9))
+        { // write warning only if difference is more than 10%
+          fprintf(FPaOut, "Calculated effective Born radius of receptor atom ");
+          fprintf(FPaOut, "%d (%f) set to its lower bound (%f).\n",
+                    iat, ReEffRad[hVar_corrB], ReEffRad_bound[hVar_corrB]);
         }
 #endif
-    //clangini debug start
-    //std::cout << "Eff radius either none or zero" << std::cout;
-    //clangini debug end
+        //clangini debug start
+        //std::cout << "Eff radius either none or zero" << std::cout;
+        //clangini debug end
 	      // ReEffRad[NeighList3[iat]] = 1. / ( 1./ReRadOut[NeighList3[iat]] -
 				// 	     (ReSelfVol[NeighList3[iat]]+ReSelfVol_add[NeighList3[iat]])/pi4 );
         ReEffRad[hVar_corrB] = ReEffRad_bound[hVar_corrB];
@@ -558,20 +569,15 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
   for (iat=1;iat<=FrAtNu;iat++)
     if (FrPaCh[iat] != 0. ) {
 
-
-
-
-
       if (EmpCorrB[0]!='y')
         FrEffRad[iat] = 1. / ( 1./FrRadOut[iat] - FrSelfVol[iat]/pi4 );
       else
       {
 
-	  FrEffRad[iat] = 1./( (-1.*(1./FrRadOut[iat] - FrSelfVol[iat]/pi4))
+	       FrEffRad[iat] = 1./( (-1.*(1./FrRadOut[iat] - FrSelfVol[iat]/pi4))
 			       + 3.0*sqrt( (1./(2.*FrRadOut[iat]*FrRadOut[iat])) -
 					   (FrSelfVol_corrB[iat]/pi4) ) )
-	      + 0.215;
-
+	           + 0.215;
 
 	  /*
 	    Dey exception handling :
@@ -581,14 +587,18 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
 	    to "nan" values or the effective born radius is smaller than 0
 
 	  */
-	  if(isnan(FrEffRad[iat]) || (FrEffRad[iat] <= FrEffRad_bound[iat]))
+	  if(std::isnan(FrEffRad[iat]) || (FrEffRad[iat] <= FrEffRad_bound[iat]))
 	  {
 #ifndef NOWARN
 	      // fprintf(FPaOut,"WARNING could not calculate empirically-corrected effective born radius of fragment atom %d, using standard approach\n",iat);
-        if(!isnan(FrEffRad[iat])){
+        // if(!std::isnan(FrEffRad[iat])){
+        //   fprintf(FPaOut, "Calculated effective Born radius of fragment atom %d (%f) set to its lower bound (%f).\n", iat, FrEffRad[iat], FrEffRad_bound[iat]);
+        // } else {
+        //   fprintf(FPaOut, "WARNING empirically-corrected effective born radius of fragment atom %d is nan. Set to its estimated lower bound (%f).\n", iat, FrEffRad_bound[iat]);
+        // }
+        if (!std::isnan(FrEffRad[iat]) && (FrEffRad[iat] / FrEffRad_bound[iat] < 0.9))
+        {
           fprintf(FPaOut, "Calculated effective Born radius of fragment atom %d (%f) set to its lower bound (%f).\n", iat, FrEffRad[iat], FrEffRad_bound[iat]);
-        } else {
-          fprintf(FPaOut, "WARNING empirically-corrected effective born radius of fragment atom %d is nan. Set to its estimated lower bound (%f).\n", iat, FrEffRad_bound[iat]);
         }
 #endif
         //clangini debug start
@@ -611,9 +621,15 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
   printf("\n\tElectrostatic intra-ligand interactions...\n"); */
   nn = GB_int_fr(FrAtNu,Frdist2,FrPaCh,FrEffRad,Ksolv,&FrIntEn);
 
+  // clangini debug
+  // std::cout << "FrSelfEn = " << FrSelfEn << " FrIntEn = " << FrIntEn;
+  // clangini debug end
+
   *PFrDesoElec = FrSelfEn + FrIntEn;
   *PFrDesoElec -= *PFrSolvEn;
   *PFrDesoElec *= corr_fr_deso;
+
+  // std::cout << "  Corr frg. desolv:  " << *PFrDesoElec << "\n";
 
   free_dmatrix(dist,1,FrAtNu,1,ReAtNu);
   free_dvector(FrSelfVol,1,FrAtNu); /* dey memory leak */
@@ -634,6 +650,471 @@ struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
                 nymaxFr+1,nzminFr,nzmaxFr+1);
 
 /*  printf("\tSlow Desol %lf\n",1e-6 * (clock()-ntime)); */
+}
+
+void CalcEffRad(int ReAtNu, double **ReCoor, double *RePaCh,
+                double *ReRad, double *ReRad2, 
+                double *ReRadOut, double *ReRadOut2,
+                double *ReEffRad_bound,
+                struct point *surfpt_re, int *nsurf_re,
+                int *pointsrf_re, double *ReSelfVol, int FrAtNu, double **RoSFCo,
+                double **FrCoor, double *FrPaCh, double *FrRad, double *FrRad2,
+                double *FrRadOut, double *FrRadOut2,
+                double *FrEffRad_bound,
+                double **Frdist2, double **dist2,
+                double *FrMinC_orig, double *FrMaxC_orig,
+                int Nsurfpt_fr, struct point *surfpt_fr_orig,
+                int *nsurf_fr, int *pointsrf_fr, struct point *surfpt_ex,
+                double Tr[4], double U1[4][4], double U2[4][4], double WaMoRa,
+                double GrSiSo, int NPtSphere, struct point Min,
+                struct point Max, double *XGrid, double *YGrid, double *ZGrid,
+                int NGridx, int NGridy, int NGridz, char ***GridMat,
+                double Kelec, double Ksolv, double UnitVol, double pi4,
+                double *ReSelfVol_corrB, char *EmpCorrB, FILE *FPaOut,
+                double *ReEffRad, double *FrEffRad,
+                int *NeighList3, int *PNNeigh3)
+/*########################################################################
+Continuum Electrostatics: Born effective radii and exports the neighbour,
+lists needed for the calculation of continuum electrostatics with the 
+slow and precise method.
+This function is a mod of ElecFrag().
+########################################################################*/
+
+/*#######################################################################
+int ReAtNu -------------- Tot # rec atoms
+double **ReCoor ---------- Rec Coordinates
+double *RePaCh ----------- Rec partial charges
+double *RePaCh_Fr -------- Modified rec partial charges (for the charged residues
+                          around the BS a unit charge is assigned to the atom
+                          closest to the charge center
+double *ReRad ----------- Rec charge radii (=vdW radii apart "enclosed" H)
+double *ReRad2 ---------- (Rec charge radii)^2
+double *ReRadOut -------- Rec charge radii + WaMoRa
+double *ReRadOut2 ------- (Rec charge radii + WaMoRa)^2
+
+==============================================================================
+                  SAS1 is a SAS built to obtain the volume enclosed by the MS
+                  SAS2 is a SAS built for a fast evaluation of the desolvation
+                  SAS3 is a SAS built to estimate the surface hydrophobicity
+==============================================================================
+
+struct point *surfpt_re - Coor of points over rec SAS1
+int *nsurf_re ----------- nsurf_re[n] = amount of SAS1 surface points
+                          generated by rec atom n
+int *pointsrf_re -------- pointsrf_re[n] = first rec SAS1 point (in the
+                          list surfpt_re) that is generated by rec atom n
+double **ReSelfVol ------ ReSelfVol[iat] = integral of 1/r^4 over the receptor
+                          volume for atom iat
+int FrAtNu -------------- Tot # frag atoms
+double **RoSFCo ---------- Frag coordinates in the seeded conformation
+double **FrCoor ---------- Frag coordinates in the original location
+double *FrPaCh ----------- Frag partial charges
+double *FrRad ----------- Frag charge radii (=vdW radii apart "enclosed" H)
+double *FrRad2 ---------- (Frag charge radii)^2
+double *FrRadOut -------- Frag charge radii + WaMoRa
+double *FrRadOut2 ------- (Frag charge radii + WaMoRa)^2
+double **Frdist2 --------- Squared interatomic frag distances
+double **dist2 ----------- Squared interatomic rec-frag distances
+double *FrMinC_orig ------ Min (along x,y,z) of FrCoor
+double *FrMaxC_orig ------ Max (along x,y,z) of FrCoor
+double *PFrSolvEn ------- Frag solvation energy
+int Nsurfpt_fr ---------- Tot # of points over the frag SAS1
+struct point *surfpt_fr_orig - Coor of points over frag SAS1 (obtained from
+                               FrCoor coordinates)
+int *nsurf_fr ----------- nsurf_fr[n] = amount of SAS1 surface points
+                          generated by frag atom n
+int *pointsrf_fr -------- pointsrf_fr[n] = first frag SAS1 point (in the
+                          list surfpt_fr) that is generated by frag atom n
+struct point *surfpt_ex - Coor of points over SAS1 generated by the frag and
+                          by those rec atoms that are at a distance < 2*WaMoRa
+                          from at least 1 frag atom
+double Tr[4] ------------ Translation vector to superimpose the first atom of
+                          FrCoor with the first of RoSFCo
+double U1[4][4] --------- Rotation matrix around the axis passing by the 1st atom
+                          of FrCoor and perpendicular to the plane formed by the
+                          vector joining the 1st atom and the 2nd atom of FrCoor
+                          and the vector joining the 1st atom and the 2nd atom of
+                          RoSFCo. The rotation angle is such that it superimpose
+                          the 2nd atom of RoSFCo with the 2nd atom of FrCoor
+double U2[4][4] --------- Rotation matrix around the axis joining the 1st atom and
+                          the 2nd atom of RoSFCo in order to superimpose
+                          the 3rd atom of RoSFCo with the 3rd atom of FrCoor
+double WaMoRa ----------- Radius of the water molecule
+double GrSiSo ----------- Size of the 3D grid used for cont. electrostatics
+double GrInSo ----------- Margin left along each dimension (positive and
+                          negative) of the rec for building the 3D grid box
+int NPtSphere ----------- Amount of points placed over each atom to generate
+                          the SAS (built in order to obtain the volume
+                          enclosed by the MS)
+struct point Min -------- Min coor of the grid box
+struct point Max -------- Max coor of the grid box
+double *XGrid ----------- X coor of the grid points
+double *YGrid ----------- Y coor of the grid points
+double *ZGrid ----------- Z coor of the grid points
+int  NGridx ------------- Tot # of grid points along x
+int  NGridy ------------- Tot # of grid points along y
+int  NGridz ------------- Tot # of grid points along z
+char ***GridMat --------- Matrix telling if a grid point is occupied by the
+                          rec (o), empty (e), or if it belongs to the interface
+                          between SAS and MS (s)
+double ***DeltaPrDeso --- Elec desolvation due to the occupation of a grid point
+double Kelec ------------ Constant
+double Ksolv ------------ Constant
+double UnitVol ---------- Volume of the grid element for cont. elec.
+double pi4 -------------- 4 * greekpi
+int nxminBS ------------- grid point (along x) where the BS starts
+int nyminBS ------------- grid point (along y) where the BS starts
+int nzminBS ------------- grid point (along z) where the BS starts
+int nxmaxBS ------------- grid point (along x) where the BS ends
+int nymaxBS ------------- grid point (along y) where the BS ends
+int nzmaxBS ------------- grid point (along z) where the BS ends
+double corr_scrint ------ Correction factor for the screened interaction
+                          calculated according to the GB formula
+                          (slow and precise method)
+double corr_fr_deso ----- Correction factor for slow frag elec desolvation
+                          (fd approx.)
+double *PReDesoElec ----- Rec elec desolvation
+double *PReFrIntElec ---- Rec-Frag screened interaction
+double *PFrDesoElec ----- Frag elec desolvation
+######################################################################*/
+{
+  int /*unused variable :i,*/ iat, jat, ix, iy, iz, NNeigh1, *NeighList1, ExFrAtNu, Nsurfpt_ex,
+      nxminFr, nyminFr, nzminFr, nxmaxFr, nymaxFr, nzmaxFr, NNeigh2, *NeighList2,NNeigh3,
+      // nxmin_sma, nymin_sma, nzmin_sma, nxmax_sma, nymax_sma, nzmax_sma, 
+      nxmin_big, nymin_big, nzmin_big, nxmax_big, nymax_big, nzmax_big,
+      nn, /* ,unused variables :n,ntime,*/ FrOut, hVar_corrB;
+  double **ExRoSFCo, **dist, FrMinC[4], FrMaxC[4];
+  double *ExFrRadOut, *ExFrRadOut2, *ExFrRad, *FrSelfVol,
+      *ReSelfVol_add, FrSelfEn, FrIntEn; /*unused variable :,ReSelfEn,ReIntEn; */
+  double *FrSelfVol_corrB, *ReSelfVol_add_corrB;
+  char ***FrGridMat;
+  struct point *surfpt_fr;
+/*#######################################################################
+int i,iat,jat,ix,iy,iz -- Multipurpose indices
+int NNeigh1 ------------- Amount of rec atoms closer than 2*WaMoRa
+                          to the fragment
+int *NeighList1 --------- NeighList1[1->NNeigh1] = rec atom # closer
+                          than 2*WaMoRa to the fragment
+int ExFrAtNu ------------ FrAtNu + NNeigh1
+int Nsurfpt_ex ---------- Tot # of SAS1 generated by the frag and
+                          by those rec atoms that are at a
+                          distance < 2*WaMoRa from at least 1 frag atom
+int nxminFr ------------- grid point (along x) where the frag starts
+int nyminFr ------------- grid point (along y) where the frag starts
+int nzminFr ------------- grid point (along z) where the frag starts
+int nxmaxFr ------------- grid point (along x) where the frag ends
+int nymaxFr ------------- grid point (along y) where the frag ends
+int nzmaxFr ------------- grid point (along z) where the frag ends
+int NNeigh2 ------------- Amount of rec atoms closer than 3*WaMoRa
+                          to the fragment
+int *NeighList2 --------- NeighList2[1->NNeigh2] = rec atom # closer
+                          than 3*WaMoRa to the fragment
+int NNeigh3 ------------- Amount of rec atoms falling at least once
+                          in the cutoff for non-bonded interactions
+int *NeighList3 --------- NeighList3[1->NNeigh3] = rec atom # falling at least
+                          once in the cutoff for non-bonded interactions
+int nxmin_sma ----------- The biggest between nxminFr and nxminBS
+int nymin_sma ----------- The biggest between nyminFr and nyminBS
+int nzmin_sma ----------- The biggest between nzminFr and nzminBS
+int nxmax_sma ----------- The smallest between nxmaxFr and nxmaxBS
+int nymax_sma ----------- The smallest between nymaxFr and nymaxBS
+int nzmax_sma ----------- The smallest between nzmaxFr and nzmaxBS
+int nxmin_big ----------- The smallest between nxminFr and 1
+int nymin_big ----------- The smallest between nyminFr and 1
+int nzmin_big ----------- The smallest between nzminFr and 1
+int nxmax_big ----------- The biggest between nxmaxFr and NGridx
+int nymax_big ----------- The biggest between nymaxFr and NGridy
+int nzmax_big ----------- The biggest between nzmaxFr and NGridz
+int nn,n,ntime ---------- Multipurpose variables
+int FrOut --------------- Flag telling the position of the frag respect
+                          to the elec grid box:
+                          0 = frag completely contained in the grid box
+                          1 = fragment partially contained in the grid box
+                          2 = fragment completely out of the grid box
+double **ExRoSFCo -------- Coor of the frag and of those rec atoms that are at a
+                          distance < 2*WaMoRa from at least 1 frag atom
+double **dist ------------ Frag-rec interatomic distances
+double FrMinC[4] --------- Min (along x,y,z) of RoSFCo
+double FrMaxC[4] --------- Max (along x,y,z) of RoSFCo
+double *ExFrRadOut ------ Charge radii + WaMoRa of the frag and of those
+                          rec atoms that are at a distance < 2*WaMoRa from
+                          at least 1 frag atom
+double *ExFrRadOut2 ----- (Charge radii + WaMoRa)^2 of the frag and of those
+                          rec atoms that are at a distance < 2*WaMoRa from
+                          at least 1 frag atom
+double *ExFrRad --------- Charge radii of the frag and of those
+                          rec atoms that are at a distance < 2*WaMoRa from
+                          at least 1 frag atom
+double *FrSelfVol ------- FrSelfVol[iat] = integral of 1/r^4 over the solute
+                          volume for frag atom iat
+double *ReEffRad -------- ReEffRad[n] = effective radius of rec atom n
+double *FrEffRad -------- FrEffRad[n] = effective radius of frag atom n
+double *ReSelfVol_add --- ReSelfVol_add[iat] = integral of 1/r^4 over
+                          the rec and the frag volume for rec atom iat
+double FrSelfEn --------- Tot frag self-energy
+double FrIntEn ---------- Tot frag intramolecular interaction energy
+double ReSelfEn --------- Tot rec self-energy
+double ReIntEn ---------- Tot rec intramolecular interaction energy
+char ***FrGridMat ------- Small submatrix of GridMat around the frag telling the
+                          volume occupied by the frag in the bound conformation
+struct point *surfpt_fr - Coor of points over frag SAS1 (relative to RoSFCo)
+######################################################################*/
+
+  /* Get the position of the fragment on the precalculated grid
+  printf("\tPosition of the fragment...\n");  */
+  nn = get_frag_dim(FrAtNu, RoSFCo, FrRadOut, GrSiSo, WaMoRa, NGridx,
+                    NGridy, NGridz, Min, &nxminFr,
+                    &nyminFr, &nzminFr, &nxmaxFr, &nymaxFr, &nzmaxFr, &FrOut);
+
+  /* Get the receptor atoms that are closer than 2*WaMoRa (NeighList1) or
+   than 3*WaMoRa (NeighList2) to the fragment. NeighList1 will be used
+   to generate the volume enclosed by the S&R surface, while NeighList2
+   will be used to generate the S&R surface
+   NeighList3 is the list of the receptor atoms that fall at least once
+   in the cutoff for non-bonded interactions
+  printf("\tReceptor Neighbours...\n");
+  ntime = clock(); */
+  NeighList1 = ivector(1, ReAtNu);
+  NeighList2 = ivector(1, ReAtNu);
+  // NeighList3 = ivector(1, ReAtNu);
+  dist = dmatrix(1, FrAtNu, 1, ReAtNu);
+  nn = get_Rec_neigh(ReAtNu, FrAtNu, dist2, dist, ReRad,
+                     FrRad, RePaCh, WaMoRa, nsurf_re, &NNeigh1, NeighList1, &NNeigh2,
+                     NeighList2, &NNeigh3, NeighList3);
+  /*  printf("\tget_Rec_neigh %lf\n",1e-6 * (clock()-ntime)); */
+
+  /* Make some new arrays for the "Extended fragment" (= the fragment plus
+   his receptor neighbours)
+  printf("\tNew arrays for the ''Extended fragment''...\n"); */
+
+  ExFrAtNu = FrAtNu + NNeigh1; // receptor neighbours from NNeigh1. clangini
+  ExRoSFCo = dmatrix(1, ExFrAtNu, 1, 3);
+  ExFrRad = dvector(1, ExFrAtNu);
+  ExFrRadOut = dvector(1, ExFrAtNu);
+  ExFrRadOut2 = dvector(1, ExFrAtNu);
+  for (iat = 1; iat <= FrAtNu; iat++)
+  {
+    ExRoSFCo[iat][1] = RoSFCo[iat][1];
+    ExRoSFCo[iat][2] = RoSFCo[iat][2];
+    ExRoSFCo[iat][3] = RoSFCo[iat][3];
+    ExFrRad[iat] = FrRad[iat];
+    ExFrRadOut[iat] = FrRadOut[iat];
+    ExFrRadOut2[iat] = FrRadOut2[iat];
+  }
+
+  for (iat = FrAtNu + 1, jat = 1; iat <= ExFrAtNu; iat++, jat++)
+  {
+    ExRoSFCo[iat][1] = ReCoor[NeighList1[jat]][1];
+    ExRoSFCo[iat][2] = ReCoor[NeighList1[jat]][2];
+    ExRoSFCo[iat][3] = ReCoor[NeighList1[jat]][3];
+    ExFrRad[iat] = ReRad[NeighList1[jat]];
+    ExFrRadOut[iat] = ReRadOut[NeighList1[jat]];
+    ExFrRadOut2[iat] = ReRadOut2[NeighList1[jat]];
+  }
+
+  /* Translate and rotate the S&R surface of the fragment alone from the
+   original position to the actual position
+  printf("\tMoving SAS surface...\n"); */
+  surfpt_fr = structpointvect(1, NPtSphere * FrAtNu);
+  nn = Mov_surf(Nsurfpt_fr, surfpt_fr_orig, FrCoor, FrMinC_orig, FrMaxC_orig,
+                Tr, U1, U2, surfpt_fr, FrMinC, FrMaxC);
+
+  /* Superpose the S&R surfaces of the fragment alone and of the receptor
+   neighbour atoms and obtain the resulting surface
+  printf("\tSurface convolution...\n");
+  ntime = clock(); */
+  nn = join_surf(ReCoor, ReRadOut2, surfpt_re, nsurf_re, pointsrf_re,
+                 FrAtNu, RoSFCo, FrRadOut2, surfpt_fr, nsurf_fr, pointsrf_fr,
+                 NNeigh2, NeighList2, &Nsurfpt_ex, surfpt_ex);
+  /*  printf("\tjoin_surf %lf\n",1e-6 * (clock()-ntime)); */
+
+  /* Make the map (FrGridMat) of the 3D grid points occupied by the volume
+   enclosed by the SAS of the "extended fragment"
+  printf("\tMap of volume enclosed by the SAS for the fragment...\n");
+  ntime = clock(); */
+  FrGridMat = c3tensor(nxminFr, nxmaxFr + 1, nyminFr, nymaxFr + 1, nzminFr, nzmaxFr + 1); // Why do we use +1? clangini
+  for (ix = nxminFr; ix <= nxmaxFr + 1; ix++)
+    for (iy = nyminFr; iy <= nymaxFr + 1; iy++)
+      for (iz = nzminFr; iz <= nzmaxFr + 1; iz++)
+        FrGridMat[ix][iy][iz] = 'e';
+
+  nn = SAS_Volume_Fr(ExFrAtNu, ExRoSFCo, ExFrRadOut, ExFrRadOut2, Min, GrSiSo,
+                     nxminFr, nyminFr, nzminFr, nxmaxFr, nymaxFr, nzmaxFr,
+                     FrGridMat, GridMat, FrOut);
+  /*  printf("\tSAS_Volume_Fr %lf\n",1e-6 * (clock()-ntime)); */
+
+  /* Now place a sphere of radius WaMoRa on every surface grid point and
+   mark as empty all the volume grid points falling inside
+  printf("\n\tGeneration of volume enclosed by the MS...\n");
+  ntime = clock(); */
+  nn = Excl_Grid_Fr(Min, WaMoRa, GrSiSo, nxminFr, nyminFr, nzminFr, nxmaxFr,
+                    nymaxFr, nzmaxFr, FrGridMat, Nsurfpt_ex, surfpt_ex);
+  /*  printf("\tExcl_Grid_Fr %lf\n",1e-6 * (clock()-ntime)); */
+
+  /* Check if fragment is out of the grid: if yes cut the part that is out */
+  // nxmin_sma = (nxminFr > nxminBS) ? nxminFr : nxminBS;
+  // nymin_sma = (nyminFr > nyminBS) ? nyminFr : nyminBS;
+  // nzmin_sma = (nzminFr > nzminBS) ? nzminFr : nzminBS;
+  // nxmax_sma = (nxmaxFr < nxmaxBS) ? nxmaxFr : nxmaxBS;
+  // nymax_sma = (nymaxFr < nymaxBS) ? nymaxFr : nymaxBS;
+  // nzmax_sma = (nzmaxFr < nzmaxBS) ? nzmaxFr : nzmaxBS;
+
+  nxmin_big = (nxminFr < 1) ? nxminFr : 1;
+  nymin_big = (nyminFr < 1) ? nyminFr : 1;
+  nzmin_big = (nzminFr < 1) ? nzminFr : 1;
+  nxmax_big = (nxmaxFr > NGridx) ? nxmaxFr : NGridx;
+  nymax_big = (nymaxFr > NGridy) ? nymaxFr : NGridy;
+  nzmax_big = (nzmaxFr > NGridz) ? nzmaxFr : NGridz;
+  
+  /* Calculate protein desolvation
+  printf("\n\tProtein desolvation...\n");
+  printf("\tOut %d\n",FrOut); */
+  // *PReDesoElec = 0.;
+  // if (FrOut != 2) // if fragment is not completely out of BS
+  //   for (ix = nxmin_sma; ix <= nxmax_sma; ix++)
+  //     for (iy = nymin_sma; iy <= nymax_sma; iy++)
+  //       for (iz = nzmin_sma; iz <= nzmax_sma; iz++)
+  //         if (FrGridMat[ix][iy][iz] == 'o')
+  //           *PReDesoElec += DeltaPrDeso[ix][iy][iz]; // eq. (5) from SEED 3.3.6 manual
+
+  /* Calculate the effective volumes of the receptor in presence of the ligand
+  printf("\n\tEffective volumes of the receptor...\n");
+  ntime = clock(); */
+  ReSelfVol_add = dvector(1, ReAtNu);
+  ReSelfVol_add_corrB = dvector(1, ReAtNu);
+  for (iat = 1; iat <= ReAtNu; iat++)
+  {
+    ReSelfVol_add[iat] = 0.;
+    ReSelfVol_add_corrB[iat] = 0.;
+  }
+  nn = Get_Self_Vol_Re(ReAtNu, ReCoor, NNeigh3, NeighList3, ReRad2, GrSiSo,
+                       XGrid, YGrid, ZGrid, nxminFr, nyminFr, nzminFr,
+                       nxmaxFr, nymaxFr, nzmaxFr, UnitVol, FrGridMat,
+                       ReSelfVol_add, ReSelfVol_add_corrB, EmpCorrB);
+  /*  printf("\tGet_Self_Vol_Re %lf\n",1e-6 * (clock()-ntime)); */
+
+  /* Calculate the effective volumes of the ligand in the binding site
+  printf("\n\tEffective volumes of the ligand...\n");
+  ntime = clock(); */
+  FrSelfVol = dvector(1, FrAtNu);
+  FrSelfVol_corrB = dvector(1, FrAtNu);
+  for (iat = 1; iat <= FrAtNu; iat++)
+  {
+    FrSelfVol[iat] = 0.;
+    FrSelfVol_corrB[iat] = 0.;
+  }
+  nn = Get_Self_Vol_Fr(FrAtNu, RoSFCo, FrPaCh, FrRad2, FrRadOut, FrRadOut2,
+                       GrSiSo, XGrid, YGrid, ZGrid, Min, UnitVol, NGridx, NGridy,
+                       NGridz, GridMat, nxminFr, nyminFr, nzminFr,
+                       nxmaxFr, nymaxFr, nzmaxFr, FrGridMat, FrOut, nxmin_big,
+                       nymin_big, nzmin_big, nxmax_big, nymax_big, nzmax_big,
+                       FrSelfVol, FrSelfVol_corrB, EmpCorrB);
+  /*  printf("\tGet_Self_Vol_Fr %lf\n",1e-6 * (clock()-ntime)); */
+
+  /* Calculate the effective radii of the receptor
+  printf("\n\tEffective radii of the receptor...\n"); */
+  for (iat = 1; iat <= NNeigh3; iat++) // calculate the ReEffRad only for atoms within the cutoff. clangini
+  {
+    if (EmpCorrB[0] != 'y')
+      ReEffRad[NeighList3[iat]] = 1. / (1. / ReRadOut[NeighList3[iat]] -
+                                        (ReSelfVol[NeighList3[iat]] + ReSelfVol_add[NeighList3[iat]]) / pi4);
+    else
+    {
+      hVar_corrB = NeighList3[iat];
+
+      ReEffRad[hVar_corrB] = 1. / ((-1. * (1. / ReRadOut[hVar_corrB] -
+                                           (ReSelfVol[hVar_corrB] + ReSelfVol_add[hVar_corrB]) / pi4)) +
+                                   3.0 * sqrt((1. / (2. * ReRadOut[hVar_corrB] * ReRadOut[hVar_corrB])) -
+                                              ((ReSelfVol_corrB[hVar_corrB] + ReSelfVol_add_corrB[hVar_corrB]) / pi4))) +
+                             0.215;
+      if (std::isnan(ReEffRad[hVar_corrB]) || ReEffRad[hVar_corrB] <= ReEffRad_bound[hVar_corrB])
+      {
+#ifndef NOWARN
+        if (!std::isnan(ReEffRad[hVar_corrB]) && (ReEffRad[hVar_corrB] / ReEffRad_bound[hVar_corrB] < 0.9))
+        { // write warning only if difference is more than 10%
+          fprintf(FPaOut, "Calculated effective Born radius of receptor atom ");
+          fprintf(FPaOut, "%d (%f) set to its lower bound (%f).\n",
+                  iat, ReEffRad[hVar_corrB], ReEffRad_bound[hVar_corrB]);
+        }
+#endif
+        ReEffRad[hVar_corrB] = ReEffRad_bound[hVar_corrB];
+      }
+    }
+  }
+
+  /* Receptor desolvation calculated with GB (it could be useful one day...)
+  ReSelfEn = 0.;
+  for (iat=1;iat<=NNeigh3;iat++) {
+    ReSelfEn += Ksolv * RePaCh[NeighList3[iat]] * RePaCh[NeighList3[iat]] /
+                (2. * ReEffRad[NeighList3[iat]]);
+  }
+  nn = GB_int_re(ReAtNu,ReCoor,RePaCh,ReEffRad,Ksolv,&ReIntEn);
+  printf("deso %lf\n",ReSelfEn+ReIntEn-7745.587392+10320.308710);
+*/
+
+  /* Calculate frag self energy */
+  // FrSelfEn = 0.;
+
+  /* #ifdef OMP */
+  /* #pragma omp parallel for default(none) shared(FrEffRad) reduction(+:FrSelfEn) */
+  /* #endif */
+  for (iat = 1; iat <= FrAtNu; iat++)
+    if (FrPaCh[iat] != 0.)
+    {
+
+      if (EmpCorrB[0] != 'y')
+        FrEffRad[iat] = 1. / (1. / FrRadOut[iat] - FrSelfVol[iat] / pi4);
+      else
+      {
+
+        FrEffRad[iat] = 1. / ((-1. * (1. / FrRadOut[iat] - FrSelfVol[iat] / pi4)) + 
+                        3.0 * sqrt((1. / (2. * FrRadOut[iat] * FrRadOut[iat])) -
+                        (FrSelfVol_corrB[iat] / pi4))) + 0.215;
+        if (std::isnan(FrEffRad[iat]) || (FrEffRad[iat] <= FrEffRad_bound[iat]))
+        {
+#ifndef NOWARN
+          if (!std::isnan(FrEffRad[iat]) && (FrEffRad[iat] / FrEffRad_bound[iat] < 0.9))
+          {
+            fprintf(FPaOut, "Calculated effective Born radius of fragment atom %d (%f) set to its lower bound (%f).\n", iat, FrEffRad[iat], FrEffRad_bound[iat]);
+          }
+#endif
+          FrEffRad[iat] = FrEffRad_bound[iat];
+        }
+      }
+      //FrSelfEn += Ksolv * FrPaCh[iat] * FrPaCh[iat] / (2. * FrEffRad[iat]);
+    }
+
+  /* Calculate the electrostatic intermolecular interactions
+  printf("\n\tElectrostatic intermolecular interactions...\n"); */
+  // nn = screened_int(RePaCh_Fr, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+  //                   FrEffRad, dist2, dist, Kelec, Ksolv, PReFrIntElec);
+  // *PReFrIntElec *= corr_scrint;
+
+  /* Calculate the electrostatic intra-ligand interactions
+  printf("\n\tElectrostatic intra-ligand interactions...\n"); */
+  //nn = GB_int_fr(FrAtNu, Frdist2, FrPaCh, FrEffRad, Ksolv, &FrIntEn);
+
+  //*PFrDesoElec = FrSelfEn + FrIntEn;
+  //*PFrDesoElec -= *PFrSolvEn;
+  //*PFrDesoElec *= corr_fr_deso;
+  *PNNeigh3 = NNeigh3;
+
+  free_dmatrix(dist, 1, FrAtNu, 1, ReAtNu);
+  free_dvector(FrSelfVol, 1, FrAtNu);       /* dey memory leak */
+  free_dvector(FrSelfVol_corrB, 1, FrAtNu); /* dey memory leak */
+  free_dvector(ReSelfVol_add, 1, ReAtNu);
+  free_dvector(ReSelfVol_add_corrB, 1, ReAtNu);
+  free_structpointvect(surfpt_fr, 1, NPtSphere * FrAtNu);
+  // free_ivector(NeighList3, 1, ReAtNu);
+  free_ivector(NeighList2, 1, ReAtNu);
+  free_ivector(NeighList1, 1, ReAtNu);
+  free_dvector(ExFrRadOut2, 1, ExFrAtNu);
+  free_dvector(ExFrRadOut, 1, ExFrAtNu);
+  free_dvector(ExFrRad, 1, ExFrAtNu);
+  free_dmatrix(ExRoSFCo, 1, ExFrAtNu, 1, 3);
+  free_c3tensor(FrGridMat, nxminFr, nxmaxFr + 1, nyminFr,
+                nymaxFr + 1, nzminFr, nzmaxFr + 1);
+  /*  printf("\tSlow Desol %lf\n",1e-6 * (clock()-ntime)); */
 }
 
 int get_frag_dim(int FrAtNu,double **RoSFCo,double *FrRadOut,double GrSiSo,
@@ -1508,10 +1989,13 @@ int Get_Self_Vol_Re(int ReAtNu,double **ReCoor,int NFrNeigh,int *FrNeighList,
                     int NStartGridx,int NStartGridy,int NStartGridz,
                     int NGridx,int NGridy,int NGridz,
                     double UnitVol,char ***GridMat,double *SelfVol,
-		    double *SelfVol_corrB,char *EmpCorrB)
+		                double *SelfVol_corrB,char *EmpCorrB)
 /*##########################################
 For rec atoms: Add to the integral of 1/r^4 resulting from
 the isolated rec the contribution due to the presence of the frag
+
+SelfVol has already been calculated for the isolated receptor. Here we add the
+integral on the volume occupied by the fragment.
 ###########################################*/
 
 /*##########################################
@@ -1543,7 +2027,7 @@ double *SelfVol --------- SelfVol[iat] = integral of 1/r^4 over
   double UnitVol27,cutoff,cutoff2,cutoff2_grid,r2,*SelfVolTmp,*SelfVolTmp_corrB;
 
   cutoff = 5.;      /* cutoff between fine and coarse 3D grid */
-  cutoff2 = cutoff * cutoff;
+  cutoff2 = cutoff * cutoff; /* 25.0 */
   cutoff2_grid = (cutoff+sqrt(3.)*GrSiSo)*(cutoff+sqrt(3.)*GrSiSo);
   UnitVol27 = UnitVol * 27.;
 
@@ -1777,23 +2261,24 @@ double *SelfVol --------- SelfVol[iat] = integral of 1/r^4 over the solute
                      r2 > FrRad2[iat] && r2 <= FrRadOut2[iat] ) {
                   r4 = r2 * r2;
                   SelfVol[iat] -= UnitVol / r4;
-		  if (EmpCorrB[0]=='y')
-		    SelfVol_corrB[iat] -= UnitVol / (r4*sqrt(r2));
+		              if (EmpCorrB[0]=='y')
+		                SelfVol_corrB[iat] -= UnitVol / (r4*sqrt(r2));
+                  //std::cout << "may be some problem with atom iat =" << iat << std::endl; // clangini debug
                 }
                 else if ( (FrGridMat[ix][iy][iz] == 'o' ||
                            GridMat[ix][iy][iz] == 'o') &&
                            r2 > FrRadOut2[iat] ) {
                   r4 = r2 * r2;
                   SelfVol[iat] += UnitVol / r4;
-		  if (EmpCorrB[0]=='y')
-		    SelfVol_corrB[iat] += UnitVol / (r4*sqrt(r2));
+		              if (EmpCorrB[0]=='y')
+		                SelfVol_corrB[iat] += UnitVol / (r4*sqrt(r2));
                 }
               }
               else if ( (ix >= nxminFr && ix <= nxmaxFr+1 &&
                          iy >= nyminFr && iy <= nymaxFr+1 &&
                          iz >= nzminFr && iz <= nzmaxFr+1 &&
                          FrGridMat[ix][iy][iz] == 'o') ||
-                        GridMat[ix][iy][iz] == 'o' ) {
+                         GridMat[ix][iy][iz] == 'o' ) {
                 r2 = (XGrid[ix]-RoSFCo[iat][1]) *
                      (XGrid[ix]-RoSFCo[iat][1]) +
                      (YGrid[iy]-RoSFCo[iat][2]) *
@@ -1803,8 +2288,8 @@ double *SelfVol --------- SelfVol[iat] = integral of 1/r^4 over the solute
                 if ( r2 > FrRadOut2[iat] && r2 < cutoff1sq) {
                   r4 = r2 * r2;
                   SelfVol[iat] += UnitVol / r4;
-		  if (EmpCorrB[0]=='y')
-		    SelfVol_corrB[iat] += UnitVol / (r4*sqrt(r2));
+		              if (EmpCorrB[0]=='y')
+		                SelfVol_corrB[iat] += UnitVol / (r4*sqrt(r2));
                 }
               }
             }
@@ -1894,10 +2379,10 @@ double *SelfVol --------- SelfVol[iat] = integral of 1/r^4 over the solute
   }
   else {
     // clangini debug start
-    //std::cout << "fragment partially out or rec elec grid box" << std::endl;
+    // std::cout << "fragment partially out or rec elec grid box" << std::endl;
     //clangini debug end
 /* The fragment is partially out of the rec elec grid box --> you need to check
-   carefully the boundaries in order not ot go out of the box */
+   carefully the boundaries in order not to go out of the box */
     cutoff1sq = cutoff1 * cutoff1;
     boxL = (cutoff1 + 0.00001) / GrSiSo + 1;
 /* Integration with grid size GrSiSo */
@@ -2126,6 +2611,300 @@ double *PReFrIntElec ---- Rec-Frag screened interaction
     return 0;
 }
 
+int screened_int_forces(double **RePaCh_Fr, double *ReEffRad,
+                        int NNeigh3, int *NeighList3, int FrAtNu,
+                        double *FrPaCh, double *FrEffRad, double **dist2, double **dist,
+                        double Kelec, double Ksolv,
+                        double **RoSFCo, double **ReCoor, double **RelCOMCo,
+                        double *F_elec, double *T_elec, double corr_scrint)
+/*##########################################
+Calculate the forces derived from the 
+frag-rec screened interaction energy
+###########################################*/
+
+/*##########################################
+double *RePaCh_Fr -------- Modified rec partial charges (for the charged residues
+                          around the BS a unit charge is assigned to the atom
+                          closest to the charge center
+double *ReEffRad -------- ReEffRad[n] = effective radius of rec atom n
+int NNeigh3 ------------- Amount of rec atoms falling at least once
+                          in the cutoff for non-bonded interactions
+int *NeighList3 --------- NeighList3[1->NNeigh3] = rec atom # falling at least
+                          once in the cutoff for non-bonded interactions
+int FrAtNu -------------- Tot # frag atoms
+double *FrPaCh ----------- Frag partial charges
+double *FrEffRad -------- FrEffRad[n] = effective radius of frag atom n
+double **dist2 ----------- Squared interatomic rec-frag distances
+double **dist ------------ Frag-rec interatomic distances
+double Kelec ------------ Constant
+double Ksolv ------------ Constant
+double *PReFrIntElec ---- Rec-Frag screened interaction
+###########################################*/
+{
+  int iat, jat;
+  double Rij, Rij_GB;
+  double e_ij[4];
+  double F_i[4];
+  double T_i[4];
+  double dEdr;
+  // double En_i;
+
+  F_elec[1] = 0.0;
+  F_elec[2] = 0.0;
+  F_elec[3] = 0.0;
+  T_elec[1] = 0.0;
+  T_elec[2] = 0.0;
+  T_elec[3] = 0.0;
+
+  //*PIntEn = 0.;
+  for (jat = 1; jat <= FrAtNu; jat++) // loop over frag atoms
+  {
+    F_i[1] = 0.0;
+    F_i[2] = 0.0;
+    F_i[3] = 0.0;
+
+    if (FrPaCh[jat] != 0.)
+    {
+      for (iat = 1; iat <= NNeigh3; iat++) // loop over rec atoms
+      {
+        dEdr = 0.0;
+        if (dist2[jat][NeighList3[iat]] > 0.)
+        {
+
+          Rij = (double)ReEffRad[NeighList3[iat]] * FrEffRad[jat];
+          Rij_GB = sqrtf(dist2[jat][NeighList3[iat]] +
+                         Rij * expf(-dist2[jat][NeighList3[iat]] / (4. * Rij)));
+
+          // En_i = RePaCh_Fr[jat][NeighList3[iat]] * FrPaCh[jat] *
+          //       (Kelec / dist[jat][NeighList3[iat]] +
+          //         Ksolv / Rij_GB);
+          // *PIntEn += En_i;
+          // dEdr = -RePaCh_Fr[jat][NeighList3[iat]] * FrPaCh[jat] * (Kelec / dist2[jat][NeighList3[iat]]) +
+          //        RePaCh_Fr[jat][NeighList3[iat]] * FrPaCh[jat] * 0.5 * Ksolv / (Rij_GB * Rij_GB * Rij_GB) *
+          //            (2 * dist[jat][NeighList3[iat]] - 0.5 * dist[jat][NeighList3[iat]] * 
+          //            expf(-dist2[jat][NeighList3[iat]] / (4. * Rij)));
+          dEdr = -RePaCh_Fr[jat][NeighList3[iat]] * FrPaCh[jat] * ((Kelec / (dist2[jat][NeighList3[iat]] * dist[jat][NeighList3[iat]])) +
+                  Ksolv / (Rij_GB * Rij_GB * Rij_GB) *
+                     (1. - 0.25 * expf(-dist2[jat][NeighList3[iat]] / (4. * Rij))));
+          e_ij[1] = (ReCoor[NeighList3[iat]][1] - RoSFCo[jat][1]); // / dist[jat][NeighList3[iat]];
+          e_ij[2] = (ReCoor[NeighList3[iat]][2] - RoSFCo[jat][2]); // / dist[jat][NeighList3[iat]];
+          e_ij[3] = (ReCoor[NeighList3[iat]][3] - RoSFCo[jat][3]); // / dist[jat][NeighList3[iat]];
+
+          F_i[1] += dEdr * e_ij[1];
+          F_i[2] += dEdr * e_ij[2];
+          F_i[3] += dEdr * e_ij[3];
+          // *PReFrIntElec += Inte;
+        }
+      }
+
+      F_i[1] *= corr_scrint;
+      F_i[2] *= corr_scrint;
+      F_i[3] *= corr_scrint;
+
+      F_elec[1] += F_i[1];
+      F_elec[2] += F_i[2];
+      F_elec[3] += F_i[3];
+
+      VectPr(RelCOMCo[jat][1], RelCOMCo[jat][2], RelCOMCo[jat][3],
+             F_i[1], F_i[2], F_i[3],
+             &T_i[1], &T_i[2], &T_i[3]);
+      T_elec[1] += T_i[1];
+      T_elec[2] += T_i[2];
+      T_elec[3] += T_i[3];
+    }
+  }
+
+  if (iat == NNeigh3 + 1)
+    return 1;
+  else
+    return 0;
+}
+
+void check_gradient_int_elec(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
+                             double *ReVdWR, double *FrVdWR,
+                             double *Felec, double *Telec,
+                             double **RoSFCo, double **ReCoor,
+                             double *ReMinC,
+                             double GrSiCu_en, int *CubNum_en, int ***CubFAI_en, int ***CubLAI_en,
+                             int *CubLiA_en, int PsSpNC, int ***PsSphe,
+                             double PsSpRa, int ReReNu, int *AtReprRes,
+                             int *FiAtRes, int *LaAtRes, int *FrAtEl_nu, double *AtWei,
+                             double *RePaCh, double *FrPaCh, double *TotChaRes, int NuChResEn, int *LiChResEn,
+                             double **ChFrRe_ps_elec, double *ReEffRad, double *FrEffRad,
+                             int *NeighList3, int NNeigh3, double Kelec, double Ksolv, double corr_scrint)
+{
+  /* This function checks the gradients of int_elec */
+  int i, j, k;
+  int iat, jat;
+  int areturn;
+  double **dist2, **dist, **dummy;
+  double num_grad[6]; // numerical gradient
+  double eps = 0.00001;
+  double eps_rot = eps * 0.0174533;
+  double **eps_coords;
+  double E_plus, E_minus;
+  double COM[4];
+  Quaternion<double> q_rb;
+  double **ChFrRe_tmp;
+
+  eps_coords = zero_dmatrix(1, FrAtNu, 1, 3);
+  copy_dmatrix(RoSFCo, eps_coords, 1, FrAtNu, 1, 3);
+  dist2 = zero_dmatrix(1, FrAtNu, 1, ReAtNu);
+  dist = zero_dmatrix(1, FrAtNu,  1, ReAtNu);
+  dummy = zero_dmatrix(1,FrAtNu, 1, ReAtNu);
+  ChFrRe_tmp = dmatrix(1, FrAtNu, 1, ReAtNu);
+  // copy_dmatrix(ChFrRe_ps_elec 1, FrAtNu, 1, ReAtNu);
+
+  // numerical forces:
+  for (j = 1; j <= 3; j++)
+  {
+    // x + eps
+    for (i = 1; i <= FrAtNu; i++)
+    {
+      eps_coords[i][j] += eps;
+    }
+    SqDisFrRe_ps(FrAtNu, eps_coords, ReCoor, ReMinC, GrSiCu_en,
+                 CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                 PsSpNC, PsSphe, dummy, ReAtNu, PsSpRa,
+                 RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                 TotChaRes, NuChResEn, LiChResEn,
+                 dist2, ChFrRe_tmp);
+    dist2_to_dist(dist2, dist, FrAtNu, ReAtNu);
+    // for (iat = 1; iat <= FrAtNu; iat++)
+    // {
+    //   for (jat = 1; jat <= ReAtNu; jat++)
+    //   {
+    //     if ((distortion[iat][jat] < 0. && dist2[iat][jat] >= 0.) || 
+    //         (distortion[iat][jat] > 0. && dist2[iat][jat] <= 0.)){
+    //           std::cerr << "PROBLEM WITH DISTANCES" << std::endl;
+    //         }
+    //   }
+    // }
+    // for (iat = 1; iat <= FrAtNu; iat++)
+    // {
+    //   for (jat = 1; jat <= ReAtNu; jat++)
+    //   {
+    //     if (ChFrRe_tmp[iat][jat] != ChFrRe_ps_elec[iat][jat])
+    //       std::cerr << "PROBLEM WITH NUMERICAL GRADIENT" << std::endl;
+    //   }
+    // }
+    areturn = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                           FrEffRad, dist2, dist, Kelec, Ksolv, &E_plus);
+    // E_plus *= corr_scrint;
+    // copy_dmatrix(RoSFCo, eps_coords, 1, FrAtNu, 1, 3);
+    // x - eps
+    for (i = 1; i <= FrAtNu; i++)
+    {
+      eps_coords[i][j] -= 2 * eps;
+    }
+    SqDisFrRe_ps(FrAtNu, eps_coords, ReCoor, ReMinC, GrSiCu_en,
+                 CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                 PsSpNC, PsSphe, dummy, ReAtNu, PsSpRa,
+                 RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                 TotChaRes, NuChResEn, LiChResEn,
+                 dist2, ChFrRe_tmp);
+    dist2_to_dist(dist2, dist, FrAtNu, ReAtNu);
+    // for (iat = 1; iat <= FrAtNu; iat++)
+    // {
+    //   for (jat = 1; jat <= ReAtNu; jat++)
+    //   {
+    //     if ((distortion[iat][jat] < 0. && dist2[iat][jat] >= 0.) ||
+    //         (distortion[iat][jat] > 0. && dist2[iat][jat] <= 0.))
+    //     {
+    //       std::cerr << "PROBLEM WITH DISTANCES" << std::endl;
+    //     }
+    //   }
+    // }
+    // for (iat = 1; iat <= FrAtNu; iat++){
+    //   for (jat = 1; jat <= ReAtNu; jat++){
+    //     if (ChFrRe_tmp[iat][jat] != ChFrRe_ps_elec[iat][jat])
+    //       std::cerr << "PROBLEM WITH NUMERICALS" << std::endl;
+    //   }
+    // }
+    areturn = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                           FrEffRad, dist2, dist, Kelec, Ksolv, &E_minus);
+    copy_dmatrix(RoSFCo, eps_coords, 1, FrAtNu, 1, 3);
+    // numerical gradient:
+    num_grad[j] = (E_plus - E_minus) / (2 * eps);
+  }
+  std::cout << "Grad check" << std::endl;
+  std::cout << -Felec[1] << " " << num_grad[1] * corr_scrint << std::endl;
+  std::cout << -Felec[2] << " " << num_grad[2] * corr_scrint << std::endl;
+  std::cout << -Felec[3] << " " << num_grad[3] * corr_scrint << std::endl;
+  //numerical torques:
+
+  while (k <= 3)
+  {
+    E_plus = 0.0;
+    E_minus = 0.0;
+    CenterOfMass(COM, RoSFCo, FrAtNu, AtWei, FrAtEl_nu);
+    if (k == 1)
+    {
+      q_rb.fromXYZrot(eps_rot, 0.0, 0.0);
+    }
+    else if (k == 2)
+    {
+      q_rb.fromXYZrot(0.0, eps_rot, 0.0);
+    }
+    else if (k == 3)
+    {
+      q_rb.fromXYZrot(0.0, 0.0, eps_rot);
+    }
+    for (i = 1; i <= FrAtNu; i++)
+    {
+      q_rb.quatConjugateVecRef(eps_coords[i], COM[1], COM[2], COM[3]);
+    }
+    SqDisFrRe_ps(FrAtNu, eps_coords, ReCoor, ReMinC, GrSiCu_en,
+                 CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                 PsSpNC, PsSphe, dummy, ReAtNu, PsSpRa,
+                 RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                 TotChaRes, NuChResEn, LiChResEn,
+                 dist2, ChFrRe_tmp);
+    dist2_to_dist(dist2, dist, FrAtNu, ReAtNu);
+    areturn = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                           FrEffRad, dist2, dist, Kelec, Ksolv, &E_plus);
+    if (k == 1)
+    {
+      q_rb.fromXYZrot(-2 * eps_rot, 0.0, 0.0);
+    }
+    else if (k == 2)
+    {
+      q_rb.fromXYZrot(0.0, -2 * eps_rot, 0.0);
+    }
+    else if (k == 3)
+    {
+      q_rb.fromXYZrot(0.0, 0.0, -2 * eps_rot);
+    }
+    for (i = 1; i <= FrAtNu; i++)
+    {
+      q_rb.quatConjugateVecRef(eps_coords[i], COM[1], COM[2], COM[3]);
+    }
+    SqDisFrRe_ps(FrAtNu, eps_coords, ReCoor, ReMinC, GrSiCu_en,
+                 CubNum_en, CubFAI_en, CubLAI_en, CubLiA_en,
+                 PsSpNC, PsSphe, dummy, ReAtNu, PsSpRa,
+                 RePaCh, ReReNu, AtReprRes, FiAtRes, LaAtRes,
+                 TotChaRes, NuChResEn, LiChResEn,
+                 dist2, ChFrRe_tmp);
+    dist2_to_dist(dist2, dist, FrAtNu, ReAtNu);
+    areturn = screened_int(ChFrRe_ps_elec, ReEffRad, NNeigh3, NeighList3, FrAtNu, FrPaCh,
+                           FrEffRad, dist2, dist, Kelec, Ksolv, &E_minus);
+    copy_dmatrix(RoSFCo, eps_coords, 1, FrAtNu, 1, 3);
+    // numerical gradient:
+    num_grad[k + 3] = (E_plus - E_minus) / (2 * eps_rot);
+    k++;
+  }
+  std::cout << -Telec[1] << " " << num_grad[4] * corr_scrint << std::endl;
+  std::cout << -Telec[2] << " " << num_grad[5] * corr_scrint << std::endl;
+  std::cout << -Telec[3] << " " << num_grad[6] * corr_scrint << std::endl;
+
+  free_dmatrix(eps_coords, 1, FrAtNu, 1, 3);
+  free_dmatrix(dist2, 1, FrAtNu, 1, ReAtNu);
+  free_dmatrix(dist, 1, FrAtNu, 1, ReAtNu);
+  free_dmatrix(dummy, 1, FrAtNu, 1, ReAtNu);
+  free_dmatrix(ChFrRe_tmp, 1, FrAtNu, 1, ReAtNu);
+  return;
+}
+
 int GB_int_fr(int FrAtNu,double **Frdist2,double *FrPaCh,
               double *EffRad,double Ksolv,double *PIntEnTot)
 /*##########################################
@@ -2300,14 +3079,19 @@ char ***FrGridMat ------- Matrix telling if a grid point is occupied by the
   nn = Excl_Grid(FrAtNu,FrCoor,Min,FrRadOut,FrRadOut2,WaMoRa,GrSiSo,
                  1,1,1,NGridx,NGridy,NGridz,UnitVol,
                  FrGridMat,Nsurfpt_fr,surfpt_fr_orig,FrSelfVol,FrSelfVol_corrB,
-		 EmpCorrB);
+		             EmpCorrB);
+  // for (int jj=1;jj<=FrAtNu;jj++){
+  //   std::cout << "FrSelfVol_corrB[" << jj << "]= " << FrSelfVol_corrB[jj] << '\n';
+  //   std::cout << "FrSelfVol[" << jj << "]= " << FrSelfVol[jj] << '\n';
+  // }
 /* Calculate the frag self energy */
-  nn = Get_Self_En_Fr(FrAtNu,FrCoor,FrPaCh,FrRadOut,FrRadOut2,
+  nn = Get_Self_En_Fr(FrAtNu,FrCoor,FrPaCh,FrRadOut,FrRadOut2,FrEffRad_bound,
                       XGrid,YGrid,ZGrid,UnitVol,Ksolv,pi4,FrGridMat,
                       1,1,1,NGridx,NGridy,NGridz,FrSelfVol,FrEffRad,&FrSelfEn,
 		                  FrSelfVol_corrB,EmpCorrB,FPaOut);
   
-  for (iat=1;iat <= FrAtNu; iat++){ // set lower bound on frag bond radius
+  for (iat=1;iat <= FrAtNu; iat++){ 
+    // set lower bound on frag bond radius
     FrEffRad_bound[iat] = FrEffRad[iat];
   }
 /* Calculate the frag interaction energy */
@@ -2332,12 +3116,12 @@ char ***FrGridMat ------- Matrix telling if a grid point is occupied by the
 }
 
 int Get_Self_En_Fr(int FrAtNu,double **RoSFCo,double *FrPaCh,double *FrRadOut,
-                   double *FrRadOut2,double *XGrid,double *YGrid,double *ZGrid,
+                   double *FrRadOut2,double *FrEffRad_bound,double *XGrid,double *YGrid,double *ZGrid,
                    double UnitVol,double Ksolv,double pi4,char ***FrGridMat,
                    int nxminFr,int nyminFr,int nzminFr,
                    int nxmaxFr,int nymaxFr,int nzmaxFr,
                    double *FrSelfVol,double *FrEffRad,double *PFrSelfEn,
-		   double *FrSelfVol_corrB,char *EmpCorrB,FILE * FPaOut)
+		               double *FrSelfVol_corrB,char *EmpCorrB,FILE * FPaOut)
 /*##########################################
 Calculate the frag self energy
 ###########################################*/
@@ -2374,7 +3158,11 @@ double *PFrSelfEn ------- Tot frag self-energy
   ix=nxminFr;
 
   *PFrSelfEn = 0.;
+  //int jumppoint; //debug
   for (iat=1;iat<=FrAtNu;iat++) {
+    //jumppoint = 0; //debug
+
+
     if (FrPaCh[iat] != 0. ) {
       for (ix=nxminFr;ix<=nxmaxFr;ix++) {
         for (iy=nyminFr;iy<=nymaxFr;iy++) {
@@ -2389,46 +3177,71 @@ double *PFrSelfEn ------- Tot frag self-energy
               if ( r2 > FrRadOut2[iat]) {
                 r4 = r2 * r2;
                 FrSelfVol[iat] += UnitVol / r4;
-		if (EmpCorrB[0]=='y')
-		  FrSelfVol_corrB[iat] += UnitVol / (r4*sqrt(r2));
+		            if (EmpCorrB[0]=='y')
+		              FrSelfVol_corrB[iat] += UnitVol / (r4*sqrt(r2));
               }
             }
+            /*else if (FrGridMat[ix][iy][iz] == 's') {
+              r2 = (XGrid[ix]-RoSFCo[iat][1]) *
+                   (XGrid[ix]-RoSFCo[iat][1]) +
+                   (YGrid[iy]-RoSFCo[iat][2]) *
+                   (YGrid[iy]-RoSFCo[iat][2]) +
+                   (ZGrid[iz]-RoSFCo[iat][3]) *
+                   (ZGrid[iz]-RoSFCo[iat][3]);
+              if ( r2 <= FrRadOut2[iat]) {
+                jumppoint++;
+              }
+            }FrSelfVol_corrB[ */ //debug
           }
         }
       }
+
+      //std::cout << "FrSelfVol[" << iat << "]/pi4 = " << FrSelfVol[iat]/pi4 << "\n";
+      //std::cout << "Calculated Born radius[" << iat << "] = " << 1. / ( 1./(FrRadOut[iat]) - FrSelfVol[iat]/pi4 ) << "\n";
+      //std::cout << "My hypothesis Born radius[" << iat << "] = " << 1. / ( 1./(FrRadOut[iat]-3.5) + FrSelfVol[iat]/pi4 ) << "\n";
+      //std::cout << "FrRadOut[" << iat << "] = " << FrRadOut[iat] << "\n" ;
 
       if (EmpCorrB[0]!='y')
         FrEffRad[iat] = 1. / ( 1./FrRadOut[iat] - FrSelfVol[iat]/pi4 );
       else
       {
 
-	  FrEffRad[iat] = 1./( (-1.*(1./FrRadOut[iat] - FrSelfVol[iat]/pi4))
-			       + 3.0*sqrt( (1./(2.*FrRadOut[iat]*FrRadOut[iat])) -
-					   (FrSelfVol_corrB[iat]/pi4) ) )
-	      + 0.215;
+    	  FrEffRad[iat] = 1./( (-1.*(1./FrRadOut[iat] - FrSelfVol[iat]/pi4))
+    			       + 3.0*sqrt( (1./(2.*FrRadOut[iat]*FrRadOut[iat])) - (FrSelfVol_corrB[iat]/pi4) ) )
+    	           + 0.215;
 
-	  /*
-	    Dey exception handling :
-	    in rare cases the expression :
-	    (1./(2.*ReRadOut[iat]*ReRadOut[iat])) - ((*SelfVol_corrB)[iat]/pi4)
-	    can become < 0 -> the sqrt() function cannot be evaluated, which leads
-	    to "nan" values or the effective born radius is smaller than 0
+        // std::cout << "=====" << "\n";
+        // std::cout << "1/2R^2 = " << 1./(2.*FrRadOut2[iat]) << " FrSelfVol_corrB[iat]/pi4 " << (FrSelfVol_corrB[iat]/pi4) << std::endl;
+        // std::cout << "G0 = " << 1./FrRadOut[iat] - FrSelfVol[iat]/pi4 << std::endl;
+        // std::cout << "G1 = " << 3.0*sqrt( (1./(2.*FrRadOut[iat]*FrRadOut[iat])) - (FrSelfVol_corrB[iat]/pi4) ) << "\n";
+        // std::cout << "FrEffRad_corrB[" << iat << "] = " << FrEffRad[iat] << std::endl;
+        // std::cout << "1/R = " << 1./FrRadOut[iat] << "  FrSelfVol[iat]/pi4 = " << FrSelfVol[iat]/pi4 << std::endl;
+        // std::cout << "FrEffRad[" << iat << "] = " << 1. / ( 1./FrRadOut[iat] - FrSelfVol[iat]/pi4 ) << std::endl;
+        // std::cout << "Lower bound (Born radius) = " << FrRadOut[iat] - 1.4 << std::endl;
 
-	  */
-	  if(FrEffRad[iat]<=0 || isnan(FrEffRad[iat]))
-	  {
-#ifndef NOWARN
-	    fprintf(FPaOut,"WARNING could not calculate empirically-corrected effective born radius of fragment atom %d, using standard approach\n",iat);
-#endif
-      std::cout << "Fragment effective radius is 0 or nan" << std::endl;
-	    FrEffRad[iat] = 1. / ( 1./FrRadOut[iat] - FrSelfVol[iat]/pi4 );
-	  }
+    	  /*
+    	    Dey exception handling :
+    	    in rare cases the expression :
+    	    (1./(2.*ReRadOut[iat]*ReRadOut[iat])) - ((*SelfVol_corrB)[iat]/pi4)
+    	    can become < 0 -> the sqrt() function cannot be evaluated, which leads
+    	    to "nan" values or the effective born radius is smaller than 0
 
-      }
+    	  */
+    	  if(FrEffRad[iat]<=0 || std::isnan(FrEffRad[iat]))
+    	  {
+    #ifndef NOWARN
+    	    fprintf(FPaOut,"WARNING could not calculate empirically-corrected effective born radius of fragment atom %d, using standard approach\n",iat);
+    #endif
+          // std::cout << "Fragment effective radius is 0 or nan" << std::endl;
+    	    FrEffRad[iat] = 1. / ( 1./FrRadOut[iat] - FrSelfVol[iat]/pi4 );
+    	  }
 
-      *PFrSelfEn += Ksolv * FrPaCh[iat] * FrPaCh[iat] / (2. * FrEffRad[iat]);
+          }
+
+          *PFrSelfEn += Ksolv * FrPaCh[iat] * FrPaCh[iat] / (2. * FrEffRad[iat]);
 
     }
+    //std::cout << "Jumped surf point for atom " << iat << " = " << jumppoint <<"\n";
   }
 
   if (ix == FrAtNu+1 )

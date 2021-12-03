@@ -71,6 +71,9 @@ unsigned char *cvector(long nl, long nh);
 unsigned long *lvector(long nl, long nh);
 double *dvector(long nl, long nh);
 float **matrix(long nrl, long nrh, long ncl, long nch);
+double **dmatrix(double **s, long nrl, long nrh, long ncl, long nch);
+void copy_dmatrix(double **source, double **dest, long nrl, long nrh,
+                  long ncl, long nch);
 double **dmatrix(long nrl, long nrh, long ncl, long nch);
 int **imatrix(long nrl, long nrh, long ncl, long nch);
 float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch,
@@ -110,6 +113,23 @@ void free_ppdvector(double ***v, long nl, long nh);
 /*clangini end*/
 
 /* ------ added by MS ------ */
+struct Point3D 
+{
+    double x;
+    double y;
+    double z;
+
+    Point3D();
+    Point3D(double x_, double y_, double z_);
+    Point3D(const Point3D& p);
+    
+    const Point3D& operator=(const Point3D& rhs);
+    const Point3D& operator+=(const Point3D& q);
+    Point3D operator*(double v);
+
+    friend Point3D operator+(const Point3D& lhs, const Point3D& rhs);
+};
+
 struct point *structpointvect(long nl, long nh);
 char ***c3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh);
 double ***d3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh);
@@ -131,6 +151,15 @@ double * dvecresize(double *,int newsize);
 double **zero_dmatrix(int rl,int rh,int cl,int ch);
 void dmm_prod(int m1,int n1,int m2,int n2,double **A,double **B,double **P);
 void dm_transpose(int m, int n, double **M, double **T);
+template <class T>
+T max_el(T *v, int l, int r);
+template <class T>
+T max_abs_el(T *v, int l, int r);
+template <class T>
+void sum_vec(T *sum, T *a, T *b, int start, int end);
+template <class T>
+void sub_vec(T *sub, T *a, T *b, int start, int end);
+#include "tmplt_nrutil.cpp"
 /* ------------------------- */
 
 #else /* ANSI */
