@@ -24,12 +24,14 @@ Two implicit solvation models based on the Generalized Born methodology
 are employed to efficiently evaluate the protein and fragment desolvation
 upon binding and the screened electrostatic interaction.
 
-**NEW!** The best generated poses can now be stochastically minimized with 
-Monte Carlo simulated annealing. Beware that this new feature is experimental and
-has not been tested thoroughly yet. See :ref:`mc_minimization` for details.
+**NEW!** The best generated poses can now be minimized in rigid-body spaces with 
+:ref:`mc_minimization` and/or :ref:`steepest_descent`. 
+Beware that these new features are experimental and
+have not been tested thoroughly yet.
 
 **NEW!** A new keyword-based parameter file has been introduced. This allows more flexibility in 
-the way settings are specified, but only involves newly added settings (e.g. the ones of :ref:`mc_minimization`),
+the way settings are specified, but only involves newly added parameters 
+(e.g. the ones for :ref:`mc_minimization` or :ref:`steepest_descent`),
 so that legacy ``seed.par`` files keep working as expected. See :ref:`KW_param` for details.
 
 |

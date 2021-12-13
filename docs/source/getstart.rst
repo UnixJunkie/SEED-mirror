@@ -33,6 +33,8 @@ After installation run SEED with the following command:
   
   seed_4 seed.inp >& log
 
+For compiling and running the parallel version of SEED, refer to :ref:`parallel`.
+
 .. _input_files:
 
 Input Files 

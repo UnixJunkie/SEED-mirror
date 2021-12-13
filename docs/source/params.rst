@@ -4,12 +4,12 @@ Parameters
 ==========
 
 SEED user-modifiable parameters are contained in two main input files.
-| The file ``seed.inp`` contains the most frequently modified :ref:`input_param`
+| The file ``seed.inp`` contains the most frequently modified `input_param`_
 as they regard a specific SEED run (path and name of structural input files, 
 list of residues forming the binding pocket, 
 switch between polar and apolar docking, ...).
 
-The :ref:`par_param` ``seed.par`` contains 
+The `par_param`_ ``seed.par`` contains 
 less frequently modified input/output options, parameters for docking, 
 energy and clustering. Modification of most of these parameters is recommended only 
 to advanced users who wish to fine tune the energy model.
@@ -112,7 +112,7 @@ Here we define all the parameters of the ``seed.inp`` file.
 As you do not need to modify all the parameters and in most of the cases 
 default values will give good results, we recommend not to write an input 
 file from scratch, but to modify a default template. You can do this here through 
-the :ref:`par_generator`.
+the `par_generator`_.
 
 .. _par_param:
   
@@ -371,8 +371,10 @@ multiple values. If the same keyword is repeated multiple times in the file, the
 instance will be used.
 The additional keyword-based parameter file, that we will refer to as ``seed_kw.par`` 
 should always be present (even if blank) and its path has to be specified in the second 
-line of :ref:`i1<i1>`.
-The keywords that can be set are the following:
+line of `i1`_.
+
+If a keyword is not specified in the ``seed_kw.par``, its default value will be used.
+The keywords that can be set are the following (defaults are given in brackets):
 
 .. _MC_param:
 
@@ -380,68 +382,117 @@ Monte Carlo parameters
 ^^^^^^^^^^^^^^^^^^^^^^
 
 The following parameters are needed for running a Monte Carlo Simulated Annealing
-minimization of the top poses.
-This option can be enabled by setting :ref:`do_mc<do_mc>` to ``y`` (yes) and adding 
+(MCSA) minimization of the top poses.
+This option can be enabled by setting `do_mc`_ to ``y`` (yes) and adding 
 the following related keywords.
-If :ref:`do_mc<do_mc>` is set to ``n`` (no), all the additional MC parameters in this section 
-play no role.
+If `do_mc`_ is set to ``n`` (no), all the additional MC parameters in this section 
+play no role. See :ref:`mc_minimization` for further details on MCSA.
 
 .. _do_mc:
 
-**do_mc**
-  | Perform MC refinement? (``y`` / ``n``)
+**do_mc** (n)
+  | Perform MCSA refinement? (``y`` / ``n``)
 
 .. _mc_temp:
 
-**mc_temp**
+**mc_temp** (0.0)
   | Starting temperature of MC run.
 
 .. _mc_max_xyz_step:
 
-**mc_max_xyz_step**
+**mc_max_xyz_step** (0.0, 0.0)
   | Maximum rigid body translation step (in Angstrom): coarse (1st value) 
   | and fine (2nd value) moves.
 
 .. _mc_max_rot_step:
 
-**mc_max_rot_step**
+**mc_max_rot_step** (0.0, 0.0)
   | Maximum rigid body rotation step (in degrees): coarse (1st value) 
   | and fine (2nd value) moves.
 
 .. _mc_rot_freq:
 
-**mc_rot_freq**
+**mc_rot_freq** (0.5)
   | MC move set frequencies:
   | Frequency :math:`p` of rigid body rotation moves (the frequency of 
   | rigid body translation move will be :math:`q = 1 - p`).
 
 .. _mc_xyz_fine_freq:
 
-**mc_xyz_fine_freq**
+**mc_xyz_fine_freq** (0.5)
   | Relative frequency (w.r.t. the number of translation move) of fine translation moves.
 
 .. _mc_rot_fine_freq:
 
-**mc_rot_fine_freq**
+**mc_rot_fine_freq** (0.5)
   | Relative frequency (w.r.t. the number of rotation moves) of fine rotation moves.
 
 .. _mc_niter:
 
-**mc_niter**
+**mc_niter** (0, 0)
   | Number of steps :math:`N_{out}` of the outer MC chain (1st value).
   | Number of steps :math:`N_{in}` of the inner MC chain (2nd value).
 
 .. _mc_sa_alpha:
 
-**mc_sa_alpha**
+**mc_sa_alpha** (1.0)
   | Annealing parameter :math:`\alpha`.
 
 .. _mc_rseed:
 
-**mc_rseed**
+**mc_rseed** (-1)
   | Seed for the pseudo-random number generator used by the MC sampler. A value of ``-1`` uses 
     the current CPU time.
 
+.. _SD_param:
+
+Steepest Descent parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters are needed for running a steepest descent (SD) minimization 
+of the top poses in rigid-body space.
+This option can be enabled by setting `do_sd`_ to ``y`` (yes) and specify the following 
+relevant keywords (or using the defaults).
+If `do_sd`_ is set to ``n`` (no), all the additional SD parameters in this section are 
+ignored. Note that rigid-body SD minimization is performed after a the MCSA minimization 
+(if the latter is enabled). See :ref:`steepest_descent` for further details on SD.
+
+.. _do_sd:
+
+**do_sd** (n)
+  | Perform SD refinement? (``y`` / ``n``)
+
+.. _do_gradient_check:
+
+**do_gradient_check** (n)
+  | Compare analytical and numerical gradients and print them to the ``log`` file.
+    This is mainly useful for troubleshooting and debugging.
+
+.. _sd_max_iter:
+
+**sd_max_iter** (20)
+    Maximum number of SD iterations.
+
+.. _sd_eps_grms:
+
+**sd_eps_grms** (0.02):
+    Stopping threshold on the minimum value of the gradient 
+    (:math:`\| \boldsymbol{\alpha} \circ \nabla U(\mathbf{x}_i) \|`).
+    
+.. _sd_alpha_xyz:
+
+**sd_alpha_xyz** (0.1):
+    Base increment size for rigid-body translations. Expressed in Angstrom.
+
+.. _sd_alpha_rot:
+
+**sd_alpha_rot** (0.01):
+    Base increment size for rigid-body rotations. Expressed in degrees.
+
+.. _sd_learning_rate:
+
+**sd_learning_rate** (0.1):
+    Starting learning rate :math:`\eta_0` for SD.
 
 .. _par_generator:
 
