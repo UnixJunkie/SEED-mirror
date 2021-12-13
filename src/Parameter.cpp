@@ -76,7 +76,7 @@ void Parameter::readKW(char *kwParFil) {
       do_mc = keyval[0];
       // cout << "do_mc = " << do_mc << endl;
     } 
-    else if (key == "do_rbmin"){
+    else if (key == "do_sd"){
       do_rbmin = keyval[0];
       // cout << "do_rbmin = " << do_rbmin << endl;
     } 
@@ -120,27 +120,28 @@ void Parameter::readKW(char *kwParFil) {
     {
       mc_rand_seed = std::stoi(keyval);
     }
+    // From here on, steepest descent parameters:
     else if (key == "do_gradient_check")
     {
       do_gradient_check = keyval[0];
     }
-    else if (key == "min_max_iter")
+    else if (key == "sd_max_iter")
     {
       max_iter = std::stoi(keyval);
     }
-    else if (key == "min_eps_grms")
+    else if (key == "sd_eps_grms")
     {
       eps_grms = std::stod(keyval);
     }
-    else if (key == "min_alpha_xyz")
+    else if (key == "sd_alpha_xyz")
     {
       alpha_xyz = std::stod(keyval);
     }
-    else if (key == "min_alpha_rot")
+    else if (key == "sd_alpha_rot")
     {
       alpha_rot = std::stod(keyval);
     }
-    else if (key == "min_learning_rate")
+    else if (key == "sd_learning_rate")
     {
       learning_rate = std::stod(keyval);
     }

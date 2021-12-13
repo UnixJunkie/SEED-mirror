@@ -4315,7 +4315,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
             free_dvector(ReEffRad,1, ReAtNu);
             free_dvector(FrEffRad,1, FrAtNu);
           } // end of if (seed_par.do_rbmin == 'y')
-        }
+        }   // end of if (((Solv_typ[0]=='s')||(Solv_typ[0]=='b'))&&(ChkInGrid))
 
         /* ----- FAST or BOTH methods ----- */
         if (((Solv_typ[0]=='f')||(Solv_typ[0]=='b'))&&(ChkInGrid)) {
