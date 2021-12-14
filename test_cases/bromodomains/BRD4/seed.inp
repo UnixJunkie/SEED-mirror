@@ -1,5 +1,6 @@
 #           Parameter filename
-../../seed4_cgenff4.par
+../../seed4_cgenff4_na.par
+../../seed4_kw.par
 #           Receptor coordinates (in mol2 format) filename
 brd4_4pci_seed.mol2
 #           Binding site residue list
@@ -31,4 +32,5 @@ n
 #           energy cutoff in kcal/mol / 2nd clustering cutoff in kcal/mol
 d
 4pci_brd4_ligand_and_mirror_image.mol2        b     0.0   0.0
+single
 end

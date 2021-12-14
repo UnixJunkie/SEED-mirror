@@ -1,11 +1,11 @@
-Date and time: Mon Jun 17 16:23:43 2019
+Date and time: Tue Dec 14 16:27:16 2021
 
     ---------------------------------------------------------------------       
                Solvation Energy for Exhaustive Docking (SEED)                   
           N. Majeux, M. Scarsi, F. Dey, C. Langini and A. Caflisch              
                         Department of Biochemistry                              
                            University of Zurich                                 
-                         Jun 17 2019  (SEED 4.0.0)                                       
+                         Dec 14 2021  (SEED 4.0.0)                                       
 
     Copyright (C) 2017, Caflisch Lab, University of Zurich               
                                                                            
@@ -28,7 +28,8 @@ Date and time: Mon Jun 17 16:23:43 2019
 Data of the input file :
 
 #           Parameter filename
-../../seed4_cgenff4.par
+../../seed4_cgenff4_na.par
+../../seed4_kw.par
 #           Receptor coordinates (in mol2 format) filename
 brd4_4pci_seed.mol2
 #           Binding site residue list
@@ -60,6 +61,7 @@ n
 #           energy cutoff in kcal/mol / 2nd clustering cutoff in kcal/mol
 d
 4pci_brd4_ligand_and_mirror_image.mol2        b     0.0   0.0
+single
 
 Data of the parameters file :
 
@@ -189,7 +191,7 @@ w  ./scratch/desolvation.grid
 #     Atom  element  van der Waals
 #     type  number  radius energy_min (absolute value)
 #   -----------------------------------
-228
+270
 1      H      1     0.22450 0.046000  # polar H
 2      HC     1     0.22450 0.046000  # N-ter H
 3      HA     1     1.32000 0.022000  # nonpolar H
@@ -418,6 +420,48 @@ w  ./scratch/desolvation.grid
 226    SG2P1  16    2.0937  0.6308    # mono-thio S-P bond
 227    OG2S1  8     1.6796  0.1423    # mono-thio S-P bond
 228    SG2P2  16    2.0546  0.6199    # di-thio S-P bond
+229    HN1    1    0.224500 0.046000 
+230    HN2    1    0.224500 0.046000 
+231    HN3    1    1.100000 0.046000 #adm jr. aromatic Hvdw 
+232    HN4    1    0.224500 0.046000 
+233    HN5    1    0.224500 0.046000 
+234    HN6    1    1.320000 0.022000 
+235    HN7    1    1.320000 0.022000 
+236    HN8    1    1.340000 0.028000 # Hydrogen bound to CN8 
+237    HN9    1    1.340000 0.024000 # Hydrogen bound to CN9 
+238    NN1    7    1.850000 0.200000 
+239    NN2    7    1.850000 0.200000 
+240    NN2B   7    1.850000 0.200000 # From NN2, for N9 in guanines 
+241    NN2G   7    1.850000 0.200000 
+242    NN2U   7    1.850000 0.200000 
+243    NN3    7    1.850000 0.200000 
+244    NN3A   7    1.850000 0.200000 
+245    NN3G   7    1.850000 0.200000 
+246    NN4    7    1.850000 0.200000 
+247    NN6    7    1.850000 0.200000 
+248    ON1    8    1.700000 0.120000 
+249    ON1C   8    1.700000 0.120000 
+250    ON2    8    1.770000 0.152100 
+251    ON3    8    1.700000 0.120000 
+252    ON4    8    1.770000 0.152100 
+253    ON5    8    1.770000 0.152100 
+254    ON6    8    1.770000 0.152100 
+255    ON6B   8    1.770000 0.152100 
+256    CN1    6    1.900000 0.100000 
+257    CN1T   6    1.900000 0.100000 
+258    CN2    6    1.900000 0.100000 
+259    CN3    6    1.900000 0.090000 
+260    CN3T   6    1.900000 0.090000 # T, adm jr. 
+261    CN4    6    1.900000 0.075000 
+262    CN5    6    1.900000 0.075000 
+263    CN5G   6    1.900000 0.075000 
+264    CN7    6    2.275000 0.020000 #equivalent to protein CT1 
+265    CN7B   6    2.275000 0.020000 #equivalent to protein CT1 
+266    CN8    6    2.010000 0.056000 
+267    CN8B   6    2.010000 0.056000 
+268    CN9    6    2.040000 0.078000 
+269    P      15   2.150000 0.585000 
+270    P2     15   2.150000 0.585000
 #
 # Hydrogen bond distances between donor and acceptor
 #
@@ -1261,7 +1305,7 @@ Number of kept apolar vectors for seeding of apolar fragments : 47
 
 -------------------------------------------------
 
-Data for the fragment type 1 :
+Data for the fragment type 1 (1) :
 
 
 Fragment name is: 4pci_ligand
@@ -1279,7 +1323,7 @@ Total number of generated fragments of type 1 (4pci_ligand) : 1604520
 Fragments that passed the bump checking : 167623
 Fragments that passed the vdW energy cutoff : 1988
 Fragments that passed the total energy cutoff : 1940
-CPU time in sec. for the seeding of 4pci_ligand : 2.41
+CPU time in sec. for the seeding of 4pci_ligand : 2.83
 
 Number of positions conserved for clustering : 20
 
@@ -1313,51 +1357,6 @@ CPU time in sec. for the sorting and clusterings of 4pci_ligand : 0.00
 
 Dielectric value =  2.0 -> 78.5 transfer energy for the fragment (4pci_ligand) :    -4.2400
 
-Calculated effective Born radius of fragment atom 32 (1.723721) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 32 (1.703755) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 33 (1.707273) set to its lower bound (1.732436).
-Calculated effective Born radius of fragment atom 32 (1.684123) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 33 (1.702739) set to its lower bound (1.732436).
-Calculated effective Born radius of fragment atom 32 (1.688692) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 33 (1.718292) set to its lower bound (1.732436).
-Calculated effective Born radius of fragment atom 32 (1.698850) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 27 (1.871063) set to its lower bound (1.874641).
-Calculated effective Born radius of fragment atom 32 (1.691602) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 33 (1.691599) set to its lower bound (1.732436).
-Calculated effective Born radius of fragment atom 34 (1.730878) set to its lower bound (1.734826).
-Calculated effective Born radius of fragment atom 31 (1.763847) set to its lower bound (1.822059).
-Calculated effective Born radius of fragment atom 32 (1.709644) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 28 (1.918852) set to its lower bound (1.972639).
-Calculated effective Born radius of fragment atom 32 (1.711886) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 16 (2.354393) set to its lower bound (2.386078).
-Calculated effective Born radius of fragment atom 30 (1.871283) set to its lower bound (1.876143).
-Calculated effective Born radius of fragment atom 31 (1.774579) set to its lower bound (1.822059).
-Calculated effective Born radius of fragment atom 32 (1.679987) set to its lower bound (1.728779).
-Calculated effective Born radius of fragment atom 2 (2.364456) set to its lower bound (2.405497).
-Calculated effective Born radius of fragment atom 6 (2.546072) set to its lower bound (2.573114).
-Calculated effective Born radius of fragment atom 20 (1.872447) set to its lower bound (1.910695).
-Calculated effective Born radius of fragment atom 21 (1.745691) set to its lower bound (1.784135).
-Calculated effective Born radius of fragment atom 22 (1.747142) set to its lower bound (1.781760).
-Calculated effective Born radius of fragment atom 23 (1.594364) set to its lower bound (1.636447).
-Calculated effective Born radius of fragment atom 24 (1.847926) set to its lower bound (1.878354).
-Calculated effective Born radius of fragment atom 25 (1.708703) set to its lower bound (1.730405).
-Calculated effective Born radius of fragment atom 2 (2.390271) set to its lower bound (2.405497).
-Calculated effective Born radius of fragment atom 4 (3.026836) set to its lower bound (3.034574).
-Calculated effective Born radius of fragment atom 6 (2.526917) set to its lower bound (2.573114).
-Calculated effective Born radius of fragment atom 7 (2.365101) set to its lower bound (2.400602).
-Calculated effective Born radius of fragment atom 20 (1.867237) set to its lower bound (1.910695).
-Calculated effective Born radius of fragment atom 21 (1.763945) set to its lower bound (1.784135).
-Calculated effective Born radius of fragment atom 23 (1.633643) set to its lower bound (1.636447).
-Calculated effective Born radius of fragment atom 24 (1.847914) set to its lower bound (1.878354).
-Calculated effective Born radius of fragment atom 25 (1.694884) set to its lower bound (1.730405).
-Calculated effective Born radius of fragment atom 2 (2.371384) set to its lower bound (2.405497).
-Calculated effective Born radius of fragment atom 6 (2.569939) set to its lower bound (2.573114).
-Calculated effective Born radius of fragment atom 20 (1.886161) set to its lower bound (1.910695).
-Calculated effective Born radius of fragment atom 21 (1.755553) set to its lower bound (1.784135).
-Calculated effective Born radius of fragment atom 22 (1.746124) set to its lower bound (1.781760).
-Calculated effective Born radius of fragment atom 23 (1.595557) set to its lower bound (1.636447).
-Calculated effective Born radius of fragment atom 24 (1.845088) set to its lower bound (1.878354).
-Calculated effective Born radius of fragment atom 25 (1.716463) set to its lower bound (1.730405).
 Total number of conserved second clusters : 4
 Total number of conserved positions : 13
 
@@ -1394,13 +1393,13 @@ Best postprocessed poses for fragment type 1 (4pci_ligand) :
 
      1     1      111     1       -25.86      -9.88         4.99       4.28       -26.47
 
-CPU time in sec. for the postprocessing (energy with slow method) : 0.83
+CPU time in sec. for the postprocessing (energy with slow method) : 1.04
 CPU time in sec. for the sorting of the postprocessed positions : 0.00
 
-Total CPU time in sec. for the seeding of fragment 1 (4pci_ligand) : 3.23
+Total CPU time in sec. for the seeding of fragment 1 (4pci_ligand) : 3.87
 -------------------------------------------------
 
-Data for the fragment type 2 :
+Data for the fragment type 2 (2) :
 
 
 Fragment name is: 4pci_ligand_inverted
@@ -1418,7 +1417,7 @@ Total number of generated fragments of type 2 (4pci_ligand_inverted) : 1587600
 Fragments that passed the bump checking : 172048
 Fragments that passed the vdW energy cutoff : 2274
 Fragments that passed the total energy cutoff : 2323
-CPU time in sec. for the seeding of 4pci_ligand_inverted : 2.41
+CPU time in sec. for the seeding of 4pci_ligand_inverted : 2.83
 
 Number of positions conserved for clustering : 20
 
@@ -1452,94 +1451,6 @@ CPU time in sec. for the sorting and clusterings of 4pci_ligand_inverted : 0.00
 
 Dielectric value =  2.0 -> 78.5 transfer energy for the fragment (4pci_ligand_inverted) :    -3.7810
 
-Calculated effective Born radius of fragment atom 29 (1.897941) set to its lower bound (1.933347).
-Calculated effective Born radius of fragment atom 24 (1.859725) set to its lower bound (1.877969).
-Calculated effective Born radius of fragment atom 29 (1.913849) set to its lower bound (1.933347).
-Calculated effective Born radius of fragment atom 24 (1.876286) set to its lower bound (1.877969).
-Calculated effective Born radius of fragment atom 29 (1.928488) set to its lower bound (1.933347).
-Calculated effective Born radius of fragment atom 24 (1.851225) set to its lower bound (1.877969).
-Calculated effective Born radius of fragment atom 22 (1.735891) set to its lower bound (1.781788).
-Calculated effective Born radius of fragment atom 24 (1.839584) set to its lower bound (1.877969).
-Calculated effective Born radius of fragment atom 25 (1.708890) set to its lower bound (1.731802).
-Calculated effective Born radius of fragment atom 3 (2.200106) set to its lower bound (2.249369).
-Calculated effective Born radius of fragment atom 16 (2.342327) set to its lower bound (2.385838).
-Calculated effective Born radius of fragment atom 17 (2.332661) set to its lower bound (2.379494).
-Calculated effective Born radius of fragment atom 18 (2.378280) set to its lower bound (2.431499).
-Calculated effective Born radius of fragment atom 19 (2.751296) set to its lower bound (2.796274).
-Calculated effective Born radius of fragment atom 30 (1.798195) set to its lower bound (1.819778).
-Calculated effective Born radius of fragment atom 32 (1.699928) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.703638) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 34 (1.715733) set to its lower bound (1.746372).
-Calculated effective Born radius of fragment atom 35 (2.554703) set to its lower bound (2.602000).
-Calculated effective Born radius of fragment atom 3 (2.199978) set to its lower bound (2.249369).
-Calculated effective Born radius of fragment atom 16 (2.342175) set to its lower bound (2.385838).
-Calculated effective Born radius of fragment atom 17 (2.333031) set to its lower bound (2.379494).
-Calculated effective Born radius of fragment atom 18 (2.382026) set to its lower bound (2.431499).
-Calculated effective Born radius of fragment atom 19 (2.751156) set to its lower bound (2.796274).
-Calculated effective Born radius of fragment atom 30 (1.795855) set to its lower bound (1.819778).
-Calculated effective Born radius of fragment atom 32 (1.697240) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.702363) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 34 (1.715556) set to its lower bound (1.746372).
-Calculated effective Born radius of fragment atom 35 (2.555854) set to its lower bound (2.602000).
-Calculated effective Born radius of fragment atom 3 (2.196106) set to its lower bound (2.249369).
-Calculated effective Born radius of fragment atom 16 (2.363647) set to its lower bound (2.385838).
-Calculated effective Born radius of fragment atom 17 (2.335526) set to its lower bound (2.379494).
-Calculated effective Born radius of fragment atom 18 (2.383826) set to its lower bound (2.431499).
-Calculated effective Born radius of fragment atom 19 (2.753787) set to its lower bound (2.796274).
-Calculated effective Born radius of fragment atom 30 (1.790464) set to its lower bound (1.819778).
-Calculated effective Born radius of fragment atom 32 (1.699898) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.697528) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 34 (1.714938) set to its lower bound (1.746372).
-Calculated effective Born radius of fragment atom 35 (2.548435) set to its lower bound (2.602000).
-Calculated effective Born radius of fragment atom 17 (2.368138) set to its lower bound (2.379494).
-Calculated effective Born radius of fragment atom 32 (1.693331) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.691348) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 34 (1.724938) set to its lower bound (1.746372).
-Calculated effective Born radius of fragment atom 31 (1.790053) set to its lower bound (1.816925).
-Calculated effective Born radius of fragment atom 32 (1.692894) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.699134) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 32 (1.706178) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.699187) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 3 (2.212878) set to its lower bound (2.249369).
-Calculated effective Born radius of fragment atom 32 (1.707661) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.699922) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 34 (1.715732) set to its lower bound (1.746372).
-Calculated effective Born radius of fragment atom 32 (1.725598) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.706461) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 2 (2.422316) set to its lower bound (2.430584).
-Calculated effective Born radius of fragment atom 4 (3.017801) set to its lower bound (3.025143).
-Calculated effective Born radius of fragment atom 6 (2.511940) set to its lower bound (2.567789).
-Calculated effective Born radius of fragment atom 7 (2.347773) set to its lower bound (2.396036).
-Calculated effective Born radius of fragment atom 8 (2.352719) set to its lower bound (2.389315).
-Calculated effective Born radius of fragment atom 20 (1.865816) set to its lower bound (1.911035).
-Calculated effective Born radius of fragment atom 21 (1.824655) set to its lower bound (1.830254).
-Calculated effective Born radius of fragment atom 24 (1.840531) set to its lower bound (1.877969).
-Calculated effective Born radius of fragment atom 25 (1.702235) set to its lower bound (1.731802).
-Calculated effective Born radius of fragment atom 26 (1.704233) set to its lower bound (1.731968).
-Calculated effective Born radius of fragment atom 15 (2.474907) set to its lower bound (2.507170).
-Calculated effective Born radius of fragment atom 16 (2.326802) set to its lower bound (2.385838).
-Calculated effective Born radius of fragment atom 17 (2.330110) set to its lower bound (2.379494).
-Calculated effective Born radius of fragment atom 31 (1.746783) set to its lower bound (1.816925).
-Calculated effective Born radius of fragment atom 32 (1.690029) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.691777) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 3 (2.202181) set to its lower bound (2.249369).
-Calculated effective Born radius of fragment atom 16 (2.356454) set to its lower bound (2.385838).
-Calculated effective Born radius of fragment atom 17 (2.334759) set to its lower bound (2.379494).
-Calculated effective Born radius of fragment atom 18 (2.380419) set to its lower bound (2.431499).
-Calculated effective Born radius of fragment atom 19 (2.787535) set to its lower bound (2.796274).
-Calculated effective Born radius of fragment atom 21 (1.825094) set to its lower bound (1.830254).
-Calculated effective Born radius of fragment atom 32 (1.701534) set to its lower bound (1.733098).
-Calculated effective Born radius of fragment atom 33 (1.702610) set to its lower bound (1.728475).
-Calculated effective Born radius of fragment atom 34 (1.711692) set to its lower bound (1.746372).
-Calculated effective Born radius of fragment atom 35 (2.561631) set to its lower bound (2.602000).
-Calculated effective Born radius of fragment atom 2 (2.411888) set to its lower bound (2.430584).
-Calculated effective Born radius of fragment atom 6 (2.562890) set to its lower bound (2.567789).
-Calculated effective Born radius of fragment atom 7 (2.382478) set to its lower bound (2.396036).
-Calculated effective Born radius of fragment atom 20 (1.863939) set to its lower bound (1.911035).
-Calculated effective Born radius of fragment atom 21 (1.772709) set to its lower bound (1.830254).
-Calculated effective Born radius of fragment atom 24 (1.841605) set to its lower bound (1.877969).
-Calculated effective Born radius of fragment atom 25 (1.700738) set to its lower bound (1.731802).
-Calculated effective Born radius of fragment atom 26 (1.707415) set to its lower bound (1.731968).
 Total number of conserved second clusters : 7
 Total number of conserved positions : 17
 
@@ -1586,13 +1497,13 @@ Best postprocessed poses for fragment type 2 (4pci_ligand_inverted) :
 
      1     1      116     1       -16.46      -0.96         3.09       0.59       -13.74
 
-CPU time in sec. for the postprocessing (energy with slow method) : 1.00
+CPU time in sec. for the postprocessing (energy with slow method) : 1.26
 CPU time in sec. for the sorting of the postprocessed positions : 0.00
 
-Total CPU time in sec. for the seeding of fragment 2 (4pci_ligand_inverted) : 3.41
+Total CPU time in sec. for the seeding of fragment 2 (4pci_ligand_inverted) : 4.09
 -------------------------------------------------
 
-CPU time in sec. for creating/reading Coulombic grid : 8.52
-CPU time in sec. for creating/reading van der Waals grid : 9.83
-CPU time in sec. up to the loop over the fragments : 35.60
-Total CPU time in sec. : 42.24
+CPU time in sec. for creating/reading Coulombic grid : 11.18
+CPU time in sec. for creating/reading van der Waals grid : 15.70
+CPU time in sec. up to the loop over the fragments : 51.46
+Total CPU time in sec. : 59.42

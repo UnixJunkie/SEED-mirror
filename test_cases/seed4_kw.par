@@ -1,5 +1,5 @@
 #	Do MC refinement?
-do_mc = y
+do_mc = n
 #       Starting temperature of MC run
 mc_temp = 600.0
 #	Max rigid body translation step (in Angstrom): coarse and fine moves
@@ -20,4 +20,4 @@ mc_sa_alpha = 0.995
 #           Seed for pseudo-random number generator
 mc_rseed = -1 # -1 uses the current time
 #	Do rigid body minimization? not functional at the moment
-do_rbmin = n
+do_sd = n
