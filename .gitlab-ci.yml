@@ -1,6 +1,6 @@
 # Specify the docker image to use (only used if using docker runners)
 # See: http://doc.gitlab.com/ee/ci/docker/using_docker_images.html
-image: ubuntu:16.04
+image: ubuntu:20.04
 
 stages:
   - build
@@ -13,6 +13,7 @@ build_job:
     - apt-get install -y make
     - apt-get install -y build-essential
     - apt-get install -y automake
+    - apt-get install -y libboost-all-dev
   script:
   - pwd; cd ./src;
   - make seed
