@@ -1,0 +1,1280 @@
+biotype      1    N       "Glycine"                   22   2   35
+biotype      2    CA      "Glycine"                   13  151  16
+biotype      3    C       "Glycine"                   10   8   13
+biotype      4    HN      "Glycine"                   1    4   1
+biotype      5    O       "Glycine"                   23   9   42
+biotype      6    HA      "Glycine"                   60  10   6
+biotype      7    N       "Alanine"                   22   2   35
+biotype      8    CA      "Alanine"                   12   5   15
+biotype      9    C       "Alanine"                   10   8   13
+biotype     10    HN      "Alanine"                   1    4   1
+biotype     11    O       "Alanine"                   23   9   42
+biotype     12    HA      "Alanine"                   2   10   6
+biotype     13    CB      "Alanine"                   14  11   17
+biotype     14    HB      "Alanine"                   59  10   3
+biotype     15    N       "Valine"                    22   2   35
+biotype     16    CA      "Valine"                    12   5   15
+biotype     17    C       "Valine"                    10   8   13
+biotype     18    HN      "Valine"                    1    4   1
+biotype     19    O       "Valine"                    23   9   42
+biotype     20    HA      "Valine"                    2   10   6
+biotype     21    CB      "Valine"                    12  12   15
+biotype     22    HB      "Valine"                    57  10   3
+biotype     23    CG      "Valine"                    14  13   17
+biotype     24    HG      "Valine"                    59  10   3
+biotype     25    N       "Leucine"                   22   2   35
+biotype     26    CA      "Leucine"                   12   5   15
+biotype     27    C       "Leucine"                   10   8   13
+biotype     28    HN      "Leucine"                   1    4   1
+biotype     29    O       "Leucine"                   23   9   42
+biotype     30    HA      "Leucine"                   2   10   6
+biotype     31    CB      "Leucine"                   13 118   16
+biotype     32    HB      "Leucine"                   58  10   3
+biotype     33    CG      "Leucine"                   12 119   15
+biotype     34    HG      "Leucine"                   57  10   3
+biotype     35    CD      "Leucine"                   14 120   17
+biotype     36    HD      "Leucine"                   59  10   3
+biotype     37    N       "Isoleucine"                22   2   35
+biotype     38    CA      "Isoleucine"                12   5   15
+biotype     39    C       "Isoleucine"                10   8   13
+biotype     40    HN      "Isoleucine"                1    4   1
+biotype     41    O       "Isoleucine"                23   9   42
+biotype     42    HA      "Isoleucine"                2   10   6
+biotype     43    CB      "Isoleucine"                12 121   15
+biotype     44    HB      "Isoleucine"                57  10   3
+biotype     45    CG1     "Isoleucine"                13 122   16
+biotype     46    HG1     "Isoleucine"                58  10   3
+biotype     47    CG2     "Isoleucine"                14 123   17
+biotype     48    HG2     "Isoleucine"                59  10   3
+biotype     49    CD1     "Isoleucine"                14 124   17
+biotype     50    HD1     "Isoleucine"                59  10   3
+biotype     51    N       "Serine"                    22   2   35
+biotype     52    CA      "Serine"                    12   5   15
+biotype     53    C       "Serine"                    10   8   13
+biotype     54    HN      "Serine"                    1    4   1
+biotype     55    O       "Serine"                    23   9   42
+biotype     56    HA      "Serine"                    2   10   6
+biotype     57    CB      "Serine"                    13  41   16
+biotype     58    HB      "Serine"                    58  10   3
+biotype     59    OG      "Serine"                    24  42   45
+biotype     60    HG      "Serine"                    1   43   1
+biotype     61    N       "Threonine"                 22   2   35
+biotype     62    CA      "Threonine"                 12   5   15
+biotype     63    C       "Threonine"                 10   8   13
+biotype     64    HN      "Threonine"                 1    4   1
+biotype     65    O       "Threonine"                 23   9   42
+biotype     66    HA      "Threonine"                 2   10   6
+biotype     67    CB      "Threonine"                 12  44   15
+biotype     68    HB      "Threonine"                 57  10   3
+biotype     69    OG1     "Threonine"                 24  45   45
+biotype     70    HG1     "Threonine"                 1   46   1
+biotype     71    CG2     "Threonine"                 14  47   17
+biotype     72    HG2     "Threonine"                 59  10   3
+biotype     73    N       "Cysteine (-SH)"            22   2   35
+biotype     74    CA      "Cysteine (-SH)"            12   5   15
+biotype     75    C       "Cysteine (-SH)"            10   8   13
+biotype     76    HN      "Cysteine (-SH)"            1    4   1
+biotype     77    O       "Cysteine (-SH)"            23   9   42
+biotype     78    HA      "Cysteine (-SH)"            2   10   6
+biotype     79    CB      "Cysteine (-SH)"            13  48   16
+biotype     80    HB      "Cysteine (-SH)"            58  10   3
+biotype     81    SG      "Cysteine (-SH)"            26  49   50
+biotype     82    HG      "Cysteine (-SH)"            7   50   10
+biotype     83    N       "Cystine (-SS-)"            22   2   35
+biotype     84    CA      "Cystine (-SS-)"            12   5   15
+biotype     85    C       "Cystine (-SS-)"            10   8   13
+biotype     86    HN      "Cystine (-SS-)"            1    4   1
+biotype     87    O       "Cystine (-SS-)"            23   9   42
+biotype     88    HA      "Cystine (-SS-)"            2   10   6
+biotype     89    CB      "Cystine (-SS-)"            13 147   16
+biotype     90    HB      "Cystine (-SS-)"            58  10   3
+biotype     91    SG      "Cystine (-SS-)"            27 148   51
+biotype     92    N       "Proline"                   43   3   31
+biotype     93    CA      "Proline"                   17   6   22
+biotype     94    C       "Proline"                   10   8   13
+biotype     95    O       "Proline"                   23   9   42
+biotype     96    HA      "Proline"                   2    7   6
+biotype     97    CB      "Proline"                   18  51   23
+biotype     98    HB      "Proline"                   58  10   3
+biotype     99    CG      "Proline"                   18  52   23
+biotype    100    HG      "Proline"                   58  10   3
+biotype    101    CD      "Proline"                   18  53   24
+biotype    102    HD      "Proline"                   58  10   3
+biotype    103    N       "Phenylalanine"             22   2   35
+biotype    104    CA      "Phenylalanine"             12   5   15
+biotype    105    C       "Phenylalanine"             10   8   13
+biotype    106    HN      "Phenylalanine"             1    4   1
+biotype    107    O       "Phenylalanine"             23   9   42
+biotype    108    HA      "Phenylalanine"             2   10   6
+biotype    109    CB      "Phenylalanine"             13 114   16
+biotype    110    HB      "Phenylalanine"             58  10   3
+biotype    111    CG      "Phenylalanine"             11 115   14
+biotype    112    CD      "Phenylalanine"             11 116   14
+biotype    113    HD      "Phenylalanine"             3  117   5
+biotype    114    CE      "Phenylalanine"             11 116   14
+biotype    115    HE      "Phenylalanine"             3  117   5
+biotype    116    CZ      "Phenylalanine"             11 116   14
+biotype    117    HZ      "Phenylalanine"             3  117   5
+biotype    118    N       "Tyrosine"                  22   2   35
+biotype    119    CA      "Tyrosine"                  12   5   15
+biotype    120    C       "Tyrosine"                  10   8   13
+biotype    121    HN      "Tyrosine"                  1    4   1
+biotype    122    O       "Tyrosine"                  23   9   42
+biotype    123    HA      "Tyrosine"                  2   10   6
+biotype    124    CB      "Tyrosine"                  13  54   16
+biotype    125    HB      "Tyrosine"                  58  10   3
+biotype    126    CG      "Tyrosine"                  11  55   14
+biotype    127    CD      "Tyrosine"                  11  56   14
+biotype    128    HD      "Tyrosine"                  3   57   5
+biotype    129    CE      "Tyrosine"                  11  56   14
+biotype    130    HE      "Tyrosine"                  3   57   5
+biotype    131    CZ      "Tyrosine"                  11  58   14
+biotype    132    OH      "Tyrosine"                  24  59   45
+biotype    133    HH      "Tyrosine"                  1   60   1
+biotype    134    N       "Tryptophan"                22   2   35
+biotype    135    CA      "Tryptophan"                12   5   15
+biotype    136    C       "Tryptophan"                10   8   13
+biotype    137    HN      "Tryptophan"                1    4   1
+biotype    138    O       "Tryptophan"                23   9   42
+biotype    139    HA      "Tryptophan"                2   10   6
+biotype    140    CB      "Tryptophan"                13  61   16
+biotype    141    HB      "Tryptophan"                58  10   3
+biotype    142    CG      "Tryptophan"                61  62   21
+biotype    143    CD1     "Tryptophan"                11  63   14
+biotype    144    HD1     "Tryptophan"                3   64   5
+biotype    145    CD2     "Tryptophan"                16  65   20
+biotype    146    NE1     "Tryptophan"                45  66   39
+biotype    147    HE1     "Tryptophan"                1   67   1
+biotype    148    CE2     "Tryptophan"                16  68   20
+biotype    149    CE3     "Tryptophan"                61 261   109
+biotype    150    HE3     "Tryptophan"                3  265   5
+biotype    151    CZ2     "Tryptophan"                61 262   109
+biotype    152    HZ2     "Tryptophan"                3  266   5
+biotype    153    CZ3     "Tryptophan"                11 263   14
+biotype    154    HZ3     "Tryptophan"                3  267   5
+biotype    155    CH2     "Tryptophan"                11 264   14
+biotype    156    HH2     "Tryptophan"                3  268   5
+biotype    157    N       "Histidine (+)"             22   2   35
+biotype    158    CA      "Histidine (+)"             12   5   15
+biotype    159    C       "Histidine (+)"             10   8   13
+biotype    160    HN      "Histidine (+)"             1    4   1
+biotype    161    O       "Histidine (+)"             23   9   42
+biotype    162    HA      "Histidine (+)"             2   10   6
+biotype    163    CB      "Histidine (+)"             13  88   110
+biotype    164    HB      "Histidine (+)"             58  10   3
+biotype    165    CG      "Histidine (+)"             15  89   18
+biotype    166    ND1     "Histidine (+)"             45  90   34
+biotype    167    HD1     "Histidine (+)"             1   91   1
+biotype    168    CD2     "Histidine (+)"             15  92   18
+biotype    169    HD2     "Histidine (+)"             4   93   7
+biotype    170    CE1     "Histidine (+)"             15  94   19
+biotype    171    HE1     "Histidine (+)"             5   95   8
+biotype    172    NE2     "Histidine (+)"             45  96   34
+biotype    173    HE2     "Histidine (+)"             1   97   1
+biotype    174    N       "Histidine (HD)"            22   2   35
+biotype    175    CA      "Histidine (HD)"            12   5   15
+biotype    176    C       "Histidine (HD)"            10   8   13
+biotype    177    HN      "Histidine (HD)"            1    4   1
+biotype    178    O       "Histidine (HD)"            23   9   42
+biotype    179    HA      "Histidine (HD)"            2   10   6
+biotype    180    CB      "Histidine (HD)"            13  79   16
+biotype    181    HB      "Histidine (HD)"            58  10   3
+biotype    182    CG      "Histidine (HD)"            15  80   18
+biotype    183    ND1     "Histidine (HD)"            45  81   32
+biotype    184    HD1     "Histidine (HD)"            1   82   1
+biotype    185    CD2     "Histidine (HD)"            15  83   18
+biotype    186    HD2     "Histidine (HD)"            6   84   9
+biotype    187    CE1     "Histidine (HD)"            15  85   19
+biotype    188    HE1     "Histidine (HD)"            4   86   7
+biotype    189    NE2     "Histidine (HD)"            41  87   33
+biotype    190    N       "Histidine (HE)"            22   2   35
+biotype    191    CA      "Histidine (HE)"            12   5   15
+biotype    192    C       "Histidine (HE)"            10   8   13
+biotype    193    HN      "Histidine (HE)"            1    4   1
+biotype    194    O       "Histidine (HE)"            23   9   42
+biotype    195    HA      "Histidine (HE)"            2   10   6
+biotype    196    CB      "Histidine (HE)"            13  71   16
+biotype    197    HB      "Histidine (HE)"            58  10   3
+biotype    198    CG      "Histidine (HE)"            15  72   18
+biotype    199    ND1     "Histidine (HE)"            41  73   33
+biotype    200    CD2     "Histidine (HE)"            15  74   18
+biotype    201    HD2     "Histidine (HE)"            6   10   9
+biotype    202    CE1     "Histidine (HE)"            15  75   19
+biotype    203    HE1     "Histidine (HE)"            4   76   7
+biotype    204    NE2     "Histidine (HE)"            45  77   32
+biotype    205    HE2     "Histidine (HE)"            1   78   1
+biotype    206    N       "Aspartic Acid(-)"          22   2   35
+biotype    207    CA      "Aspartic Acid(-)"          12   5   15
+biotype    208    C       "Aspartic Acid(-)"          10   8   13
+biotype    209    HN      "Aspartic Acid(-)"          1    4   1
+biotype    210    O       "Aspartic Acid(-)"          23   9   42
+biotype    211    HA      "Aspartic Acid(-)"          2   10   6
+biotype    212    CB      "Aspartic Acid(-)"          13  24   110
+biotype    213    HB      "Aspartic Acid(-)"          58  10   3
+biotype    214    CG      "Aspartic Acid(-)"          19  25   25
+biotype    215    OD      "Aspartic Acid(-)"          44  26   44
+biotype    216    N       "Asparagine"                22   2   35
+biotype    217    CA      "Asparagine"                12   5   15
+biotype    218    C       "Asparagine"                10   8   13
+biotype    219    HN      "Asparagine"                1    4   1
+biotype    220    O       "Asparagine"                23   9   42
+biotype    221    HA      "Asparagine"                2   10   6
+biotype    222    CB      "Asparagine"                13  27   16
+biotype    223    HB      "Asparagine"                58  10   3
+biotype    224    CG      "Asparagine"                19  28   25
+biotype    225    OD1     "Asparagine"                23  29   42
+biotype    226    ND2     "Asparagine"                45  30   36
+biotype    227    HD2     "Asparagine"                1   31   1
+biotype    228    N       "Glutamic Acid(-)"          22   2   35
+biotype    229    CA      "Glutamic Acid(-)"          12   5   15
+biotype    230    C       "Glutamic Acid(-)"          10   8   13
+biotype    231    HN      "Glutamic Acid(-)"          1    4   1
+biotype    232    O       "Glutamic Acid(-)"          23   9   42
+biotype    233    HA      "Glutamic Acid(-)"          2   10   6
+biotype    234    CB      "Glutamic Acid(-)"          13  33   110
+biotype    235    HB      "Glutamic Acid(-)"          58  10   3
+biotype    236    CG      "Glutamic Acid(-)"          13  34   16
+biotype    237    HG      "Glutamic Acid(-)"          58  10   3
+biotype    238    CD      "Glutamic Acid(-)"          19  35   25
+biotype    239    OE      "Glutamic Acid(-)"          44  36   44
+biotype    240    N       "Glutamine"                 22   2   35
+biotype    241    CA      "Glutamine"                 12   5   15
+biotype    242    C       "Glutamine"                 10   8   13
+biotype    243    HN      "Glutamine"                 1    4   1
+biotype    244    O       "Glutamine"                 23   9   42
+biotype    245    HA      "Glutamine"                 2   10   6
+biotype    246    CB      "Glutamine"                 13  37   16
+biotype    247    HB      "Glutamine"                 58  10   3
+biotype    248    CG      "Glutamine"                 13  38   16
+biotype    249    HG      "Glutamine"                 58  10   3
+biotype    250    CD      "Glutamine"                 19  39   25
+biotype    251    OE1     "Glutamine"                 23  40   42
+biotype    252    NE2     "Glutamine"                 45 149   36
+biotype    253    HE2     "Glutamine"                 1  150   1
+biotype    254    N       "Methionine"                22   2   35
+biotype    255    CA      "Methionine"                12   5   15
+biotype    256    C       "Methionine"                10   8   13
+biotype    257    HN      "Methionine"                1    4   1
+biotype    258    O       "Methionine"                23   9   42
+biotype    259    HA      "Methionine"                2   10   6
+biotype    260    CB      "Methionine"                13 110   16
+biotype    261    HB      "Methionine"                58  10   3
+biotype    262    CG      "Methionine"                13 111   16
+biotype    263    HG      "Methionine"                58  10   3
+biotype    264    SD      "Methionine"                26 112   50
+biotype    265    CE      "Methionine"                14 113   17
+biotype    266    HE      "Methionine"                59  10   3
+biotype    267    N       "Lysine(+)"                 22   2   35
+biotype    268    CA      "Lysine(+)"                 12   5   15
+biotype    269    C       "Lysine(+)"                 10   8   13
+biotype    270    HN      "Lysine(+)"                 1    4   1
+biotype    271    O       "Lysine(+)"                 23   9   42
+biotype    272    HA      "Lysine(+)"                 2   10   6
+biotype    273    CB      "Lysine(+)"                 13  98   16
+biotype    274    HB      "Lysine(+)"                 58  10   3
+biotype    275    CG      "Lysine(+)"                 13  99   16
+biotype    276    HG      "Lysine(+)"                 58  10   3
+biotype    277    CD      "Lysine(+)"                 13 100   16
+biotype    278    HD      "Lysine(+)"                 58  10   3
+biotype    279    CE      "Lysine(+)"                 13 101   16
+biotype    280    HE      "Lysine(+)"                 58 102   3
+biotype    281    NZ      "Lysine(+)"                 42 103   37
+biotype    282    HZ      "Lysine(+)"                 1  104   2
+biotype    283    N       "Arginine(+)"               22   2   35
+biotype    284    CA      "Arginine(+)"               12   5   15
+biotype    285    C       "Arginine(+)"               10   8   13
+biotype    286    HN      "Arginine(+)"               1    4   1
+biotype    287    O       "Arginine(+)"               23   9   42
+biotype    288    HA      "Arginine(+)"               2   10   6
+biotype    289    CB      "Arginine(+)"               13  14   16
+biotype    290    HB      "Arginine(+)"               58  10   3
+biotype    291    CG      "Arginine(+)"               13  15   16
+biotype    292    HG      "Arginine(+)"               58  10   3
+biotype    293    CD      "Arginine(+)"               13  16   16
+biotype    294    HD      "Arginine(+)"               58  10   3
+biotype    295    NE      "Arginine(+)"               45  17   38
+biotype    296    HE      "Arginine(+)"               1   18   2
+biotype    297    CZ      "Arginine(+)"               10  19   13
+biotype    298    NH      "Arginine(+)"               45  20   38
+biotype    299    HH      "Arginine(+)"               1   21   2
+biotype    300    N       "Ornithine(+)"              22   2   35
+biotype    301    CA      "Ornithine(+)"              12   5   15
+biotype    302    C       "Ornithine(+)"              10   8   13
+biotype    303    HN      "Ornithine(+)"              1    4   1
+biotype    304    O       "Ornithine(+)"              23   9   42
+biotype    305    HA      "Ornithine(+)"              2   10   6
+biotype    306    CB      "Ornithine(+)"              13 100   16
+biotype    307    HB      "Ornithine(+)"              58  10   3
+biotype    308    CG      "Ornithine(+)"              13 100   16
+biotype    309    HG      "Ornithine(+)"              58  10   3
+biotype    310    CD      "Ornithine(+)"              13 101   16
+biotype    311    HD      "Ornithine(+)"              58 102   3
+biotype    312    NE      "Ornithine(+)"              42 103   37
+biotype    313    HE      "Ornithine(+)"              1  104   2
+biotype    314    N       "MethylAlanine (AIB)"       22   0   35
+biotype    315    CA      "MethylAlanine (AIB)"       12   0    0
+biotype    316    C       "MethylAlanine (AIB)"       10   0   13
+biotype    317    HN      "MethylAlanine (AIB)"       1    0   2
+biotype    318    O       "MethylAlanine (AIB)"       23   0   42
+biotype    319    CB      "MethylAlanine (AIB)"       14   0   17
+biotype    320    HB      "MethylAlanine (AIB)"       59   0   3
+biotype    321    N       "Pyroglutamic Acid"         22   0    0
+biotype    322    CA      "Pyroglutamic Acid"         12   0    0
+biotype    323    C       "Pyroglutamic Acid"         10   0    0
+biotype    324    HN      "Pyroglutamic Acid"         1    0    0
+biotype    325    O       "Pyroglutamic Acid"         23   0    0
+biotype    326    HA      "Pyroglutamic Acid"         2    0    0
+biotype    327    CB      "Pyroglutamic Acid"         13   0    0
+biotype    328    HB      "Pyroglutamic Acid"         58   0    0
+biotype    329    CG      "Pyroglutamic Acid"         13   0    0
+biotype    330    HG      "Pyroglutamic Acid"         58   0    0
+biotype    331    CD      "Pyroglutamic Acid"         10   0    0
+biotype    332    OE      "Pyroglutamic Acid"         23   0    0
+biotype    333    N       "N-Terminal Residue(+)"     42 103   37
+biotype    334    CA      "N-Terminal Residue(+)"     12 101   15
+biotype    335    C       "N-Terminal Residue(+)"     10   8   13
+biotype    336    HN      "N-Terminal Residue(+)"     1  104   2
+biotype    337    O       "N-Terminal Residue(+)"     23   9   42
+biotype    338    HA      "N-Terminal Residue(+)"     2   84   6
+biotype    339    N       "N-Terminal Glycine(+)"     42 103   37
+biotype    340    CA      "N-Terminal Glycine(+)"     13  76   16
+biotype    341    C       "N-Terminal Glycine(+)"     10   8   13
+biotype    342    HN      "N-Terminal Glycine(+)"     1  104   2
+biotype    343    O       "N-Terminal Glycine(+)"     23   9   42
+biotype    344    HA      "N-Terminal Glycine(+)"     60  10   6
+biotype    345    N       "N-Terminal Proline(+)"     42 213   40
+biotype    346    CA      "N-Terminal Proline(+)"     17  50   22
+biotype    347    C       "N-Terminal Proline(+)"     10   8   13
+biotype    348    HN      "N-Terminal Proline(+)"     1  214   2
+biotype    349    O       "N-Terminal Proline(+)"     23   9   42 
+biotype    350    HA      "N-Terminal Proline(+)"     2   10   6
+biotype    351    CD      "N-Terminal Proline(+)"     18  50   24
+biotype    352    HD      "N-Terminal Proline(+)"     58  10   3
+biotype    353    N       "C-Terminal Residue(-)"     22   2   35
+biotype    354    CA      "C-Terminal Residue(-)"     12   5   15
+biotype    355    C       "C-Terminal Residue(-)"     19 188   25
+biotype    356    HN      "C-Terminal Residue(-)"     1    4    1
+biotype    357    OXT     "C-Terminal Residue(-)"     44 215   44
+biotype    358    HA      "C-Terminal Residue(-)"     2   10    6
+biotype    359    N       "C-Terminal Glycine(-)"     22   2   35
+biotype    360    CA      "C-Terminal Glycine(-)"     13 151   16
+biotype    361    C       "C-Terminal Glycine(-)"     19 188   25
+biotype    362    HN      "C-Terminal Glycine(-)"     1    4    1
+biotype    363    OXT     "C-Terminal Glycine(-)"     44 215   44
+biotype    364    HA      "C-Terminal Glycine(-)"     60  10    6
+biotype    365    N       "C-Terminal Proline(-)"     43   3   31
+biotype    366    CA      "C-Terminal Proline(-)"     17   6   22
+biotype    367    C       "C-Terminal Proline(-)"     19 188   25
+biotype    368    OXT     "C-Terminal Proline(-)"     44 215   44
+biotype    369    HA      "C-Terminal Proline(-)"     2   10    6
+biotype    370    CD      "C-Terminal Proline(-)"     18  53   24
+biotype    371    HD      "C-Terminal Proline(-)"     58  10    3
+biotype    372    CH3     "Acetyl N-Terminus"         14  13   17
+biotype    373    H       "Acetyl N-Terminus"         59   7    3
+biotype    374    C       "Acetyl N-Terminus"         10   8   13
+biotype    375    O       "Acetyl N-Terminus"         23   9   42
+biotype    376    C       "Formyl N-Terminus"         10   8   13
+biotype    377    H       "Formyl N-Terminus"         57 231    3
+biotype    378    O       "Formyl N-Terminus"         23   9   42
+biotype    379    N       "N-MeAmide C-Terminus"      22   2   35
+biotype    380    HN      "N-MeAmide C-Terminus"      1    4    1
+biotype    381    CH3     "N-MeAmide C-Terminus"      14  48   17
+biotype    382    H       "N-MeAmide C-Terminus"      59   7    3
+biotype    383    N       "Amide C-Terminus"          22  30   36
+biotype    384    HN      "Amide C-Terminus"          1   31    1
+biotype    385    N       "Gamma Residue"             22   0    0
+biotype    386    CA      "Gamma Residue"             13   0    0
+biotype    387    C       "Gamma Residue"             10   0    0
+biotype    388    HN      "Gamma Residue"             1    0    0
+biotype    389    O       "Gamma Residue"             23   0    0
+biotype    390    HA      "Gamma Residue"             2    0    0
+biotype    391    CB      "Gamma Residue"             13   0    0
+biotype    392    HB      "Gamma Residue"             58   0    0
+biotype    393    CG      "Gamma Residue"             14   0    0
+biotype    394    HG      "Gamma Residue"             59   0    0
+biotype    395    N       "Hydroxyproline"            43   3   31
+biotype    396    CA      "Hydroxyproline"            17   6   22
+biotype    397    C       "Hydroxyproline"            10   8   13
+biotype    398    O       "Hydroxyproline"            23   9   42
+biotype    399    HA      "Hydroxyproline"            2    7    6
+biotype    400    CB      "Hydroxyproline"            18  51   23
+biotype    401    HB      "Hydroxyproline"            58  10    3
+biotype    402    CG      "Hydroxyproline"            18  44   23
+biotype    403    HG      "Hydroxyproline"            57  10    3
+biotype    404    CD      "Hydroxyproline"            18  53   24
+biotype    405    HD      "Hydroxyproline"            58  10    3
+biotype    406    OE      "Hydroxyproline"            24  45   45
+biotype    407    HE      "Hydroxyproline"            1   46    1
+biotype    408    N       "Alpha amino N-butyric"     22   2   35
+biotype    409    CA      "Alpha amino N-butyric"     12   5   15
+biotype    410    C       "Alpha amino N-butyric"     10   8   13
+biotype    411    HN      "Alpha amino N-butyric"     1    4   1
+biotype    412    O       "Alpha amino N-butyric"     23   9   42 
+biotype    413    HA      "Alpha amino N-butyric"     2   10   6
+biotype    414    CB      "Alpha amino N-butyric"     13 122   16
+biotype    415    HB      "Alpha amino N-butyric"     58  10   3
+biotype    416    CG      "Alpha amino N-butyric"     14 123   17
+biotype    417    HG      "Alpha amino N-butyric"     59  10   3
+biotype    418    N       "Norvaline"                 22   2   35
+biotype    419    CA      "Norvaline"                 12   5   15
+biotype    420    C       "Norvaline"                 10   8   13
+biotype    421    HN      "Norvaline"                 1    4   1
+biotype    422    O       "Norvaline"                 23   9   42
+biotype    423    HA      "Norvaline"                 2   10   6
+biotype    424    CB      "Norvaline"                 13 122   16
+biotype    425    HB      "Norvaline"                 58  10   3
+biotype    426    CG      "Norvaline"                 13 122   16
+biotype    427    HG      "Norvaline"                 58  10   3
+biotype    428    CD      "Norvaline"                 14 123   17
+biotype    429    HD      "Norvaline"                 59  10   3
+biotype    430    N       "Norleucine"                22   2   35
+biotype    431    CA      "Norleucine"                12   5   15
+biotype    432    C       "Norleucine"                10   8   13
+biotype    433    HN      "Norleucine"                1    4   1
+biotype    434    O       "Norleucine"                23   9   42
+biotype    435    HA      "Norleucine"                2   10   6
+biotype    436    CB      "Norleucine"                13 122   16
+biotype    437    HB      "Norleucine"                58  10   3
+biotype    438    CG      "Norleucine"                13 122   16
+biotype    439    HG      "Norleucine"                58  10   3
+biotype    440    CD      "Norleucine"                13 122   16
+biotype    441    HD      "Norleucine"                58  10   3
+biotype    442    CE      "Norleucine"                14 123   17
+biotype    443    HE      "Norleucine"                59  10   3
+biotype    444    NA      "Sodium Ion"                39  22    0
+biotype    445    CL      "Chloride Ion"              40  23    0
+biotype    446    C       "Urea"                      10   0    0
+biotype    447    O       "Urea"                      23   0    0
+biotype    448    N       "Urea"                      22   0    0
+biotype    449    HN      "Urea"                      1    0    0
+biotype    450    OW      "SPC Water"                 50 218    0
+biotype    451    HW      "SPC Water"                 54 219    0
+biotype    452    OW      "TIP3P Water"               25 216   47
+biotype    453    HW      "TIP3P Water"               1  217    4
+biotype    454    C       "N-Methyl Formamide"        10   8   13
+biotype    455    O       "N-Methyl Formamide"        23   9   42
+biotype    456    N       "N-Methyl Formamide"        22   2   35
+biotype    457    HN      "N-Methyl Formamide"        1    4    1
+biotype    458    CNT     "N-Methyl Formamide"        14  48   17
+biotype    459    HNT     "N-Methyl Formamide"        59  10    3
+biotype    460    HC      "N-Methyl Formamide"        57 231    3
+biotype    461    C       "N-Methyl Acetamide"        10   8   13
+biotype    462    O       "N-Methyl Acetamide"        23   9   42
+biotype    463    N       "N-Methyl Acetamide"        22   2   35
+biotype    464    HN      "N-Methyl Acetamide"        1    4    1
+biotype    465    CCT     "N-Methyl Acetamide"        14 123   17
+biotype    466    HCT     "N-Methyl Acetamide"        59  10    3
+biotype    467    CNT     "N-Methyl Acetamide"        14  48   17
+biotype    468    HNT     "N-Methyl Acetamide"        59  10    3
+biotype    469    C       "Acetamide"                 10  28   25
+biotype    470    O       "Acetamide"                 23  29   42
+biotype    471    N       "Acetamide"                 22  30   36
+biotype    472    HN      "Acetamide"                 1   31    1
+biotype    473    CCT     "Acetamide"                 14 123   17
+biotype    474    HCT     "Acetamide"                 59  10    3
+biotype    475    C       "Propionamide"              10  39   25
+biotype    476    O       "Propionamide"              23  40   42
+biotype    477    N       "Propionamide"              22 149   36
+biotype    478    HN      "Propionamide"              1  150    1
+biotype    479    CCT     "Propionamide"              13 122   16
+biotype    480    HCT     "Propionamide"              58  10    3
+biotype    481    CBT     "Propionamide"              14 123   17
+biotype    482    HBT     "Propionamide"              59  10    3
+biotype    483    OW      "TIP4P Water"               49 231    0
+biotype    484    HW      "TIP4P Water"               54 245    0
+biotype    485    MW      "TIP4P Water"               51 246    0
+biotype    486    OW      "TIP5P Water"               53 231    0
+biotype    487    HW      "TIP5P Water"               54 248    0
+biotype    488    MW      "TIP5P Water"               51 247    0
+biotype    489    CT      "Methane"                   0    0    0
+biotype    490    HT      "Methane"                   0    0    0
+biotype    491    C       "Formamide"                 10 228   25
+biotype    492    O       "Formamide"                 23 229   42
+biotype    493    N       "Formamide"                 22 226   36
+biotype    494    HN      "Formamide"                 1  227    1
+biotype    495    HC      "Formamide"                 57 230    3
+biotype    496    C       "N,N'-Dimethyl Acetamide"   10   0    0
+biotype    497    O       "N,N'-Dimethyl Acetamide"   23   0    0
+biotype    498    N       "N,N'-Dimethyl Acetamide"   0    0    0
+biotype    499    CCT     "N,N'-Dimethyl Acetamide"   14   0    0
+biotype    500    HCT     "N,N'-Dimethyl Acetamide"   59   0    0
+biotype    501    C1      "N,N'-Dimethyl Acetamide"   14   0    0
+biotype    502    H1      "N,N'-Dimethyl Acetamide"   59   0    0
+biotype    503    C2      "N,N'-Dimethyl Acetamide"   14   0    0
+biotype    504    H2      "N,N'-Dimethyl Acetamide"   59   0    0
+biotype    505    CT      "Methanol"                  14 222   17
+biotype    506    O       "Methanol"                  24  42   45 
+biotype    507    HT      "Methanol"                  59  10    3
+biotype    508    HO      "Methanol"                  1   43    1
+biotype    509    CT      "p-Cresol"                  14 123   17
+biotype    510    HCT     "p-Cresol"                  59  10    3
+biotype    511    C1      "p-Cresol"                  11  55   14
+biotype    512    C2      "p-Cresol"                  11  56   14
+biotype    513    H2      "p-Cresol"                  3   57    5
+biotype    514    C3      "p-Cresol"                  11  56   14
+biotype    515    H3      "p-Cresol"                  3   57    5
+biotype    516    C4      "p-Cresol"                  11  58   14
+biotype    517    O       "p-Cresol"                  24  59   45
+biotype    518    HO      "p-Cresol"                  1   60    1
+biotype    519    N       "a,g-Diaminobut. Acid(+)"   22   2   35
+biotype    520    CA      "a,g-Diaminobut. Acid(+)"   12   5   15
+biotype    521    C       "a,g-Diaminobut. Acid(+)"   10   8   13
+biotype    522    HN      "a,g-Diaminobut. Acid(+)"   1    4    1
+biotype    523    O       "a,g-Diaminobut. Acid(+)"   23   9   42
+biotype    524    HA      "a,g-Diaminobut. Acid(+)"   2   10    6
+biotype    525    CB      "a,g-Diaminobut. Acid(+)"   13 100   16
+biotype    526    HB      "a,g-Diaminobut. Acid(+)"   58  10    3
+biotype    527    CG      "a,g-Diaminobut. Acid(+)"   13 101   16
+biotype    528    HG      "a,g-Diaminobut. Acid(+)"   58 102    3
+biotype    529    ND      "a,g-Diaminobut. Acid(+)"   42 103   37
+biotype    530    HD      "a,g-Diaminobut. Acid(+)"   1  104    2
+biotype    531    K       "Potassium Ion"             47  22    0
+biotype    532    BR      "Bromide Ion"               0   23    0
+biotype    533    CS      "Caesium Ion"               48  22    0
+biotype    534    I       "Iodide Ion"                0   23    0
+biotype    535    N       "Ammonium Ion"              14 221   37
+biotype    536    HN      "Ammonium Ion"              1  104    2
+biotype    537    C       "Acetate Ion"               10  25   25
+biotype    538    OXT     "Acetate Ion"               23  26   44
+biotype    539    CH3     "Acetate Ion"               14 220   17
+biotype    540    H       "Acetate Ion"               59  10    3
+biotype    541    C       "Guanidinium Ion"           10  19   13
+biotype    542    N       "Guanidinium Ion"           22  20   38
+biotype    543    HN      "Guanidinium Ion"           1   21    2
+biotype    544    N       "N-Terminal AIB(+)"         22   0    0
+biotype    545    CA      "N-Terminal AIB(+)"         12   0    0
+biotype    546    C       "N-Terminal AIB(+)"         10   0    0
+biotype    547    HN      "N-Terminal AIB(+)"         1    0    0
+biotype    548    O       "N-Terminal AIB(+)"         23   0    0
+biotype    549    N       "C-Terminal AIB(-)"         22   0    0
+biotype    550    CA      "C-Terminal AIB(-)"         12   0    0
+biotype    551    C       "C-Terminal AIB(-)"         10   0    0
+biotype    552    HN      "C-Terminal AIB(-)"         1    0    0
+biotype    553    OXT     "C-Terminal AIB(-)"         23   0    0
+biotype    554    CA      "Free Amino Acid(+/-)"      12 101   15
+biotype    555    CA      "Free GLY(+/-)"             13 232   16
+biotype    556    CA      "Free PRO(+/-)"             17 233   22
+biotype    557    CA      "Free AIB(+/-)"             12   0    0
+biotype    558    N1      "Cytosine"                  36   0    83
+biotype    559    H1      "Cytosine"                  1    0    54
+biotype    560    C2      "Cytosine"                  31   0    63
+biotype    561    O2      "Cytosine"                  46   0    95
+biotype    562    N3      "Cytosine"                  36   0    87
+biotype    563    C4      "Cytosine"                  31   0    66
+biotype    564    N4      "Cytosine"                  36   0    82
+biotype    565    H4      "Cytosine"                  1    0    53
+biotype    566    C5      "Cytosine"                  32   0    67
+biotype    567    H5      "Cytosine"                  28   0    55
+biotype    568    C6      "Cytosine"                  32   0    67
+biotype    569    H6      "Cytosine"                  28   0    55
+biotype    570    N1      "Uracil"                    36   0    84
+biotype    571    H1      "Uracil"                    1    0    54
+biotype    572    C2      "Uracil"                    31   0    65
+biotype    573    O2      "Uracil"                    46   0    94
+biotype    574    N3      "Uracil"                    36   0    85
+biotype    575    H3      "Uracil"                    1    0    54
+biotype    576    C4      "Uracil"                    31   0    63
+biotype    577    O4      "Uracil"                    46   0    94
+biotype    578    C5      "Uracil"                    32   0    67
+biotype    579    H5      "Uracil"                    28   0    55
+biotype    580    C6      "Uracil"                    32   0    67
+biotype    581    H6      "Uracil"                    28   0    55
+biotype    582    N1      "Thymine"                   36   0    84
+biotype    583    H1      "Thymine"                   1    0    54
+biotype    584    C2      "Thymine"                   31   0    65
+biotype    585    O2      "Thymine"                   46   0    94
+biotype    586    N3      "Thymine"                   36   0    85
+biotype    587    H3      "Thymine"                   1    0    54
+biotype    588    C4      "Thymine"                   31   0    63
+biotype    589    O4      "Thymine"                   23   0    94
+biotype    590    C5      "Thymine"                   31   0    72
+biotype    591    C5M     "Thymine"                   35   0    81
+biotype    592    H5M     "Thymine"                   2    0    62
+biotype    593    C6      "Thymine"                   32   0    67
+biotype    594    H6      "Thymine"                   1    0    55
+biotype    595    N1      "Adenine"                   36   0    88
+biotype    596    C2      "Adenine"                   33   0    73
+biotype    597    H2      "Adenine"                   28   0    55
+biotype    598    N3      "Adenine"                   36   0    88
+biotype    599    C4      "Adenine"                   33   0    74
+biotype    600    C5      "Adenine"                   33   0    74
+biotype    601    C6      "Adenine"                   31   0    66
+biotype    602    N6      "Adenine"                   36   0    82
+biotype    603    H6      "Adenine"                   1    0    53
+biotype    604    N7      "Adenine"                   36   0    91
+biotype    605    C8      "Adenine"                   33   0    73
+biotype    606    H8      "Adenine"                   28   0    55
+biotype    607    N9      "Adenine"                   36   0    83
+biotype    608    H9      "Adenine"                   1    0    54
+biotype    609    N1      "Guanine"                   36   0    86
+biotype    610    H1      "Guanine"                   1    0    54
+biotype    611    C2      "Guanine"                   31   0    66
+biotype    612    N2      "Guanine"                   36   0    82
+biotype    613    H2      "Guanine"                   1    0   103
+biotype    614    N3      "Guanine"                   36   0    86
+biotype    615    C4      "Guanine"                   33   0    74
+biotype    616    C5      "Guanine"                   33   0    75
+biotype    617    C6      "Guanine"                   31   0    63
+biotype    618    O6      "Guanine"                   46   0    94
+biotype    619    N7      "Guanine"                   36   0    91
+biotype    620    C8      "Guanine"                   33   0    73
+biotype    621    H8      "Guanine"                   28   0    55
+biotype    622    N9      "Guanine"                   36   0    84
+biotype    623    H9      "Guanine"                   1    0    54
+biotype    624    P       "Ribose-5'-Phosphate"       38   135  102
+biotype    625    O5P     "Ribose-5'-Phosphate"       37   137  96
+biotype    626    O3P     "Ribose-5'-Phosphate"       37   146  96
+biotype    627    OP      "Ribose-5'-Phosphate"       46   136  97
+biotype    628    C5*     "Ribose-5'-Phosphate"       34   138  80
+biotype    629    H5*     "Ribose-5'-Phosphate"       29   10   61
+biotype    630    C4*     "Ribose-5'-Phosphate"       12   139  76
+biotype    631    O4*     "Ribose-5'-Phosphate"       37   140  101
+biotype    632    H4*     "Ribose-5'-Phosphate"       2    10   60
+biotype    633    C3*     "Ribose-5'-Phosphate"       17   238  76
+biotype    634    O3*     "Ribose-5'-Phosphate"       37   239  99
+biotype    635    H3*     "Ribose-5'-Phosphate"       2    10   60
+biotype    636    HO3     "Ribose-5'-Phosphate"       1    240  58
+biotype    637    C2*     "Ribose-5'-Phosphate"       17   237  77
+biotype    638    O2*     "Ribose-5'-Phosphate"       37   144  99
+biotype    639    H2*     "Ribose-5'-Phosphate"       2    10   60
+biotype    640    HO2     "Ribose-5'-Phosphate"       1    43   58
+biotype    641    C1*     "Ribose-5'-Phosphate"       17   236  77
+biotype    642    O1*     "Ribose-5'-Phosphate"       37   144  99
+biotype    643    H1*     "Ribose-5'-Phosphate"       2    10   60
+biotype    644    HO1     "Ribose-5'-Phosphate"       1    43   58
+biotype    645    P       "dCM-5-P"                   38   125  111  
+biotype    646    O5P     "dCM-5-P"                   37   127  96   
+biotype    647    O3P     "dCM-5-P"                   37   134  96   
+biotype    648    OP      "dCM-5-P"                   46   126  97   
+biotype    649    C5*     "dCM-5-P"                   34   128  80   
+biotype    650    H5*     "dCM-5-P"                   29   10   61   
+biotype    651    C4*     "dCM-5-P"                   17   129  76   
+biotype    652    O4*     "dCM-5-P"                   37   130  100
+biotype    653    H4*     "dCM-5-P"                   2    10   60   
+biotype    654    C3*     "dCM-5-P"                   17   133  76   
+biotype    655    H3*     "dCM-5-P"                   2    10   60   
+biotype    656    C2*     "dCM-5-P"                   34   14   79
+biotype    657    H2*     "dCM-5-P"                   29   10   61   
+biotype    658    C1*     "dCM-5-P"                   17   131  77   
+biotype    659    H1*     "dCM-5-P"                   2    10   60   
+biotype    660    N1      "dCM-5-P"                   45   152  83 
+biotype    661    C2      "dCM-5-P"                   31   155  63 
+biotype    662    O2      "dCM-5-P"                   46   156  95 
+biotype    663    N3      "dCM-5-P"                   36   157  87 
+biotype    664    C4      "dCM-5-P"                   31   158  66 
+biotype    665    N4      "dCM-5-P"                   45   159  82 
+biotype    666    H4      "dCM-5-P"                   1    160  53 
+biotype    667    C5      "dCM-5-P"                   32   161  67 
+biotype    668    H5      "dCM-5-P"                   28   162  55 
+biotype    669    C6      "dCM-5-P"                   32   153  67 
+biotype    670    H6      "dCM-5-P"                   28   154  55 
+biotype    671    P       "CM-5-P"                    38   135  102
+biotype    672    O5P     "CM-5-P"                    37   137  96    
+biotype    673    O3P     "CM-5-P"                    37   146  96    
+biotype    674    OP      "CM-5-P"                    46   136  97    
+biotype    675    C5*     "CM-5-P"                    34   138  80    
+biotype    676    H5*     "CM-5-P"                    29   10   61    
+biotype    677    C4*     "CM-5-P"                    17   139  76    
+biotype    678    O4*     "CM-5-P"                    37   140  101 
+biotype    679    H4*     "CM-5-P"                    2    10   60    
+biotype    680    C3*     "CM-5-P"                    17   145  76    
+biotype    681    H3*     "CM-5-P"                    2    10   60    
+biotype    682    C2*     "CM-5-P"                    17   142  77   
+biotype    683    O2*     "CM-5-P"                    37   144  99    
+biotype    684    H2*     "CM-5-P"                    2    10   60  
+biotype    685    C1*     "CM-5-P"                    17   141  77    
+biotype    686    H1*     "CM-5-P"                    2    10   60    
+biotype    687    N1      "CM-5-P"                    45   152  83
+biotype    688    C2      "CM-5-P"                    31   155  63  
+biotype    689    O2      "CM-5-P"                    46   156  95  
+biotype    690    N3      "CM-5-P"                    36   157  87  
+biotype    691    C4      "CM-5-P"                    31   158  66  
+biotype    692    N4      "CM-5-P"                    45   159  82  
+biotype    693    H4      "CM-5-P"                    1    160  53  
+biotype    694    C5      "CM-5-P"                    32   161  67  
+biotype    695    H5      "CM-5-P"                    28   162  55  
+biotype    696    C6      "CM-5-P"                    32   153  67  
+biotype    697    H6      "CM-5-P"                    28   154  55  
+biotype    698    P       "dUM-5-P"                   38   125  111
+biotype    699    O5P     "dUM-5-P"                   37   127  96 
+biotype    700    O3P     "dUM-5-P"                   37   134  96 
+biotype    701    OP      "dUM-5-P"                   46   126  97 
+biotype    702    C5*     "dUM-5-P"                   34   128  80 
+biotype    703    H5*     "dUM-5-P"                   29   10   61 
+biotype    704    C4*     "dUM-5-P"                   17   129  76 
+biotype    705    O4*     "dUM-5-P"                   37   130  100
+biotype    706    H4*     "dUM-5-P"                   2    10   60 
+biotype    707    C3*     "dUM-5-P"                   17   133  76 
+biotype    708    H3*     "dUM-5-P"                   2    10   60 
+biotype    709    C2*     "dUM-5-P"                   34   14   79
+biotype    710    H2*     "dUM-5-P"                   29   10   61
+biotype    711    C1*     "dUM-5-P"                   17   131  77 
+biotype    712    H1*     "dUM-5-P"                   2    10   60 
+biotype    713    N1      "dUM-5-P"                   45   163  84
+biotype    714    C2      "dUM-5-P"                   31   166  65
+biotype    715    O2      "dUM-5-P"                   46   167  94
+biotype    716    N3      "dUM-5-P"                   45   168  85
+biotype    717    H3      "dUM-5-P"                   1    169  54
+biotype    718    C4      "dUM-5-P"                   31   170  63
+biotype    719    O4      "dUM-5-P"                   46   171  94
+biotype    720    C5      "dUM-5-P"                   32   172  67
+biotype    721    H5      "dUM-5-P"                   28   173  55
+biotype    722    C6      "dUM-5-P"                   32   164  67
+biotype    723    H6      "dUM-5-P"                   28   165  55
+biotype    724    P       "UM-5-P"                    38   135  102  
+biotype    725    O5P     "UM-5-P"                    37   137  96 
+biotype    726    O3P     "UM-5-P"                    37   146  96 
+biotype    727    OP      "UM-5-P"                    46   136  97 
+biotype    728    C5*     "UM-5-P"                    34   138  80 
+biotype    729    H5*     "UM-5-P"                    29   10   61 
+biotype    730    C4*     "UM-5-P"                    17   139  76 
+biotype    731    O4*     "UM-5-P"                    37   140  101
+biotype    732    H4*     "UM-5-P"                    2    10   60 
+biotype    733    C3*     "UM-5-P"                    17   145  76 
+biotype    734    H3*     "UM-5-P"                    2    10   60 
+biotype    735    C2*     "UM-5-P"                    17   142  77
+biotype    736    O2*     "UM-5-P"                    37   144  99 
+biotype    737    H2*     "UM-5-P"                    2    10   60 
+biotype    738    C1*     "UM-5-P"                    17   141  77 
+biotype    739    H1*     "UM-5-P"                    2    10   60 
+biotype    740    N1      "UM-5-P"                    45   163  84
+biotype    741    C2      "UM-5-P"                    31   166  65
+biotype    742    O2      "UM-5-P"                    46   167  94
+biotype    743    N3      "UM-5-P"                    45   168  85
+biotype    744    H3      "UM-5-P"                    1    169  54
+biotype    745    C4      "UM-5-P"                    31   170  63
+biotype    746    O4      "UM-5-P"                    46   171  94
+biotype    747    C5      "UM-5-P"                    32   172  67
+biotype    748    H5      "UM-5-P"                    28   173  55
+biotype    749    C6      "UM-5-P"                    32   164  67
+biotype    750    H6      "UM-5-P"                    28   165  55
+biotype    751    P       "dTM-5-P"                   38   125  111
+biotype    752    O5P     "dTM-5-P"                   37   127  96 
+biotype    753    O3P     "dTM-5-P"                   37   134  96 
+biotype    754    OP      "dTM-5-P"                   46   126  97 
+biotype    755    C5*     "dTM-5-P"                   34   128  80 
+biotype    756    H5*     "dTM-5-P"                   29   10   61 
+biotype    757    C4*     "dTM-5-P"                   17   129  76 
+biotype    758    O4*     "dTM-5-P"                   37   130  100
+biotype    759    H4*     "dTM-5-P"                   2    10   60 
+biotype    760    C3*     "dTM-5-P"                   17   133  76 
+biotype    761    H3*     "dTM-5-P"                   2    10   60 
+biotype    762    C2*     "dTM-5-P"                   34   14   79
+biotype    763    H2*     "dTM-5-P"                   29   10   61
+biotype    764    C1*     "dTM-5-P"                   17   131  77 
+biotype    765    H1*     "dTM-5-P"                   2    10   60 
+biotype    766    N1      "dTM-5-P"                   45   174  84
+biotype    767    C2      "dTM-5-P"                   31   177  65
+biotype    768    O2      "dTM-5-P"                   46   178  94
+biotype    769    N3      "dTM-5-P"                   45   179  85
+biotype    770    H3      "dTM-5-P"                   1    180  54
+biotype    771    C4      "dTM-5-P"                   31   181  63
+biotype    772    O4      "dTM-5-P"                   46   182  94
+biotype    773    C5      "dTM-5-P"                   32   183  72
+biotype    774    C5M     "dTM-5-P"                   35   184  81
+biotype    775    H5M     "dTM-5-P"                   30   185  62
+biotype    776    C6      "dTM-5-P"                   32   175  67
+biotype    777    H6      "dTM-5-P"                   28   176  55
+biotype    778    P       "TM-5-P"                    38   135  102  
+biotype    779    O5P     "TM-5-P"                    37   137  96 
+biotype    780    O3P     "TM-5-P"                    37   146  96 
+biotype    781    OP      "TM-5-P"                    46   136  97 
+biotype    782    C5*     "TM-5-P"                    34   138  80 
+biotype    783    H5*     "TM-5-P"                    29   10   61 
+biotype    784    C4*     "TM-5-P"                    17   139  76 
+biotype    785    O4*     "TM-5-P"                    37   140  101
+biotype    786    H4*     "TM-5-P"                    2    10   60 
+biotype    787    C3*     "TM-5-P"                    17   145  76 
+biotype    788    H3*     "TM-5-P"                    2    10   60 
+biotype    789    C2*     "TM-5-P"                    17   142  77
+biotype    790    O2*     "TM-5-P"                    37   144  99 
+biotype    791    H2*     "TM-5-P"                    2    10   60
+biotype    792    C1*     "TM-5-P"                    17   141  77 
+biotype    793    H1*     "TM-5-P"                    2    10   60 
+biotype    794    N1      "TM-5-P"                    45   174  84
+biotype    795    C2      "TM-5-P"                    31   177  65
+biotype    796    O2      "TM-5-P"                    46   178  94
+biotype    797    N3      "TM-5-P"                    45   179  85
+biotype    798    H3      "TM-5-P"                    1    180  54
+biotype    799    C4      "TM-5-P"                    31   181  63
+biotype    800    O4      "TM-5-P"                    46   182  94
+biotype    801    C5      "TM-5-P"                    32   183  72
+biotype    802    C5M     "TM-5-P"                    35   184  81
+biotype    803    H5M     "TM-5-P"                    30   185  62
+biotype    804    C6      "TM-5-P"                    32   175  67
+biotype    805    H6      "TM-5-P"                    28   176  55
+biotype    806    P       "dAM-5-P"                   38   125  111
+biotype    807    O5P     "dAM-5-P"                   37   127  96 
+biotype    808    O3P     "dAM-5-P"                   37   134  96 
+biotype    809    OP      "dAM-5-P"                   46   126  97 
+biotype    810    C5*     "dAM-5-P"                   34   128  80 
+biotype    811    H5*     "dAM-5-P"                   29   10   61 
+biotype    812    C4*     "dAM-5-P"                   17   129  76 
+biotype    813    O4*     "dAM-5-P"                   37   130  100
+biotype    814    H4*     "dAM-5-P"                   2    10   60 
+biotype    815    C3*     "dAM-5-P"                   17   133  76 
+biotype    816    H3*     "dAM-5-P"                   2    10   60 
+biotype    817    C2*     "dAM-5-P"                   34   14   79
+biotype    818    H2*     "dAM-5-P"                   29   10   61
+biotype    819    C1*     "dAM-5-P"                   17   131  77 
+biotype    820    H1*     "dAM-5-P"                   2    10   60 
+biotype    821    N1      "dAM-5-P"                   36   191  88
+biotype    822    C2      "dAM-5-P"                   33   192  73
+biotype    823    H2      "dAM-5-P"                   28   193  55
+biotype    824    N3      "dAM-5-P"                   36   194  88
+biotype    825    C4      "dAM-5-P"                   33   195  74
+biotype    826    C5      "dAM-5-P"                   33   186  74
+biotype    827    C6      "dAM-5-P"                   31   196  66
+biotype    828    N6      "dAM-5-P"                   45   197  82
+biotype    829    H6      "dAM-5-P"                   1    198  53
+biotype    830    N7      "dAM-5-P"                   36   187  91
+biotype    831    C8      "dAM-5-P"                   33   188  73
+biotype    832    H8      "dAM-5-P"                   28   189  55
+biotype    833    N9      "dAM-5-P"                   45   190  83
+biotype    834    P       "AM-5-P"                    38   135  102  
+biotype    835    O5P     "AM-5-P"                    37   137  96 
+biotype    836    O3P     "AM-5-P"                    37   146  96 
+biotype    837    OP      "AM-5-P"                    46   136  97 
+biotype    838    C5*     "AM-5-P"                    34   138  80 
+biotype    839    H5*     "AM-5-P"                    29   10   61  
+biotype    840    C4*     "AM-5-P"                    17   139  76 
+biotype    841    O4*     "AM-5-P"                    37   140  101
+biotype    842    H4*     "AM-5-P"                    2    10   60 
+biotype    843    C3*     "AM-5-P"                    17   145  76 
+biotype    844    H3*     "AM-5-P"                    2    10   60 
+biotype    845    C2*     "AM-5-P"                    17   142  77 
+biotype    846    O2*     "AM-5-P"                    37   144  99 
+biotype    847    H2*     "AM-5-P"                    2    10   60 
+biotype    848    C1*     "AM-5-P"                    17   141  77 
+biotype    849    H1*     "AM-5-P"                    2    10   60 
+biotype    850    N1      "AM-5-P"                    36   191  88
+biotype    851    C2      "AM-5-P"                    33   192  73
+biotype    852    H2      "AM-5-P"                    28   193  55
+biotype    853    N3      "AM-5-P"                    36   194  88
+biotype    854    C4      "AM-5-P"                    33   195  74
+biotype    855    C5      "AM-5-P"                    33   186  74
+biotype    856    C6      "AM-5-P"                    31   196  66
+biotype    857    N6      "AM-5-P"                    45   197  82
+biotype    858    H6      "AM-5-P"                    1    198  53
+biotype    859    N7      "AM-5-P"                    36   187  91
+biotype    860    C8      "AM-5-P"                    33   188  73
+biotype    861    H8      "AM-5-P"                    28   189  55
+biotype    862    N9      "AM-5-P"                    45   190  83
+biotype    863    P       "dGM-5-P"                   38   125  111
+biotype    864    O5P     "dGM-5-P"                   37   127  96 
+biotype    865    O3P     "dGM-5-P"                   37   134  96 
+biotype    866    OP      "dGM-5-P"                   46   126  97 
+biotype    867    C5*     "dGM-5-P"                   34   128  80 
+biotype    868    H5*     "dGM-5-P"                   29   10   61 
+biotype    869    C4*     "dGM-5-P"                   17   129  76 
+biotype    870    O4*     "dGM-5-P"                   37   130  100
+biotype    871    H4*     "dGM-5-P"                   2    10   60 
+biotype    872    C3*     "dGM-5-P"                   17   133  76
+biotype    873    H3*     "dGM-5-P"                   2    10   60 
+biotype    874    C2*     "dGM-5-P"                   34   14   79 
+biotype    875    H2*     "dGM-5-P"                   29   10   61
+biotype    876    C1*     "dGM-5-P"                   17   131  77 
+biotype    877    H1*     "dGM-5-P"                   2    10   60 
+biotype    878    N1      "dGM-5-P"                   45   203  86 
+biotype    879    H1      "dGM-5-P"                   1    204  54
+biotype    880    C2      "dGM-5-P"                   31   202  66
+biotype    881    N2      "dGM-5-P"                   45   205  82
+biotype    882    H2      "dGM-5-P"                   1    206  103
+biotype    883    N3      "dGM-5-P"                   36   201  90
+biotype    884    C4      "dGM-5-P"                   33   200  74
+biotype    885    C5      "dGM-5-P"                   33   209  75
+biotype    886    C6      "dGM-5-P"                   31   207  63
+biotype    887    O6      "dGM-5-P"                   46   208  94
+biotype    888    N7      "dGM-5-P"                   36   210  91
+biotype    889    C8      "dGM-5-P"                   33   211  73
+biotype    890    H8      "dGM-5-P"                   28   212  55
+biotype    891    N9      "dGM-5-P"                   45   199  84
+biotype    892    P       "GM-5-P"                    38   135  102
+biotype    893    O5P     "GM-5-P"                    37   137  96 
+biotype    894    O3P     "GM-5-P"                    37   146  96 
+biotype    895    OP      "GM-5-P"                    46   136  97 
+biotype    896    C5*     "GM-5-P"                    34   138  80 
+biotype    897    H5*     "GM-5-P"                    29   10   61 
+biotype    898    C4*     "GM-5-P"                    17   139  76 
+biotype    899    O4*     "GM-5-P"                    37   140  101
+biotype    900    H4*     "GM-5-P"                    2    10   60 
+biotype    901    C3*     "GM-5-P"                    17   145  76 
+biotype    902    H3*     "GM-5-P"                    2    10   60 
+biotype    903    C2*     "GM-5-P"                    17   142  77
+biotype    904    O2*     "GM-5-P"                    37   144  99 
+biotype    905    H2*     "GM-5-P"                    2    10   60 
+biotype    906    C1*     "GM-5-P"                    17   141  77 
+biotype    907    H1*     "GM-5-P"                    2    10   60 
+biotype    908    N1      "GM-5-P"                    45   203  86  
+biotype    909    H1      "GM-5-P"                    1    204  54  
+biotype    910    C2      "GM-5-P"                    31   202  66  
+biotype    911    N2      "GM-5-P"                    45   205  82  
+biotype    912    H2      "GM-5-P"                    1    206  103  
+biotype    913    N3      "GM-5-P"                    36   201  90  
+biotype    914    C4      "GM-5-P"                    33   200  74  
+biotype    915    C5      "GM-5-P"                    33   209  75  
+biotype    916    C6      "GM-5-P"                    31   207  63  
+biotype    917    O6      "GM-5-P"                    46   208  94  
+biotype    918    N7      "GM-5-P"                    36   210  91  
+biotype    919    C8      "GM-5-P"                    33   211  73  
+biotype    920    H8      "GM-5-P"                    28   212  55  
+biotype    921    N9      "GM-5-P"                    45   199  84  
+biotype    922    P       "5'-terminal (d)XM-5-P"     38   135 102
+biotype    923    O3P     "5'-terminal (d)XM-5-P"     37   234  98
+biotype    924    HOP     "5'-terminal (d)XM-5-P"     1    235  57
+biotype    925    C3*     "3'-terminal XM-5-P"        17   44   76
+biotype    926    O3*     "3'-terminal XM-5-P"        37   45   99
+biotype    927    HO3     "3'-terminal XM-5-P"        1    43   58
+biotype    928    C3*     "3'-terminal dXM-5-P"       17   44   76
+biotype    929    O3*     "3'-terminal dXM-5-P"       37   45   99
+biotype    930    HO3     "3'-terminal dXM-5-P"       1    43   58
+biotype    931    HO2     "2'-OH in CM-5-P"           1    43   58
+biotype    932    HO2     "2'-OH in UM-5-P"           1    43   58
+biotype    933    HO2     "2'-OH in TM-5-P"           1    43   58
+biotype    934    HO2     "2'-OH in AM-5-P"           1    43   58
+biotype    935    HO2     "2'-OH in GM-5-P"           1    43   58
+biotype    936    P       "Deoxyribose-5'-P"          38   125 111
+biotype    937    O5P     "Deoxyribose-5'-P"          37   127  96 
+biotype    938    O3P     "Deoxyribose-5'-P"          37   134  96 
+biotype    939    OP      "Deoxyribose-5'-P"          46   126  97 
+biotype    940    C5*     "Deoxyribose-5'-P"          34   128  80 
+biotype    941    H5*     "Deoxyribose-5'-P"          29   10   61 
+biotype    942    C4*     "Deoxyribose-5'-P"          17   129  76 
+biotype    943    O4*     "Deoxyribose-5'-P"          37   130 100
+biotype    944    H4*     "Deoxyribose-5'-P"          2    10   60 
+biotype    945    C3*     "Deoxyribose-5'-P"          17   244  76 
+biotype    946    O3*     "Deoxyribose-5'-P"          37   241  99 
+biotype    947    H3*     "Deoxyribose-5'-P"          2    10   60 
+biotype    948    HO3     "Deoxyribose-5'-P"          1    242  58 
+biotype    949    C2*     "Deoxyribose-5'-P"          34   14   79
+biotype    950    H2*     "Deoxyribose-5'-P"          29   10   61
+biotype    951    C1*     "Deoxyribose-5'-P"          17   243  77
+biotype    952    O1*     "Deoxyribose-5'-P"          37   144  99
+biotype    953    H1*     "Deoxyribose-5'-P"          2    10   60
+biotype    954    HO1     "Deoxyribose-5'-P"          1    43   58
+biotype    955    HOP     "Deoxyribose-5'-P"          1    235  57
+biotype    956    HOP     "Ribose-5'-Phosphate"       1    235  57
+biotype    957    O5*     "5'-Ribonucleosides"        37   144  99
+biotype    958    C5*     "5'-Ribonucleosides"        34   153  80
+biotype    959    HO5     "5'-Ribonucleosides"        1    143  58
+biotype    960    O5*     "5'-Deoxyribonucleosides"   37   144  99
+biotype    961    C5*     "5'-Deoxyribonucleosides"   34   153  80
+biotype    962    HO5     "5'-Deoxyribonucleosides"   1    143  58
+biotype    963    CT      "Propane"                   14   123  17
+biotype    964    HT      "Propane"                   59   10   3
+biotype    965    CB      "Propane"                   13   122  16
+biotype    966    HB      "Propane"                   58   10   3
+biotype    967    CT      "n-Butane"                  14   123  17
+biotype    968    HT      "n-Butane"                  59   10   3
+biotype    969    CB      "n-Butane"                  13   122  16
+biotype    970    HB      "n-Butane"                  58   10   3
+biotype    971    CT      "i-Butane"                  14   123  17
+biotype    972    HT      "i-Butane"                  59   10   3
+biotype    973    CB      "i-Butane"                  12   121  16
+biotype    974    HB      "i-Butane"                  57   10   3
+biotype    975    CT      "Toluene"                   14   123  17
+biotype    976    HT      "Toluene"                   59   10   3
+biotype    977    C1      "Toluene"                   11   115  14
+biotype    978    C2      "Toluene"                   11   116  14
+biotype    979    H2      "Toluene"                   3    117  5
+biotype    980    C3      "Toluene"                   11   116  14
+biotype    981    H3      "Toluene"                   3    117  5
+biotype    982    C4      "Toluene"                   11   116  14
+biotype    983    H4      "Toluene"                   3    117  5
+biotype    984    CT      "Ethanol"                   14   123  17
+biotype    985    HT      "Ethanol"                   59   10   3
+biotype    986    CB      "Ethanol"                   13   41   16
+biotype    987    HB      "Ethanol"                   58   10   3
+biotype    988    O       "Ethanol"                   24   42   45
+biotype    989    HO      "Ethanol"                   1    43   1
+biotype    990    CT      "Methanethiol"              14   223  17
+biotype    991    S       "Methanethiol"              26   49   50
+biotype    992    HT      "Methanethiol"              59   10   3
+biotype    993    HS      "Methanethiol"              7    50   10
+biotype    994    CNT     "Ethylmethylthioether"      14 113    17
+biotype    995    HNT     "Ethylmethylthioether"      59  10    3
+biotype    996    S       "Ethylmethylthioether"      26 112    50
+biotype    997    CB      "Ethylmethylthioether"      13 111    16
+biotype    998    HB      "Ethylmethylthioether"      58  10    3
+biotype    999    CCT     "Ethylmethylthioether"      14 123    17
+biotype   1000    HCT     "Ethylmethylthioether"      59  10    3
+biotype   1001    CT      "Methylimidazole (delta-H)" 14 225    17
+biotype   1002    HT      "Methylimidazole (delta-H)" 59  10    3
+biotype   1003    C1      "Methylimidazole (delta-H)" 15  80    18
+biotype   1004    N2      "Methylimidazole (delta-H)" 45  81    32
+biotype   1005    HN2     "Methylimidazole (delta-H)" 1   82    1
+biotype   1006    C2      "Methylimidazole (delta-H)" 15  83    18
+biotype   1007    HC2     "Methylimidazole (delta-H)" 6   84    9
+biotype   1008    C3      "Methylimidazole (delta-H)" 15  85    19
+biotype   1009    HC3     "Methylimidazole (delta-H)" 4   86    7
+biotype   1010    N3      "Methylimidazole (delta-H)" 41  87    33
+biotype   1011    CT      "Methylimidazole (eps-H)"   14 224    17
+biotype   1012    HT      "Methylimidazole (eps-H)"   59  10    3
+biotype   1013    C1      "Methylimidazole (eps-H)"   15  72    18
+biotype   1014    N2      "Methylimidazole (eps-H)"   41  73    33
+biotype   1015    C2      "Methylimidazole (eps-H)"   15  74    18
+biotype   1016    HC2     "Methylimidazole (eps-H)"   6   10    9
+biotype   1017    C3      "Methylimidazole (eps-H)"   15  75    19
+biotype   1018    HC3     "Methylimidazole (eps-H)"   6   76    7
+biotype   1019    N3      "Methylimidazole (eps-H)"   45  77    32
+biotype   1020    HN3     "Methylimidazole (eps-H)"   1   78    1
+biotype   1021    CT      "Methylindole"              14 123    17
+biotype   1022    HT      "Methylindole"              59  10    3
+biotype   1023    C3      "Methylindole"              11  62    21
+biotype   1024    C2      "Methylindole"              11  63    14
+biotype   1025    H2      "Methylindole"              3   64    5
+biotype   1026    C3A     "Methylindole"              16  65    20
+biotype   1027    N1      "Methylindole"              45  66    39
+biotype   1028    H1      "Methylindole"              1   67    1
+biotype   1029    C7A     "Methylindole"              16  68    20
+biotype   1030    C4      "Methylindole"              11 261    109
+biotype   1031    H4      "Methylindole"              3  265    5
+biotype   1032    C7      "Methylindole"              11 262    109
+biotype   1033    H7      "Methylindole"              3  266    5
+biotype   1034    C5      "Methylindole"              11 263    14
+biotype   1035    H5      "Methylindole"              3  267    5
+biotype   1036    C6      "Methylindole"              11 264    14
+biotype   1037    H6      "Methylindole"              3  268    5
+biotype   1038    N       "Methylammonium (+)"        42   0    37
+biotype   1039    HN      "Methylammonium (+)"        1    0    2
+biotype   1040    CT      "Methylammonium (+)"        14   0    17
+biotype   1041    HT      "Methylammonium (+)"        59   0    3
+biotype   1042    N       "Dimethylammonium (+)"      42   0    40
+biotype   1043    HN      "Dimethylammonium (+)"      1    0    2
+biotype   1044    CT      "Dimethylammonium (+)"      14   0    17
+biotype   1045    HT      "Dimethylammonium (+)"      59   0    3
+biotype   1046    CL      "Perchlorate (-)"           0    0   104
+biotype   1047    O       "Perchlorate (-)"           0    0   105
+biotype   1048    N       "Nitrate (-)"               0    0   106
+biotype   1049    O       "Nitrate (-)"               0    0   107
+biotype   1050    OW      "TIP4P-Ew Water"            52   231  0
+biotype   1051    HW      "TIP4P-Ew Water"            54   250  0
+biotype   1052    MW      "TIP4P-Ew Water"            51   249  0
+biotype   1053    C       "Benzene"                   11   116  14
+biotype   1054    HC      "Benzene"                   3    117  5
+biotype   1055    C1      "Naphthalene"               16   115  20
+biotype   1056    C2      "Naphthalene"               11   69   14
+biotype   1057    C3      "Naphthalene"               11   69   14
+biotype   1058    H2      "Naphthalene"               3    70   5
+biotype   1059    H3      "Naphthalene"               3    70   5
+biotype   1060    N1      "Purine"                    36   0    88
+biotype   1061    C2      "Purine"                    33   0    73
+biotype   1062    H2      "Purine"                    28   0    55
+biotype   1063    N3      "Purine"                    36   0    88
+biotype   1064    C4      "Purine"                    33   0    74
+biotype   1065    C5      "Purine"                    33   0    74
+biotype   1066    C6      "Purine"                    33   0    66
+biotype   1067    H6      "Purine"                    28   0    55
+biotype   1068    N7      "Purine"                    36   0    91
+biotype   1069    C8      "Purine"                    33   0    73
+biotype   1070    H8      "Purine"                    28   0    55
+biotype   1071    N9      "Purine"                    36   0    83
+biotype   1072    H9      "Purine"                    1    0    54
+biotype   1073    O       "Oxygen"                    23   115  0
+biotype   1074    N       "Glutamic Acid"             22   2    35
+biotype   1075    CA      "Glutamic Acid"             12   5    15
+biotype   1076    C       "Glutamic Acid"             10   8    13
+biotype   1077    HN      "Glutamic Acid"             1    4    1
+biotype   1078    O       "Glutamic Acid"             23   9    42
+biotype   1079    HA      "Glutamic Acid"             2    10   6
+biotype   1080    CB      "Glutamic Acid"             13   33   110 
+biotype   1081    HB      "Glutamic Acid"             58   10   3
+biotype   1082    CG      "Glutamic Acid"             13   251  16
+biotype   1083    HG      "Glutamic Acid"             58   10   3
+biotype   1084    CD      "Glutamic Acid"             19   202  26
+biotype   1085    OE1     "Glutamic Acid"             23   40   43
+biotype   1086    OE2     "Glutamic Acid"             24   269  45
+biotype   1087    HE2     "Glutamic Acid"             1    91   1
+biotype   1088    N       "Aspartic Acid"             22   2    35
+biotype   1089    CA      "Aspartic Acid"             12   5    15
+biotype   1090    C       "Aspartic Acid"             10   8    13
+biotype   1091    HN      "Aspartic Acid"             1    4    1
+biotype   1092    O       "Aspartic Acid"             23   9    42
+biotype   1093    HA      "Aspartic Acid"             2    10   6
+biotype   1094    CB      "Aspartic Acid"             13   251  110
+biotype   1095    HB      "Aspartic Acid"             58   10   3
+biotype   1096    CG      "Aspartic Acid"             19   202  26
+biotype   1097    OD1     "Aspartic Acid"             23   29   43
+biotype   1098    OD2     "Aspartic Acid"             24   269  45
+biotype   1099    HD2     "Aspartic Acid"             1    91   1
+biotype   1100    N       "Deprotonated Lysine"       22   2    35
+biotype   1101    CA      "Deprotonated Lysine"       12   5    15
+biotype   1102    C       "Deprotonated Lysine"       10   8    13
+biotype   1103    HN      "Deprotonated Lysine"       1    4    1
+biotype   1104    O       "Deprotonated Lysine"       23   9    42
+biotype   1105    HA      "Deprotonated Lysine"       2    10   6
+biotype   1106    CB      "Deprotonated Lysine"       13   98   16
+biotype   1107    HB      "Deprotonated Lysine"       58   10   3
+biotype   1108    CG      "Deprotonated Lysine"       13   99   16
+biotype   1109    HG      "Deprotonated Lysine"       58   10   3
+biotype   1110    CD      "Deprotonated Lysine"       13   100  16
+biotype   1111    HD      "Deprotonated Lysine"       58   10   3
+biotype   1112    CE      "Deprotonated Lysine"       13   76   16
+biotype   1113    HE      "Deprotonated Lysine"       58   270  3
+biotype   1114    NZ      "Deprotonated Lysine"       45   260  36
+biotype   1115    HZ      "Deprotonated Lysine"       1    255  2
+biotype   1116    N       "Cystine (thiolate)"        22   2    35
+biotype   1117    CA      "Cystine (thiolate)"        12   5    15
+biotype   1118    C       "Cystine (thiolate)"        10   8    13
+biotype   1119    HN      "Cystine (thiolate)"        1    4    1
+biotype   1120    O       "Cystine (thiolate)"        23   9    42
+biotype   1121    HA      "Cystine (thiolate)"        2    10   6
+biotype   1122    CB      "Cystine (thiolate)"        56   252  27
+biotype   1123    HB      "Cystine (thiolate)"        58   10   3
+biotype   1124    SG      "Cystine (thiolate)"        55   253  52
+biotype   1125    N       "Tyrosine (-)"              22   2    35
+biotype   1126    CA      "Tyrosine (-)"              12   5    15
+biotype   1127    C       "Tyrosine (-)"              10   8    13
+biotype   1128    HN      "Tyrosine (-)"              1    4    1
+biotype   1129    O       "Tyrosine (-)"              23   9    42
+biotype   1130    HA      "Tyrosine (-)"              2    10   6
+biotype   1131    CB      "Tyrosine (-)"              13   54   16
+biotype   1132    HB      "Tyrosine (-)"              58   10   3
+biotype   1133    CG      "Tyrosine (-)"              11   54   14
+biotype   1134    CD      "Tyrosine (-)"              11   55   14
+biotype   1135    HD      "Tyrosine (-)"              3    56   5
+biotype   1136    CE      "Tyrosine (-)"              11   0    14
+biotype   1137    HE      "Tyrosine (-)"              3    0    5
+biotype   1138    CZ      "Tyrosine (-)"              0    0    0
+biotype   1139    OZ      "Tyrosine (-)"              0    0    0
+biotype   1140    N       "Phosphotyrosine (-)"       22   2    35
+biotype   1141    CA      "Phosphotyrosine (-)"       12   5    15
+biotype   1142    C       "Phosphotyrosine (-)"       10   8    13
+biotype   1143    HN      "Phosphotyrosine (-)"       1    4    1
+biotype   1144    O       "Phosphotyrosine (-)"       23   9    42
+biotype   1145    HA      "Phosphotyrosine (-)"       2    10   6
+biotype   1146    CB      "Phosphotyrosine (-)"       13   54   16
+biotype   1147    HB      "Phosphotyrosine (-)"       58   10   3
+biotype   1148    CG      "Phosphotyrosine (-)"       11   55   14
+biotype   1149    CD      "Phosphotyrosine (-)"       11   56   14
+biotype   1150    HD      "Phosphotyrosine (-)"       3    57   5
+biotype   1151    CE      "Phosphotyrosine (-)"       11   251  14
+biotype   1152    HE      "Phosphotyrosine (-)"       3    235  5
+biotype   1153    CZ      "Phosphotyrosine (-)"       11   258  14
+biotype   1154    OZ      "Phosphotyrosine (-)"       37   77   108
+biotype   1155    P       "Phosphotyrosine (-)"       38   257  102
+biotype   1156    OP      "Phosphotyrosine (-)"       46   256  97
+biotype   1157    OH      "Phosphotyrosine (-)"       37   256  98
+biotype   1158    HOP     "Phosphotyrosine (-)"       1    259  57
+biotype   1159    N       "Phosphoserine (-)"         22   2    35
+biotype   1160    CA      "Phosphoserine (-)"         12   5    15
+biotype   1161    C       "Phosphoserine (-)"         10   8    13
+biotype   1162    HN      "Phosphoserine (-)"         1    4    1
+biotype   1163    O       "Phosphoserine (-)"         23   9    42
+biotype   1164    HA      "Phosphoserine (-)"         2    10   6
+biotype   1165    CB      "Phosphoserine (-)"         13   138  16
+biotype   1166    HB      "Phosphoserine (-)"         58   10   3
+biotype   1167    OG      "Phosphoserine (-)"         37   30   96
+biotype   1168    P       "Phosphoserine (-)"         38   135  102
+biotype   1169    OP      "Phosphoserine (-)"         46   254  97
+biotype   1170    OH      "Phosphoserine (-)"         37   234  98
+biotype   1171    HOP     "Phosphoserine (-)"         1    255  57 
+biotype   1172    N       "Phosphothreonine (-)"      22   2    35
+biotype   1173    CA      "Phosphothreonine (-)"      12   5    15
+biotype   1174    C       "Phosphothreonine (-)"      10   8    13
+biotype   1175    HN      "Phosphothreonine (-)"      1    4    1
+biotype   1176    O       "Phosphothreonine (-)"      23   9    42
+biotype   1177    HA      "Phosphothreonine (-)"      2    10   6
+biotype   1178    CB      "Phosphothreonine (-)"      12   145  15
+biotype   1179    HB      "Phosphothreonine (-)"      57   10   3
+biotype   1180    OG1     "Phosphothreonine (-)"      37   30   96
+biotype   1181    CG2     "Phosphothreonine (-)"      14   47   17
+biotype   1182    HG2     "Phosphothreonine (-)"      59   10   3 
+biotype   1183    P       "Phosphothreonine (-)"      38   135  102
+biotype   1184    OP      "Phosphothreonine (-)"      46   254  97
+biotype   1185    OH      "Phosphothreonine (-)"      37   234  98
+biotype   1186    HOP     "Phosphothreonine (-)"      1    255  57
+biotype   1187    N       "Acetylated Lysine"         22   2    35
+biotype   1188    CA      "Acetylated Lysine"         12   5    15
+biotype   1189    C       "Acetylated Lysine"         10   8    13
+biotype   1190    HN      "Acetylated Lysine"         1    4    1
+biotype   1191    O       "Acetylated Lysine"         23   9    42
+biotype   1192    HA      "Acetylated Lysine"         2    10   6
+biotype   1193    CB      "Acetylated Lysine"         13   98   16
+biotype   1194    HB      "Acetylated Lysine"         58   10   3
+biotype   1195    CG      "Acetylated Lysine"         13   99   16
+biotype   1196    HG      "Acetylated Lysine"         58   10   3
+biotype   1197    CD      "Acetylated Lysine"         13   100  16
+biotype   1198    HD      "Acetylated Lysine"         58   10   3
+biotype   1199    CE      "Acetylated Lysine"         13   151  16
+biotype   1200    HE      "Acetylated Lysine"         60   10   3
+biotype   1201    NZ      "Acetylated Lysine"         22   2    35
+biotype   1202    HZ      "Acetylated Lysine"         1    4    1
+biotype   1203    CH      "Acetylated Lysine"         10   8    13
+biotype   1204    OH      "Acetylated Lysine"         23   9    42
+biotype   1205    CI      "Acetylated Lysine"         14   13   17
+biotype   1206    HI      "Acetylated Lysine"         59   7    3
+biotype   1207    N       "Mono(CH3)-Lysine(+)"       22   2    35
+biotype   1208    CA      "Mono(CH3)-Lysine(+)"       12   5    15
+biotype   1209    C       "Mono(CH3)-Lysine(+)"       10   8    13
+biotype   1210    HN      "Mono(CH3)-Lysine(+)"       1    4    1
+biotype   1211    O       "Mono(CH3)-Lysine(+)"       23   9    42
+biotype   1212    HA      "Mono(CH3)-Lysine(+)"       2    10   6
+biotype   1213    CB      "Mono(CH3)-Lysine(+)"       13   98   16
+biotype   1214    HB      "Mono(CH3)-Lysine(+)"       58   10   3
+biotype   1215    CG      "Mono(CH3)-Lysine(+)"       13   99   16
+biotype   1216    HG      "Mono(CH3)-Lysine(+)"       58   10   3
+biotype   1217    CD      "Mono(CH3)-Lysine(+)"       13   100  16
+biotype   1218    HD      "Mono(CH3)-Lysine(+)"       58   10   3
+biotype   1219    CE      "Mono(CH3)-Lysine(+)"       13   101  16
+biotype   1220    HE      "Mono(CH3)-Lysine(+)"       58   102  3
+biotype   1221    NZ      "Mono(CH3)-Lysine(+)"       42   271  113
+biotype   1222    HZ      "Mono(CH3)-Lysine(+)"       1    104  2
+biotype   1223    CH      "Mono(CH3)-Lysine(+)"       14   272  17
+biotype   1224    HH      "Mono(CH3)-Lysine(+)"       59   102  3
+biotype   1225    N       "Di(CH3)-Lysine(+)"         22   2    35
+biotype   1226    CA      "Di(CH3)-Lysine(+)"         12   5    15
+biotype   1227    C       "Di(CH3)-Lysine(+)"         10   8    13
+biotype   1228    HN      "Di(CH3)-Lysine(+)"         1    4    1
+biotype   1229    O       "Di(CH3)-Lysine(+)"         23   9    42
+biotype   1230    HA      "Di(CH3)-Lysine(+)"         2    10   6
+biotype   1231    CB      "Di(CH3)-Lysine(+)"         13   98   16
+biotype   1232    HB      "Di(CH3)-Lysine(+)"         58   10   3
+biotype   1233    CG      "Di(CH3)-Lysine(+)"         13   99   16
+biotype   1234    HG      "Di(CH3)-Lysine(+)"         58   10   3
+biotype   1235    CD      "Di(CH3)-Lysine(+)"         13   100  16
+biotype   1236    HD      "Di(CH3)-Lysine(+)"         58   10   3
+biotype   1237    CE      "Di(CH3)-Lysine(+)"         13   0    16
+biotype   1238    HE      "Di(CH3)-Lysine(+)"         58   0    3
+biotype   1239    NZ      "Di(CH3)-Lysine(+)"         42   0    0
+biotype   1240    HZ      "Di(CH3)-Lysine(+)"         1    0    2
+biotype   1241    CH      "Di(CH3)-Lysine(+)"         14   0    17
+biotype   1242    HH      "Di(CH3)-Lysine(+)"         59   0    3
+biotype   1243    N       "Tri(CH3)-Lysine(+)"        22   2    35
+biotype   1244    CA      "Tri(CH3)-Lysine(+)"        12   5    15
+biotype   1245    C       "Tri(CH3)-Lysine(+)"        10   8    13
+biotype   1246    HN      "Tri(CH3)-Lysine(+)"        1    4    1
+biotype   1247    O       "Tri(CH3)-Lysine(+)"        23   9    42
+biotype   1248    HA      "Tri(CH3)-Lysine(+)"        2    10   6
+biotype   1249    CB      "Tri(CH3)-Lysine(+)"        13   98   16
+biotype   1250    HB      "Tri(CH3)-Lysine(+)"        58   10   3
+biotype   1251    CG      "Tri(CH3)-Lysine(+)"        13   99   16
+biotype   1252    HG      "Tri(CH3)-Lysine(+)"        58   10   3
+biotype   1253    CD      "Tri(CH3)-Lysine(+)"        13   100  16
+biotype   1254    HD      "Tri(CH3)-Lysine(+)"        58   10   3
+biotype   1255    CE      "Tri(CH3)-Lysine(+)"        13   275  16
+biotype   1256    HE      "Tri(CH3)-Lysine(+)"        58   276  3
+biotype   1257    NZ      "Tri(CH3)-Lysine(+)"        42   273  112
+biotype   1258    CH      "Tri(CH3)-Lysine(+)"        14   274  17
+biotype   1259    HH      "Tri(CH3)-Lysine(+)"        59   276  3
+biotype   1260    DU      "Dummy"                     0    0   11
+biotype   1261    DU      "Dummy"                     0    0   12
+biotype   1262    DU      "Dummy"                     0    0   27
+biotype   1263    DU      "Dummy"                     0    0   28
+biotype   1264    DU      "Dummy"                     0    0   29
+biotype   1265    DU      "Dummy"                     0    0   30
+biotype   1266    DU      "Dummy"                     0    0   41
+biotype   1267    DU      "Dummy"                     0    0   46
+biotype   1268    DU      "Dummy"                     0    0   48
+biotype   1269    DU      "Dummy"                     0    0   49
+biotype   1270    DU      "Dummy"                     0    0   56
+biotype   1271    DU      "Dummy"                     0    0   59
+biotype   1272    DU      "Dummy"                     0    0   64
+biotype   1273    DU      "Dummy"                     0    0   68
+biotype   1274    DU      "Dummy"                     0    0   69
+biotype   1275    DU      "Dummy"                     0    0   70
+biotype   1276    DU      "Dummy"                     0    0   71
+biotype   1277    DU      "Dummy"                     0    0   78
+biotype   1278    DU      "Dummy"                     0    0   89
+biotype   1279    DU      "Dummy"                     0    0   92
+biotype   1280    DU      "Dummy"                     0    0   93
