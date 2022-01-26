@@ -23,8 +23,7 @@
 
 double VWFrEn(int FrAtNu,double **RoSFCo,double *BSMinC,double VWGrIn,double VWGrSi,
              double *FrVdWR_p3,double *FrVdWE_sr,int *VWGPoN,double ***VWGrRP_at,
-             double ***VWGrRP_re,FILE *FPaOut,
-	     int *print)
+             double ***VWGrRP_re,FILE *FPaOut, int *print, double vdw_buffer)
 /* This function evaluates the van der Waals interaction energy between the
    current fragment and the receptor whose effect is precalculated in a grid :
    GrCo_i  "integer coordinate" along the x axis of the grid point just "below"
@@ -40,6 +39,7 @@ double VWFrEn(int FrAtNu,double **RoSFCo,double *BSMinC,double VWGrIn,double VWG
 {
   int i,GrCo_i,GrCo_j,GrCo_k;
   double Weig_t,Weig_u,Weig_v,VWEnEv,hlp1,hlp2,hlp3;
+  double VWEnEv_tmp;
 
   //double at_term, rep_term;//clangini
   //at_term = 0.0; //clangini
@@ -48,6 +48,7 @@ double VWFrEn(int FrAtNu,double **RoSFCo,double *BSMinC,double VWGrIn,double VWG
   //double VWEnEv_double = 0.0; // clangini
 
   VWEnEv=0.0;
+  VWEnEv_tmp = 0.0;
 
   for (i=1;i<=FrAtNu;i++) {
 
@@ -79,7 +80,7 @@ double VWFrEn(int FrAtNu,double **RoSFCo,double *BSMinC,double VWGrIn,double VWG
       }
       //clangini END
 
-      VWEnEv=VWEnEv + FrVdWE_sr[i]*FrVdWR_p3[i] * (//attractive term. clangini
+      VWEnEv_tmp = FrVdWE_sr[i]*FrVdWR_p3[i] * (//attractive term. clangini
              (1-Weig_t)*(1-Weig_u)*(1-Weig_v)*
               VWGrRP_at[GrCo_i][GrCo_j][GrCo_k] +
              Weig_t*(1-Weig_u)*(1-Weig_v)*VWGrRP_at[GrCo_i+1][GrCo_j][GrCo_k] +
@@ -99,6 +100,12 @@ double VWFrEn(int FrAtNu,double **RoSFCo,double *BSMinC,double VWGrIn,double VWG
              Weig_t*(1-Weig_u)*Weig_v*VWGrRP_re[GrCo_i+1][GrCo_j][GrCo_k+1] +
              Weig_t*Weig_u*Weig_v*VWGrRP_re[GrCo_i+1][GrCo_j+1][GrCo_k+1] +
              (1-Weig_t)*Weig_u*Weig_v*VWGrRP_re[GrCo_i][GrCo_j+1][GrCo_k+1] ) ;
+      if (vdw_buffer >= 0.0){
+	if (VWEnEv_tmp > vdw_buffer){
+          VWEnEv_tmp = vdw_buffer;
+	}
+      }
+      VWEnEv = VWEnEv + VWEnEv_tmp;
     }
 #ifndef NOWARN
     else if((*print)==0) {

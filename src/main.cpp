@@ -2166,7 +2166,7 @@ FrFiRMode reading mode for fragment input file (only relevant for MPI runs):
 
                           /* Van der Waals energy on a grid using the geometric mean approximation */
                           VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                              FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                              FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                           /* Coulombic interaction energy on a grid */
                           In_f=CoFrEn(FrAtNu,FrPaCh,RoSFCo,BSMinC,CoGrIn,CoGrSi,
@@ -2271,7 +2271,7 @@ FrFiRMode reading mode for fragment input file (only relevant for MPI runs):
 
                     /* Van der Waals energy on a grid using the geometric mean approximation */
                     VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                     VW_f=SFVWEn*VW_f;
 
@@ -2678,7 +2678,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
                             /* Van der Waals energy on a grid using the geometric mean approximation */
                             VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                                FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                                FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                             /* Coulombic interaction energy on a grid */
                             In_f=CoFrEn(FrAtNu,FrPaCh,RoSFCo,BSMinC,CoGrIn,CoGrSi,
@@ -2786,7 +2786,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
                     /* Van der Waals energy on a grid using the geometric mean approximation */
                     VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                     VW_f=SFVWEn*VW_f;
 
@@ -3205,7 +3205,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
                           /* Van der Waals energy on a grid using the geometric mean approximation */
                           VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                              FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                              FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                           /* Coulombic interaction energy on a grid */
                           In_f=CoFrEn(FrAtNu,FrPaCh,RoSFCo,BSMinC,CoGrIn,CoGrSi,
@@ -3310,7 +3310,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
                     /* Van der Waals energy on a grid using the geometric mean approximation */
                     VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                     VW_f=SFVWEn*VW_f;
 
@@ -3573,7 +3573,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
                             /* Van der Waals energy on a grid using the geometric mean approximation */
                             VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                                FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                                FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                             /* Coulombic interaction energy on a grid */
                             In_f=CoFrEn(FrAtNu,FrPaCh,RoSFCo,BSMinC,CoGrIn,CoGrSi,
@@ -3680,7 +3680,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
                     /* Van der Waals energy on a grid using the geometric mean approximation */
                     VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+                        FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
                     VW_f=SFVWEn*VW_f;
 
@@ -4322,7 +4322,7 @@ NPtSphereMax_Fr = (int) (SurfDens_deso * pi4 * (FrRmax+WaMoRa));
 
           /* Van der Waals energy on a grid using the geometric mean approximation */
           VW_f=VWFrEn(FrAtNu,RoSFCo,BSMinC,VWGrIn,VWGrSi,FrVdWR_p3,
-              FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr);
+              FrVdWE_sr,VWGPoN,VWGrRP_at,VWGrRP_re,FPaOut,&vdwErr, seed_par.vdw_buffer);
 
           /* Coulombic interaction energy on a grid */
           In_f=CoFrEn(FrAtNu,FrPaCh,RoSFCo,BSMinC,CoGrIn,CoGrSi,

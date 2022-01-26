@@ -38,6 +38,9 @@ class Parameter // This is much more like a POD struct than a class
   double alpha_xyz;
   double alpha_rot;
   double learning_rate;
+
+  // buffer for vdw
+  double vdw_buffer;
 };
 
 #endif

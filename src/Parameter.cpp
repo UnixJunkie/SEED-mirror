@@ -29,7 +29,9 @@ Parameter::Parameter() :
   eps_grms(0.02),
   alpha_xyz(0.1),
   alpha_rot(0.01),
-  learning_rate(0.1)
+  learning_rate(0.1),
+  // vdw buffer
+  vdw_buffer(-1.0)
   { } // default constructor
 
 Parameter::~Parameter() { } // default destructor
@@ -144,6 +146,10 @@ void Parameter::readKW(char *kwParFil) {
     else if (key == "sd_learning_rate")
     {
       learning_rate = std::stod(keyval);
+    }
+    else if (key == "vdw_buffer")
+    {
+      vdw_buffer = std::stod(keyval);
     }
     else
     {

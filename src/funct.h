@@ -322,7 +322,7 @@ void VWGReP(int ReAtNu,double **ReCoor,double *ReVdWR_p3,double *ReVdWE_sr,
             double ***VWGrRP_at,double ***VWGrRP_re);
 double VWFrEn(int FrAtNu,double **RoSFCo,double *BSMinC,double VWGrIn,double VWGrSi,
              double *FrVdWR_p3,double *FrVdWE_sr,int *VWGPoN,double ***VWGrRP_at,
-             double ***VWGrRP_re,FILE *FPaOut,int * print);
+             double ***VWGrRP_re,FILE *FPaOut,int * print, double vdw_buffer);
 void write_chm_clus_pproc(int CurFra,int NuPosSdCl,int FrAtNu,int *AliHyd,
                           double *In_s_ro,double *VW_s_ro,double *To_s_ro,
                           char **FrAtTy,double ***FrCoPo,int *FrPosAr_sort,
