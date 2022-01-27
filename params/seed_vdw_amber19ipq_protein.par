@@ -1,0 +1,77 @@
+1	C	6	1.908	0.086	# 60  ! sp2 C carbonyl group
+2	CA	6	1.908	0.086	# 00  sp2 C pure aromatic (benzene)
+3	CB	6	1.908	0.086	# 00  sp2 aromatic C, 5&6 membered ring junction
+4	CC	6	1.908	0.086	# 00  sp2 aromatic C, 5 memb. ring HIS
+5	CD	6	1.908	0.086	# 00  sp2 C atom in the middle of: C=CD-CD=C
+6	CI	6	1.908	0.1094	# 00  parmbsc0
+7	CK	6	1.908	0.086	# 00  sp2 C 5 memb.ring in purines (dA,dG)
+8	CP	6	1.908	0.086	# 00  sp2 C 5 memb.ring in purines (G)
+9	CM	6	1.908	0.086	# 00  sp2 C pyrimidines in pos. 5 & 6 (dT,dC)
+10	CS	6	1.908	0.086	# 00  sp2 C pyrimidines in pos. 5 & 6 (U)
+11	CN	6	1.908	0.086	# 00  sp2 C aromatic 5&6 memb.ring junct.(TRP)
+12	CQ	6	1.908	0.086	# 00  sp2 C in 5 mem.ring of purines between 2 N
+13	CR	6	1.908	0.086	# 00  sp2 arom as CQ but in HIS
+14	CT	6	1.908	0.1094	# 80  sp3 aliphatic C
+15	CV	6	1.908	0.086	# 00  sp2 arom. 5 memb.ring w/1 N and 1 H (HIS)
+16	CW	6	1.908	0.086	# 00  sp2 arom. 5 memb.ring w/1 N-H and 1 H (HIS)
+17	C*	6	1.908	0.086	# 00  sp2 arom. 5 memb.ring w/1 subst. (TRP)
+18	CX	6	1.908	0.1094	# 00  protein C-alpha (new to ff10)
+19	CY	6	1.908	0.086	# 00  nitrile C (Howard et al.JCC,16,243,1995)
+20	CZ	6	1.908	0.086	# 00  sp C (Howard et al.JCC,16,243,1995)
+21	C5	6	1.908	0.086	# 00  sp2 C 5 memb.ring in purines (A)
+22	C4	6	1.908	0.086	# 00  sp2 C pyrimidines in pos. 5 & 6 (C)
+23	C0	20	1.7131	0.459789	# 00  calcium
+24	H	1	0.7296	0.0157	# 10  H bonded to nitrogen atoms
+25	HC	1	1.487	0.0157	# 50  H aliph. bond. to C without electrwd.group
+26	H1	1	1.387	0.0157	# 50  H aliph. bond. to C with 1 electrwd. group
+27	H2	1	1.287	0.0157	# 50  H aliph. bond. to C with 2 electrwd.groups
+28	H3	1	1.187	0.0157	# 50  H aliph. bond. to C with 3 eletrwd.groups
+29	HA	1	1.459	0.015	# 70  H arom. bond. to C without elctrwd. groups
+30	H4	1	1.409	0.015	# 70  H arom. bond. to C with 1 electrwd. group
+31	H5	1	1.359	0.015	# 70  H arom.at C with 2 elctrwd. gr,+HCOO group
+32	HO	1	0.0	0.0	# 50  hydroxyl group
+33	HS	1	0.6	0.0157	# 50  hydrogen bonded to sulphur (pol?)
+34	HP	1	1.1	0.0157	# 50  H bonded to C next to positively charged gr
+35	HZ	1	1.459	0.015	# 10  H bond sp C (Howard et al.JCC,16,243,1995)
+36	F	9	1.75	0.061	# 00  fluorine (not fluoride!)
+37	Cl	17	1.948	0.265	# 00  chlorine (Applequist) (not chloride!)
+38	Br	35	2.22	0.32	# 00  bromine (Applequist) (not bromide!)
+39	I	53	2.35	0.4	# 00  iodine (Applequist) (not iodide!)
+40	MG	12	0.7926	0.8947	# 00  magnesium
+41	N	7	1.824	0.17	# 00  sp2 nitrogen in amide groups
+42	NA	7	1.824	0.17	# 00  sp2 N in 5 memb.ring w/H atom (HIS)
+43	NB	7	1.824	0.17	# 00  sp2 N in 5 memb.ring w/LP (HIS,ADE,GUA)
+44	NC	7	1.824	0.17	# 00  sp2 N in 6 memb.ring w/LP (ADE,GUA)
+45	N2	7	1.824	0.17	# 00  sp2 N in amino groupsARG/HIP/LYS>!PRO
+46	N3	7	1.824	0.17	# 00  sp3 N for charged amino groups (Lys, etc)
+47	NT	7	1.824	0.17	# 00  sp3 N for amino groups amino groups
+48	N*	7	1.824	0.17	# 00  sp2 N
+49	NY	7	1.824	0.17	# 00  nitrile N (Howard et al.JCC,16,243,1995)
+50	O	8	1.6612	0.21	# 40  carbonyl group oxygen
+51	O2	8	1.6612	0.21	# 40  carboxyl and phosphate group oxygen
+52	OH	8	1.721	0.2104	# 50  oxygen in hydroxyl group
+53	OS	8	1.6837	0.17	# 50  ether and ester oxygen
+54	OP	8	1.85	0.17	# 50  2- phosphate oxygen
+55	P	15	2.1	0.2	# 80  phosphate,pol:JACS,112,8543,90,K.J.Miller
+56	S	16	2.0	0.25	# 00  S in disulfide linkage,pol:JPC,102,2399,98
+57	SH	16	2.0	0.25	# 00  S in cystine
+58	CU	29	0.0	0.0	# 00  copper
+59	FE	26	0.0	0.0	# 00  iron
+60	Zn	30	1.1	0.0125	# 00  Zn2+
+61	CO	6	1.908	0.086	# 60  ! sp2 C carboxylate group
+62	2C	6	1.908	0.1094	# 80  sp3 aliphatic C with two (duo) heavy atoms
+63	3C	6	1.908	0.1094	# 80  sp3 aliphatic C with three (tres) heavy atoms
+64	C8	6	1.908	0.1094	# 80  sp3 aliphatic C basic AA side chain
+65	O3	8	1.6612	0.21	# 40  ASP/GLU carboxylate O; backbone C-terminus
+66	OD	8	1.6612	0.21	# 40  ASN/GLN amide O; backbone
+67	ND	7	1.824	0.17	# 00  ASN/GLN amide O; NHE
+68	OA	8	1.721	0.2104	# 50  SER/THR/TYR hydroxyl O
+69	NL	7	1.824	0.17	# 00  LYS ammonium N; backbone N-terminus
+70	TN	7	1.824	0.17	# 00  PRO backbone N
+71	TJ	6	1.908	0.1094	# 00  PRO backbone CA
+72	TG	6	1.908	0.1094	# 00  GLY backbone CA
+73	TP	6	1.908	0.1094	# 00  ARG/HIP/LYS backbone CA
+74	TM	6	1.908	0.1094	# 00  ASP/CYM/GLU backbone CA
+75	TH	1	0.841847	0.0157	# 10  ARG nitrogen-attached H
+76	TA	6	1.908	0.1094	# 00  HID/HIE/PHE/TRP/TYR CB
+77	EP	0	1.0	0.0	# 00  Extra point

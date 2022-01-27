@@ -65,6 +65,11 @@ def main(argv):
 
         if invdw:
             ls = line.split()
+            if ls[0] == "END":
+                invdw = False
+                continue
+
+            # print(ls)
             vdw_R[ls[0]] = float(ls[1])
             vdw_eps[ls[0]] = float(ls[2])
 

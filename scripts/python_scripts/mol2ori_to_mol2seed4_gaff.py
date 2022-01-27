@@ -112,7 +112,7 @@ def main(argv):
     out = get_mol2_out(orig, charges)
 
     # Now we add the CGenFF alternative atom types
-    out += "@<TRIPOS>ALT_TYPE\nCGAFF_2_ALT_TYPE_SET\nGAFF_2 "
+    out += "@<TRIPOS>ALT_TYPE\nGAFF_2_ALT_TYPE_SET\nGAFF_2 "
     for i, at in enumerate(atmtypes):
         out += str(i+1)+" "+at+" "
     out += "\n"
