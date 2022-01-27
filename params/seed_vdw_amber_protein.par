@@ -1,0 +1,62 @@
+1	C	6	1.908	0.086	# sp2 C carbonyl group 
+2	CA	6	1.908	0.086	# sp2 C pure aromatic (benzene)
+3	CB	6	1.908	0.086	# sp2 aromatic C, 5&6 membered ring junction
+4	CC	6	1.908	0.086	# sp2 aromatic C, 5 memb. ring HIS
+5	CD	6	1.908	0.086	# sp2 C atom in the middle of: C=CD-CD=C
+6	CI	6	1.908	0.1094	# parmbsc0
+7	CK	6	1.908	0.086	# sp2 C 5 memb.ring in purines (dA,dG)
+8	CP	6	1.908	0.086	# sp2 C 5 memb.ring in purines (G)
+9	CM	6	1.908	0.086	# sp2 C  pyrimidines in pos. 5 & 6 (dT,dC)
+10	CS	6	1.908	0.086	# sp2 C  pyrimidines in pos. 5 & 6 (U)
+11	CN	6	1.908	0.086	# sp2 C aromatic 5&6 memb.ring junct.(TRP)
+12	CQ	6	1.908	0.086	# sp2 C in 5 mem.ring of purines between 2 N
+13	CR	6	1.908	0.086	# sp2 arom as CQ but in HIS
+14	CT	6	1.908	0.1094	# sp3 aliphatic C
+15	CV	6	1.908	0.086	# sp2 arom. 5 memb.ring w/1 N and 1 H (HIS)
+16	CW	6	1.908	0.086	# sp2 arom. 5 memb.ring w/1 N-H and 1 H (HIS)
+17	C*	6	1.908	0.086	# sp2 arom. 5 memb.ring w/1 subst. (TRP)
+18	CX	6	1.908	0.1094	# protein C-alpha (new to ff10)
+19	XC	6	1.908	0.1094	# protein C-alpha (new to ff19)
+20	CY	6	1.908	0.086	# nitrile C (Howard et al.JCC,16,243,1995)
+21	CZ	6	1.908	0.086	# sp C (Howard et al.JCC,16,243,1995)
+22	C5	6	1.908	0.086	# sp2 C 5 memb.ring in purines (A)
+23	C4	6	1.908	0.086	# sp2 C  pyrimidines in pos. 5 & 6 (C)
+24	C0	20	1.7131	0.459789	# calcium
+25	H	1	0.6	0.0157	# H bonded to nitrogen atoms
+26	HC	1	1.487	0.0157	# H aliph. bond. to C without electrwd.group
+27	H1	1	1.387	0.0157	# H aliph. bond. to C with 1 electrwd. group
+28	H2	1	1.287	0.0157	# H aliph. bond. to C with 2 electrwd.groups
+29	H3	1	1.187	0.0157	# H aliph. bond. to C with 3 eletrwd.groups
+30	HA	1	1.459	0.015	# H arom. bond. to C without elctrwd. groups
+31	H4	1	1.409	0.015	# H arom. bond. to C with 1 electrwd. group
+32	H5	1	1.359	0.015	# H arom.at C with 2 elctrwd. gr,+HCOO group
+33	HO	1	0.0	0.0	# hydroxyl group
+34	HS	1	0.6	0.0157	# hydrogen bonded to sulphur (pol?)
+35	HP	1	1.1	0.0157	# H bonded to C next to positively charged gr
+36	HZ	1	1.459	0.015	# H bond sp C (Howard et al.JCC,16,243,1995)
+37	F	9	1.75	0.061	# fluorine (not fluoride!)
+38	Cl	17	1.948	0.265	# chlorine  (Applequist) (not chloride!)
+39	Br	35	2.22	0.32	# bromine  (Applequist) (not bromide!)
+40	I	53	2.35	0.4	# iodine   (Applequist) (not iodide!)
+41	MG	12	0.7926	0.8947	# magnesium
+42	N	7	1.824	0.17	# sp2 nitrogen in amide groups
+43	NA	7	1.824	0.17	# sp2 N in 5 memb.ring w/H atom (HIS)
+44	NB	7	1.824	0.17	# sp2 N in 5 memb.ring w/LP (HIS,ADE,GUA)
+45	NC	7	1.824	0.17	# sp2 N in 6 memb.ring w/LP (ADE,GUA)
+46	N2	7	1.824	0.17	# sp2 N in amino groups
+47	N3	7	1.824	0.17	# sp3 N for charged amino groups (Lys, etc)
+48	NT	7	1.824	0.17	# sp3 N for amino groups amino groups 
+49	N*	7	1.824	0.17	# sp2 N 
+50	NY	7	1.824	0.17	# nitrile N (Howard et al.JCC,16,243,1995)
+51	O	8	1.6612	0.21	# carbonyl group oxygen
+52	O2	8	1.6612	0.21	# carboxyl and phosphate group oxygen
+53	OH	8	1.721	0.2104	# oxygen in hydroxyl group
+54	OS	8	1.6837	0.17	# ether and ester oxygen
+55	OP	8	1.85	0.17	# 2- phosphate oxygen
+56	P	15	2.1	0.2	# phosphate,pol:JACS,112,8543,90,K.J.Miller
+57	S	16	2.0	0.25	# S in disulfide linkage,pol:JPC,102,2399,98
+58	SH	16	2.0	0.25	# S in cystine
+# MISSING KEY  CU
+# MISSING KEY  FE
+59	Zn	30	1.1	0.0125	# Zn2+ 
+60	EP	0	0.0	0.0	# extra point
