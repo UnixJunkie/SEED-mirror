@@ -122,6 +122,7 @@ def get_mol2_out(orig, charges, header):
 def main(argv):
     mol2in = argv[0]
     gaffin = argv[1]
+    mol2out = argv[2]
 
     with open(mol2in, "r") as f:
         orig = f.readlines()
@@ -143,7 +144,7 @@ def main(argv):
         out += str(i+1)+" "+at+" "
     out += "\n"
 
-    mol2out = os.path.splitext(mol2in)[0] + "_par.mol2"
+    # mol2out = os.path.splitext(mol2in)[0] + "_par.mol2"
     with open(mol2out, "w") as f:
         f.write(out)
 
