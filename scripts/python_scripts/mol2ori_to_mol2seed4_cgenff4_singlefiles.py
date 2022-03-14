@@ -118,7 +118,7 @@ for line in orimol2:
 			whereami_mol2=False
 			james_bond=True
 			# Calculate position of halogen bonding particle(s)
-			for key, value in LP_dict.iteritems():
+			for key, value in LP_dict.items():
 				coor=calc_position_LP(dict_interesting_coordinates[LP_dict[key][1]], dict_interesting_coordinates[LP_dict[key][0]], LP_dict[key][2])		
 				out+=("%7s %-8s%10.4f%10.4f%10.4f %-7s%5s %-11s%7.4f\n") %(atom_indice, key, coor[0], coor[1], coor[2], "Du", "1", "LIG", 0.0500)
 				dict_LP_indices[key]=atom_indice
@@ -139,13 +139,13 @@ for line in orimol2:
 
 
 # Add bonds for the halogen bonding particle(s)
-for key, value in dict_LP_indices.iteritems():
+for key, value in dict_LP_indices.items():
     bond_indice+=1
     out+=("%6s%6s%6s%5s\n") % (bond_indice, dict_indices[LP_dict[key][0]], value, 1)
 
 # Now we add the CGenFF alternative atom types
 out+="@<TRIPOS>ALT_TYPE\nCGenFF_4.0_ALT_TYPE_SET\nCGenFF_4.0 "
-for key, value in dict_atom_types.iteritems():
+for key, value in dict_atom_types.items():
 	out+=str(str(key)+" "+str(value)+" ")
 
 out+="\n"
