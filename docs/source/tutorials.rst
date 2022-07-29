@@ -10,6 +10,13 @@ Tutorials for preparing the input files.
 
    tutorials/preparation
 
+Preparing the input files and running SEED with Amber/GAFF.
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/gaff_preparation
+
 Analysis of the outputs of a SEED run.
 
 .. toctree::
@@ -25,3 +32,4 @@ Test cases on relevant examples from literature.
    :maxdepth: 2
 
    tutorials/test_cases
+
