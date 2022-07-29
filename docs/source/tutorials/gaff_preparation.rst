@@ -1,33 +1,12 @@
-.. raw:: html
-  
-  <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-  <script language="JavaScript">
-  <!--hide
-  
-  var password;
-  var pass_crypt;
-  var pass1="38a7744f5523335db845ff1976bf4747";
+.. _gaff_preparation:
 
-  password=prompt('Please enter your password to view this page!',' ');
-  pass_crypt = CryptoJS.MD5(password).toString();
-  
-  if (pass_crypt == pass1){
-    alert('Password Correct! You are entering restricted content!');
-  }
-  else
-     {
-       window.location="gaff_preparation.html";
-      }
+Gaff preparation (WORK IN PROGRESS)
+***********************************
 
-  //-->
-  </script>
-  </head>
+IMPORTANT: this development is still a work in progress and the use 
+of AMBER/GAFF with SEED has not been tested extensively yet.
 
-Gaff preparation
-****************
-
-This is a preliminary tutorial for preparing the receptor and library for running 
+This is a little tutorial for preparing the receptor and library for running 
 SEED using Amber/GAFF force fields.
 Using other workflows and software is of course possible, but we provide custom
 scripts (in ``scripts`` folder) to automatize most of the needed steps. 
@@ -69,7 +48,9 @@ the system-specific makefile:
 This will install all campari executables (serial, threaded, MPI, etc.).
 For protein preparation, the serial executable might be sufficient (``make campari install``).
 
-Writing a SEED-compatible receptor with Amber parameters
+.. _seed_amber_receptor:
+
+Writing a SEED-compatible receptor with AMBER parameters
 ========================================================
 
 For general preparation of a docking-ready receptor from a crystal PDB with 

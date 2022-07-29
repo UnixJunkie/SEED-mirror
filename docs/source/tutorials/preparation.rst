@@ -75,8 +75,17 @@ Combine ``lig.mol2`` with the charges and atom types from the CGenFF stream file
   
   python ${PYTHONSCRIPTS}/mol2ori_to_mol2seed4_cgenff4_singlefiles.py lig.mol2 lig.str out.mol2
 
-Protein Preparation
-===================
+Protein Preparation (OLD-STYLE)
+=========================
+
+It is now recommended to prepare the protein receptor with CAMPARI,
+because it allows to carry out all the necessary steps (reconstruction of missing 
+parts, protonation, relaxation, minimization) within the same software and it 
+directly writes a SEED-compatible mol2 file for the receptor. Further details 
+can be found in :ref:`campari_preparation`.
+
+For legacy reasons we also present an alternative workflow for the preparation of the 
+receptor, as detailed below.
 
 In this tutorial we will learn how to prepare a receptor for SEED docking.
 We assume here that the starting point is a protein from the PDB 

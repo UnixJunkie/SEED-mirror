@@ -10,6 +10,13 @@ Tutorials for preparing the input files.
 
    tutorials/preparation
 
+Preparing the receptor with CAMPARI (recommended).
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/campari_prep
+
 Preparing the input files and running SEED with Amber/GAFF.
 
 .. toctree::
