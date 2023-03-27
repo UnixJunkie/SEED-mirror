@@ -92,7 +92,7 @@ assigned with *antechamber*:
 
 .. code-block:: bash 
 
-    antechamber -i INPUT.mol2 -fi mol2 -o OUTPUT.mol2 -fo mol2 -c bcc -at gaff2 -rn LIG
+    antechamber -i INPUT.mol2 -fi mol2 -o ANTECHAMBER.mol2 -fo mol2 -c bcc -at gaff2 -rn LIG
 
 ``-c bcc`` request to use AM1-BCC semi-empirical method for fitting the charges. This is the 
 recommended choice for compatibility in the virtual screening setting. Other choices 
