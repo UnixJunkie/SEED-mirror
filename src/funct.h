@@ -224,6 +224,10 @@ void ReLAIC_en(int ReReNu,double **ReCoor,double GrSiCu_en,double *ReMinC,
 void PsSpMa(double PsSpRa,double GrSiCu_en,int PsSpNC,int ***PsSphe);
 void PsSpEE(int FrAtNu,int ReAtNu,double *ReVdWE_sr,double *FrVdWE_sr,
             double *ReVdWR,double *FrVdWR,double *VWEnEv_ps,double **SDFrRe_ps);
+float soft_core(double r, double lamb, double epsilon, double rmin, double alpha, int exp_n);
+void PsSpEE_soft(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
+            double *ReVdWR, double *FrVdWR, double *VWEnEv_ps, double **SDFrRe_ps, 
+            double lamb, double alpha, int exp_n);
 void PsSpFE(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
             double *ReVdWR, double *FrVdWR, double *FvdW, double *TvdW, 
             double *maxFvdW, double *maxTvdW, double **SDFrRe_ps,

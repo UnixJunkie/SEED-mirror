@@ -68,6 +68,69 @@ void PsSpEE(int FrAtNu,int ReAtNu,double *ReVdWE_sr,double *FrVdWE_sr,
 
 }
 
+float soft_core(double r, double lamb, double epsilon, double rmin, double alpha, int exp_n)
+{
+  double prefactor, V_softcore, denom;
+  double r6, rmin6;
+
+  r6 = r*r*r*r*r*r;
+  rmin6 = rmin*rmin*rmin*rmin*rmin*rmin; 
+
+  prefactor = epsilon * pow(lamb, exp_n);
+  denom = alpha * (1-lamb) * (1-lamb) * 0.5 + r6/rmin6;
+  V_softcore = prefactor * 1./(denom * denom) + 2./denom;
+
+  return V_softcore;
+}
+
+void PsSpEE_soft(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
+            double *ReVdWR, double *FrVdWR, double *VWEnEv_ps, double **SDFrRe_ps, 
+            double lamb, double alpha, int exp_n)
+/* This function evaluates the soft-core vdw energy using a pseudo-sphere approach as a
+   cutoff. It is equivalent to PsSpEE but using a soft-core potential.
+   RFSqDi  squared distance between one atom of the receptor and one atom
+           of the fragment
+   SumRad  sum of the van der Waals radii */
+{
+  int i, j;
+  double SumRad, SumRad_p6, RFSqDi, RFSqDi_p3;
+  double r_shift, small_eps, RFDi;
+
+  small_eps = 1.e-8;
+
+  *VWEnEv_ps = 0;
+
+  for (i = 1; i <= FrAtNu; i++)
+  {
+
+    for (j = 1; j <= ReAtNu; j++)
+    {
+
+      RFSqDi = SDFrRe_ps[i][j];
+      // shift distance
+      RFDi = sqrt(RFSqDi);
+      SumRad = ReVdWR[j] + FrVdWR[i];
+      RFDi = RFDi - SumRad*(1.0 - pow(-0.5*lamb*lamb + lamb + 0.5, 1.0/6.0));
+      // RFSqDi = RFDi*RFDi;
+
+      if (RFDi > small_eps)
+      { // is it necessary? maybe to avoid overflow. clangini.
+
+        *VWEnEv_ps = *VWEnEv_ps + soft_core(RFDi, lamb, ReVdWE_sr[j] * FrVdWE_sr[i],
+                                            SumRad, alpha, exp_n);
+      }
+
+      else
+      {
+        std::cerr << "Two atoms are too close to each other" << std::endl;
+        // *VWEnEv_ps = *VWEnEv_ps + (1.e+12);
+        *VWEnEv_ps = *VWEnEv_ps + soft_core(small_eps, lamb, ReVdWE_sr[j] * FrVdWE_sr[i],
+                                            SumRad, alpha, exp_n);
+      }
+    }
+  }
+}
+
 void PsSpFE(int FrAtNu, int ReAtNu, double *ReVdWE_sr, double *FrVdWE_sr,
             double *ReVdWR, double *FrVdWR, double *FvdW, double *TvdW, 
             double *maxFvdW, double *maxTvdW, double **SDFrRe_ps, 

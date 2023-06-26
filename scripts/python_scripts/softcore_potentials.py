@@ -43,7 +43,7 @@ epsilon = 1
 alpha = 1.0
 sigma = 3.5 # angstrom
 epsilon = 0.066 # kcal/mol
-exp_n = 1
+exp_n = 0
 
 r = np.linspace(0.01, 10, 1000)
 V = np.zeros((len(lambs), len(r)))
@@ -57,6 +57,7 @@ for i, lamb in enumerate(lambs):
 fig, ax = plt.subplots()
 for i, lamb in enumerate(lambs):
     ax.plot(r, V[i], label=f'$\lambda$ = {lamb:.1f}')
+ax.axvline(x=1e-4, color='black', linestyle='--')
 ax.set_xlabel('r [Å]')
 ax.set_ylabel('V [kcal/mol]')
 ax.set_ylim(-epsilon, 2*epsilon)
@@ -69,6 +70,7 @@ plt.show()
 fig, ax = plt.subplots()
 for i, lamb in enumerate(lambs):
     ax.plot(r, V_shifted[i], label=f'$\lambda$ = {lamb:.1f}')
+ax.axvline(x=1e-4, color='black', linestyle='--')
 ax.set_xlabel('r [Å]')
 ax.set_ylabel('V [kcal/mol]')
 ax.set_ylim(-epsilon, 2*epsilon)
